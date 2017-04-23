@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.projects.solvers;
+package com.serhiivasylchenko.masterproject.solvers;
 
 /**
  * @author Serhii Vasylchenko

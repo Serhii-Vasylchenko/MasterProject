@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.projects.core;
+package com.serhiivasylchenko.masterproject.core;
 
 /**
  * @author Serhii Vasylchenko
