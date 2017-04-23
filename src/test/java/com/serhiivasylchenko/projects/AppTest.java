@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.projects-vasylchenko;
+package com.serhiivasylchenko.projects;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
