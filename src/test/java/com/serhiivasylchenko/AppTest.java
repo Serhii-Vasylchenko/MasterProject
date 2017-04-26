@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.masterproject;
+package com.serhiivasylchenko;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

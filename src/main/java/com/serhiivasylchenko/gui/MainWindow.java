@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.masterproject.gui;
+package com.serhiivasylchenko.gui;
 
 /**
  * @author Serhii Vasylchenko

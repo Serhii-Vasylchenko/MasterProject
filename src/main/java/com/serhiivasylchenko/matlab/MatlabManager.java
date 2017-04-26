@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.masterproject.matlab;
+package com.serhiivasylchenko.matlab;
 
 /**
  * @author Serhii Vasylchenko
