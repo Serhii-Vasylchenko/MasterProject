@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane id="mainAnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.MainWindow">
@@ -22,6 +23,7 @@
                    <menus>
                        <Menu mnemonicParsing="false" text="File">
                            <items>
+                               <MenuItem mnemonicParsing="false" text="Add component"/>
                                <MenuItem mnemonicParsing="false" text="Close" />
                            </items>
                        </Menu>
@@ -43,13 +45,22 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="500.0" prefWidth="320.0">
                      <children>
-                        <TextField alignment="TOP_CENTER" prefHeight="31.0" promptText="Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0" />
+                         <TextField alignment="TOP_CENTER" prefHeight="31.0" promptText="Search"
+                                    AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="100.0"
+                                    AnchorPane.topAnchor="45.0"/>
                         <TreeView AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0" />
                         <Label layoutX="14.0" layoutY="8.0" prefHeight="21.0" prefWidth="138.0" text="Components List" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
+                         <Button layoutX="315.0" layoutY="45.0" onAction="#addComponent" mnemonicParsing="false"
+                                 prefWidth="80.0" text="New" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0">
+                             <effect>
+                                 <DropShadow blurType="TWO_PASS_BOX" color="#9dff9d" height="90.0" radius="22.0"
+                                             width="0.0"/>
+                             </effect>
+                         </Button>
                      </children>
                   </AnchorPane>
                   <AnchorPane prefWidth="320.0">
