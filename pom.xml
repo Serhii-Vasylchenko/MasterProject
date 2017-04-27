@@ -41,6 +41,13 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.2.10.Final</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.ejb/javax.ejb-api -->
+        <dependency>
+            <groupId>javax.ejb</groupId>
+            <artifactId>javax.ejb-api</artifactId>
+            <version>3.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

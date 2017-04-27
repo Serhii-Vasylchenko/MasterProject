@@ -1,19 +1,15 @@
-package com.serhiivasylchenko.core.components;
+package com.serhiivasylchenko.persistence;
 
-import com.serhiivasylchenko.core.components.parameters.ParameterList;
 import com.serhiivasylchenko.solvers.AbstractSolver;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 /**
  * @author Serhii Vasylchenko
  */
 @Entity
-public class Component {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
+public class Component extends Conditional {
     @Column
     private String name;
 
@@ -28,14 +24,6 @@ public class Component {
 
     public Component(String name) {
         this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

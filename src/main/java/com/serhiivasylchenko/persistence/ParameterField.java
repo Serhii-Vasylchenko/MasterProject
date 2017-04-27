@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.core.components.parameters;
+package com.serhiivasylchenko.persistence;
 
 /**
  * @author Serhii Vasylchenko

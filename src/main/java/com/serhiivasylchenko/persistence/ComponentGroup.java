@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.core.components;
+package com.serhiivasylchenko.persistence;
 
 import javax.persistence.*;
 import java.util.ArrayList;

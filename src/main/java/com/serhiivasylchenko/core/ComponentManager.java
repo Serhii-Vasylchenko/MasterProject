@@ -1,4 +1,7 @@
-package com.serhiivasylchenko.core.components;
+package com.serhiivasylchenko.core;
+
+import com.serhiivasylchenko.persistence.Component;
+import com.serhiivasylchenko.persistence.ComponentGroup;
 
 import java.util.ArrayList;
 import java.util.List;

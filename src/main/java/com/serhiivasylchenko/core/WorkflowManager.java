@@ -1,7 +1,6 @@
 package com.serhiivasylchenko.core;
 
-import com.serhiivasylchenko.core.components.Component;
-import com.serhiivasylchenko.core.components.ComponentManager;
+import com.serhiivasylchenko.persistence.Component;
 
 /**
  * @author Serhii Vasylchenko

@@ -1,4 +1,4 @@
-package com.serhiivasylchenko.matlab;
+package com.serhiivasylchenko.core;
 
 /**
  * @author Serhii Vasylchenko

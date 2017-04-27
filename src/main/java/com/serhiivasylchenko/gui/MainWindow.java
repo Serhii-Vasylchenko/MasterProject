@@ -5,7 +5,7 @@ package com.serhiivasylchenko.gui;
  */
 
 import com.serhiivasylchenko.core.WorkflowManager;
-import com.serhiivasylchenko.core.components.Component;
+import com.serhiivasylchenko.persistence.Component;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,7 +56,7 @@ public class MainWindow extends Application {
     public void addComponent(ActionEvent actionEvent) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Add Component");
-        //dialog.setHeaderText("Look, a Text Input Dialog");
+        dialog.setHeaderText("Choose the name for the component");
         dialog.setContentText("Name of the component:");
 
         Optional<String> result = dialog.showAndWait();

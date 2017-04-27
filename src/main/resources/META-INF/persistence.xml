@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+             xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="em" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:/master-project</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.cache.region.factory_class"
+                      value="com.hazelcast.hibernate.HazelcastCacheRegionFactory"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.cache.use_minimal_puts" value="true"/>
+            <property name="hibernate.cache.region_prefix" value=""/>
+        </properties>
+    </persistence-unit>
+</persistence>
