@@ -5,8 +5,6 @@ import com.serhiivasylchenko.utils.Parameters;
 import org.hibernate.annotations.QueryHints;
 import org.hibernate.exception.JDBCConnectionException;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityGraph;
@@ -26,9 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author Serhii Vasylchenko
  */
-
-@LocalBean
-@Stateless
 public class PersistenceBean {
 
     private EntityManager em;
