@@ -1,53 +1,29 @@
 package com.serhiivasylchenko.persistence;
 
-import com.serhiivasylchenko.solvers.AbstractSolver;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * @author Serhii Vasylchenko
  */
 @Entity
-public class Component extends Conditional {
+public class Component extends TechnicalEntity {
     @Column
-    private String name;
+    @ManyToOne
+    private System system;
 
     @Column
-    private String description = null;
-
-    @Column
-    private ParameterList parameterList;
-
-    @Column
+    @OneToOne
     private AbstractSolver solver;
 
-    public Component(String name) {
-        this.name = name;
+    public Component(System system, String name, String description) {
+        super(name, description);
+        this.system = system;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public ParameterList getParameterList() {
-        return parameterList;
-    }
-
-    public void setParameterList(ParameterList parameterList) {
-        this.parameterList = parameterList;
+    public Component() {
     }
 
     public AbstractSolver getSolver() {
@@ -56,5 +32,13 @@ public class Component extends Conditional {
 
     public void setSolver(AbstractSolver solver) {
         this.solver = solver;
+    }
+
+    public System getSystem() {
+        return system;
+    }
+
+    public void setSystem(System system) {
+        this.system = system;
     }
 }

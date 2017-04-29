@@ -1,8 +1,8 @@
 package com.serhiivasylchenko.core;
 
 import com.serhiivasylchenko.persistence.Persistable;
+import com.serhiivasylchenko.utils.Parameters;
 import org.hibernate.annotations.QueryHints;
-import org.hibernate.event.spi.AbstractEvent;
 import org.hibernate.exception.JDBCConnectionException;
 
 import javax.ejb.LocalBean;
@@ -33,8 +33,8 @@ public class PersistenceBean {
 
     private EntityManager em;
 
-    @Inject
-    Event<AbstractEvent> eventBus;
+//    @Inject
+//    Event<AbstractEvent> eventBus;
 
     private static final AtomicBoolean connected = new AtomicBoolean(true);
 
@@ -202,10 +202,10 @@ public class PersistenceBean {
         if (connected.compareAndSet(false, true)) {
 
             // notify system that database is currently available
-            DatabaseFailureEvent event = new DatabaseFailureEvent();
-            event.setAvailable(true);
-
-            this.eventBus.fire(event);
+//            DatabaseFailureEvent event = new DatabaseFailureEvent();
+//            event.setAvailable(true);
+//
+//            this.eventBus.fire(event);
         }
     }
 
@@ -213,10 +213,10 @@ public class PersistenceBean {
         if (connected.compareAndSet(true, false)) {
 
             // notify system that database is currently unavailable
-            DatabaseFailureEvent event = new DatabaseFailureEvent();
-            event.setAvailable(false);
-
-            this.eventBus.fire(event);
+//            DatabaseFailureEvent event = new DatabaseFailureEvent();
+//            event.setAvailable(false);
+//
+//            this.eventBus.fire(event);
         }
     }
 

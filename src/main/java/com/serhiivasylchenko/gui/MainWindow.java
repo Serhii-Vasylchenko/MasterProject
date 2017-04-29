@@ -6,6 +6,7 @@ package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.Component;
+import com.serhiivasylchenko.persistence.System;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,6 +55,8 @@ public class MainWindow extends Application {
     }
 
     public void addComponent(ActionEvent actionEvent) {
+        System system = new System();
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Add Component");
         dialog.setHeaderText("Choose the name for the component");
@@ -61,7 +64,7 @@ public class MainWindow extends Application {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(componentName -> {
-            Component component = new Component(componentName);
+            Component component = new Component(system, componentName, "");
             workflowManager.addComponent(component);
             updateComponentList();
         });
