@@ -1,6 +1,5 @@
 package com.serhiivasylchenko.persistence;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -10,11 +9,9 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Component extends TechnicalEntity {
-    @Column
     @ManyToOne
     private System system;
 
-    @Column
     @OneToOne
     private AbstractSolver solver;
 

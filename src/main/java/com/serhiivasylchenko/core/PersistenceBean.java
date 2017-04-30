@@ -5,8 +5,6 @@ import com.serhiivasylchenko.utils.Parameters;
 import org.hibernate.annotations.QueryHints;
 import org.hibernate.exception.JDBCConnectionException;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,6 +42,8 @@ public class PersistenceBean {
 
     public void persist(Persistable... entities) {
         try {
+            em.getTransaction().begin();
+
             for (Persistable entity : entities) {
                 if (entity.getId() == 0) {
                     this.em.persist(entity);
@@ -54,6 +54,8 @@ public class PersistenceBean {
 
             this.em.flush();
 
+            em.getTransaction().commit();
+
             this.setConnected();
         } catch (Exception e) {
             this.checkForConnectionProblem(e);
@@ -61,7 +63,6 @@ public class PersistenceBean {
         }
     }
 
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public <T extends Persistable> T merge(T entity) {
         try {
             T result = this.em.merge(entity);
@@ -74,7 +75,6 @@ public class PersistenceBean {
         }
     }
 
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void delete(Persistable entity) throws Exception {
         try {
             this.em.remove(entity);
@@ -114,7 +114,6 @@ public class PersistenceBean {
         return this.em.createEntityGraph(clazz);
     }
 
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public <T extends Persistable> T refresh(T persistable) {
         return this.find((Class<T>) persistable.getClass(), persistable.getId());
     }
@@ -173,6 +172,8 @@ public class PersistenceBean {
 
     public <T> List<T> find(Class<T> theClass, String queryName, Parameters parameters, EntityGraph entityGraph) {
         try {
+            em.getTransaction().begin();
+
             TypedQuery<T> query = this.em.createNamedQuery(queryName, theClass);
 
             if (parameters != null) {
@@ -184,6 +185,8 @@ public class PersistenceBean {
             }
 
             List<T> result = query.getResultList();
+
+            em.getTransaction().commit();
 
             this.setConnected();
             return result;

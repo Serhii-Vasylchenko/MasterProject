@@ -16,8 +16,7 @@ public class System extends TechnicalEntity {
     public static final String NQ_ALL = "nq.get.all";
     public static final String NQ_BY_NAME = "nq.get.by.name";
 
-    @Column
-    @OneToMany
+    @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST)
     private Set<Component> components;
 
     public System(String name, String description) {

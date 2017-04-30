@@ -6,6 +6,7 @@ import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.utils.Parameters;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +15,18 @@ import java.util.List;
  */
 public class WorkflowManager {
 
-    private PersistenceBean persistenceBean;
+    private PersistenceBean persistenceBean = new PersistenceBean();
 
     public WorkflowManager() {
-        persistenceBean = new PersistenceBean();
-        EntityManager em = EMProvider.getInstance().getEntityManagerFactory().createEntityManager();
+//        SessionFactory factory;
+//        try {
+//            factory = new Configuration().configure().buildSessionFactory();
+//        } catch (Throwable ex) {
+//            Logger.getLogger(this.getClass().getSimpleName()).log(Level.SEVERE, "Failed to create sessionFactory object: ", ex);
+//            throw new ExceptionInInitializerError(ex);
+//        }
+
+        EntityManager em = Persistence.createEntityManagerFactory("em").createEntityManager();
         persistenceBean.setEntityManager(em);
     }
 
@@ -26,6 +34,11 @@ public class WorkflowManager {
         System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
         Component component = new Component(system, compName, description);
         persistenceBean.persist(component);
+    }
+
+    public void addSystem(String name, String description) {
+        System system = new System(name, description);
+        persistenceBean.persist(system);
     }
 
     public void modifyComponent(Long id, Component component) {

@@ -21,7 +21,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -46,7 +45,6 @@ public class MainWindow extends Application {
             primaryStage.setScene(new Scene(root, 1200, 900));
             primaryStage.show();
 
-            //workflowManager = new WorkflowManager();
             updateComponentList();
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
@@ -59,20 +57,56 @@ public class MainWindow extends Application {
     }
 
     public void addSystem(ActionEvent actionEvent) {
-        TextInputDialog dialog = new TextInputDialog("walter");
-        dialog.setTitle("Text Input Dialog");
-        dialog.setHeaderText("Look, a Text Input Dialog");
-        dialog.setContentText("Please enter your name:");
+        // Create the custom dialog.
+        Dialog<List<String>> dialog = new Dialog<>();
+        dialog.setTitle("Add new component");
+        dialog.setContentText(null);
 
-        Optional<String> result = dialog.showAndWait();
+        // Set the button types.
+        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
 
-        // The Java 8 way to get the response value (with lambda expression).
-        // result.ifPresent(name -> System.out.println("Your name: " + name));
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        // Fields for the name and description
+        TextField nameField = new TextField();
+        TextField descriptionField = new TextField();
+        descriptionField.setPromptText("optional");
+
+        // Add the content to the grid
+        grid.add(new Label("Name"), 0, 0);
+        grid.add(nameField, 1, 0);
+        grid.add(new Label("Description"), 0, 1);
+        grid.add(descriptionField, 1, 1);
+
+        final Button addButton = (Button) dialog.getDialogPane().lookupButton(addButtonType);
+        addButton.addEventFilter(ActionEvent.ACTION, event -> {
+            if (nameField.getText().trim().isEmpty()) {
+                event.consume();
+            }
+        });
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Request focus on the name field by default.
+        Platform.runLater(nameField::requestFocus);
+
+        // Send the result to workflowManager when the add button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == addButtonType) {
+                workflowManager.addSystem(nameField.getText(), descriptionField.getText());
+                updateComponentList();
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
     }
 
     public void addComponent(ActionEvent actionEvent) {
-        //DialogPane dialogPane = (DialogPane) FXMLLoader.load(getClass().getResource("/fxml/addComponentDialog.fxml"));
-
         // Create the custom dialog.
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Add new component");
@@ -98,6 +132,7 @@ public class MainWindow extends Application {
         // Fields for the name and description
         TextField nameField = new TextField();
         TextField descriptionField = new TextField();
+        descriptionField.setPromptText("optional");
 
         // Add the content to the grid
         grid.add(new Label("System"), 0, 0);
@@ -109,7 +144,7 @@ public class MainWindow extends Application {
 
         final Button addButton = (Button) dialog.getDialogPane().lookupButton(addButtonType);
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
-            if (!systemChoiceBox.getValue().trim().isEmpty() && !nameField.getText().trim().isEmpty()) {
+            if (systemChoiceBox.getValue().trim().isEmpty() || nameField.getText().trim().isEmpty()) {
                 event.consume();
             }
         });
@@ -123,6 +158,7 @@ public class MainWindow extends Application {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
                 workflowManager.addComponent(systemChoiceBox.getValue(), nameField.getText(), descriptionField.getText());
+                updateComponentList();
             }
             return null;
         });
