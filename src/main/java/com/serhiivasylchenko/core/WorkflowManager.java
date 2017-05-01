@@ -18,14 +18,6 @@ public class WorkflowManager {
     private PersistenceBean persistenceBean = new PersistenceBean();
 
     public WorkflowManager() {
-//        SessionFactory factory;
-//        try {
-//            factory = new Configuration().configure().buildSessionFactory();
-//        } catch (Throwable ex) {
-//            Logger.getLogger(this.getClass().getSimpleName()).log(Level.SEVERE, "Failed to create sessionFactory object: ", ex);
-//            throw new ExceptionInInitializerError(ex);
-//        }
-
         EntityManager em = Persistence.createEntityManagerFactory("em").createEntityManager();
         persistenceBean.setEntityManager(em);
     }
@@ -62,10 +54,10 @@ public class WorkflowManager {
     }
 
     public List<System> getSystemList() {
-        List<System> systemList = persistenceBean.find(System.class, System.NQ_ALL, new Parameters());
-
-        return systemList;
+        return persistenceBean.find(System.class, System.NQ_ALL, new Parameters());
     }
 
-
+    public List<Component> getComponentList(String systemName) {
+        return persistenceBean.find(Component.class, Component.NQ_BY_SYSTEM_NAME, new Parameters().add("systemName", systemName));
+    }
 }

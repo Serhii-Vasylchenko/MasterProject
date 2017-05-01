@@ -1,14 +1,17 @@
 package com.serhiivasylchenko.persistence;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  * @author Serhii Vasylchenko
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = Component.NQ_BY_SYSTEM_NAME, query = "SELECT x FROM Component x WHERE x.system.name = :systemName")
+})
 public class Component extends TechnicalEntity {
+    public static final String NQ_BY_SYSTEM_NAME = "nq.get.by.system";
+
     @ManyToOne
     private System system;
 

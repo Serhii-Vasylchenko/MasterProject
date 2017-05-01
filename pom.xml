@@ -87,7 +87,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.8.3</version>
                 <configuration>
-                    <mainClass>com.serhiivasylchenko.gui.MainWindow</mainClass>
+                    <mainClass>com.serhiivasylchenko.gui.MainApp</mainClass>
                 </configuration>
             </plugin>
             <plugin>

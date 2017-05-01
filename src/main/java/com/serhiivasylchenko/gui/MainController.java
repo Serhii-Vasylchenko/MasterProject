@@ -1,62 +1,39 @@
 package com.serhiivasylchenko.gui;
 
-/**
- * @author Serhii Vasylchenko
- */
-
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.System;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.net.URL;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class MainWindow extends Application {
-
-    @FXML
-    ToggleGroup evaluateToggleGroup = new ToggleGroup();
+/**
+ * @author Serhii Vasylchenko
+ */
+public class MainController implements Initializable {
+    public TreeView<String> componentsTreeView;
 
     private WorkflowManager workflowManager = new WorkflowManager();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
-    public void start(Stage primaryStage) {
-        Parent root;
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/mainWindow.fxml"));
-            primaryStage.setTitle("Master Project");
-            primaryStage.setScene(new Scene(root, 1200, 900));
-            primaryStage.show();
+    public void initialize(URL location, ResourceBundle resources) {
+        updateComponentList();
+        //componentsTreeView.setCellFactory();
+    }
 
-            updateComponentList();
-        } catch (IOException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
-        }
+    public void runAnalysis() {
 
     }
 
-    public void runAnalysis(ActionEvent actionEvent) {
-
-    }
-
-    public void addSystem(ActionEvent actionEvent) {
+    public void addSystem() {
         // Create the custom dialog.
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Add new component");
@@ -106,7 +83,7 @@ public class MainWindow extends Application {
         dialog.showAndWait();
     }
 
-    public void addComponent(ActionEvent actionEvent) {
+    public void addComponent() {
         // Create the custom dialog.
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Add new component");
@@ -167,6 +144,21 @@ public class MainWindow extends Application {
     }
 
     private void updateComponentList() {
+        List<System> systems = workflowManager.getSystemList();
 
+        TreeItem<String> rootNode = new TreeItem<>();
+        rootNode.setExpanded(true);
+
+        systems.forEach(system -> {
+            TreeItem<String> systemName = new TreeItem<>(system.getName());
+            systemName.setExpanded(true);
+            workflowManager.getComponentList(system.getName()).forEach(component -> {
+                TreeItem<String> compName = new TreeItem<>(component.getName());
+                systemName.getChildren().add(compName);
+            });
+            rootNode.getChildren().add(systemName);
+        });
+
+        componentsTreeView.setRoot(rootNode);
     }
 }
