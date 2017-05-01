@@ -8,6 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -20,6 +22,9 @@ import java.util.stream.Collectors;
  */
 public class MainController implements Initializable {
     public TreeView<String> componentsTreeView;
+
+    private final Image systemIcon = new Image(getClass().getResourceAsStream("/icons/system1_16.png"));
+    private final Image componentIcon = new Image(getClass().getResourceAsStream("/icons/component1_16.png"));
 
     private WorkflowManager workflowManager = new WorkflowManager();
 
@@ -150,10 +155,10 @@ public class MainController implements Initializable {
         rootNode.setExpanded(true);
 
         systems.forEach(system -> {
-            TreeItem<String> systemName = new TreeItem<>(system.getName());
+            TreeItem<String> systemName = new TreeItem<>(system.getName(), new ImageView(systemIcon));
             systemName.setExpanded(true);
-            workflowManager.getComponentList(system.getName()).forEach(component -> {
-                TreeItem<String> compName = new TreeItem<>(component.getName());
+            system.getComponents().forEach(component -> {
+                TreeItem<String> compName = new TreeItem<>(component.getName(), new ImageView(componentIcon));
                 systemName.getChildren().add(compName);
             });
             rootNode.getChildren().add(systemName);
