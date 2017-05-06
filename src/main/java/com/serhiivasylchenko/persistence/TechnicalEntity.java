@@ -2,6 +2,7 @@ package com.serhiivasylchenko.persistence;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 
 /**
  * @author Serhii Vasylchenko
@@ -14,7 +15,7 @@ public abstract class TechnicalEntity extends Conditional {
     @Column
     private String description;
 
-    @Column
+    @OneToOne
     private ParameterList parameterList;
 
     public TechnicalEntity(String name, String description) {

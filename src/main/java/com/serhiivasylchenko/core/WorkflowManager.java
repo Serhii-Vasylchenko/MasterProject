@@ -24,7 +24,7 @@ public class WorkflowManager {
 
     public void addComponent(String systemName, String compName, String description) {
         System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
-        Component component = new Component(system, compName, description);
+        Component component = new Component(system, null, compName, description);
         persistenceBean.persist(component);
     }
 

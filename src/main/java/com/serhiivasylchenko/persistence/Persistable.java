@@ -15,6 +15,8 @@ import java.util.Objects;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Persistable implements Comparable<Persistable>, Serializable {
 
+    private static final long serialVersionUID = -7305666212357489588L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

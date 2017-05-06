@@ -1,6 +1,8 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
+import com.serhiivasylchenko.persistence.Component;
+import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -25,6 +27,7 @@ public class MainController implements Initializable {
 
     private final Image systemIcon = new Image(getClass().getResourceAsStream("/icons/system1_16.png"));
     private final Image componentIcon = new Image(getClass().getResourceAsStream("/icons/component1_16.png"));
+    private final Image groupIcon = new Image(getClass().getResourceAsStream("/icons/group1_16.png"));
 
     private WorkflowManager workflowManager = new WorkflowManager();
 
@@ -157,9 +160,22 @@ public class MainController implements Initializable {
         systems.forEach(system -> {
             TreeItem<String> systemName = new TreeItem<>(system.getName(), new ImageView(systemIcon));
             systemName.setExpanded(true);
-            system.getComponents().forEach(component -> {
-                TreeItem<String> compName = new TreeItem<>(component.getName(), new ImageView(componentIcon));
-                systemName.getChildren().add(compName);
+            system.getChildren().forEach(child -> {
+                TreeItem<String> childName = null;
+                if (child instanceof ComponentGroup) {
+                    ComponentGroup group = (ComponentGroup) child;
+                    childName = new TreeItem<>(group.getName(), new ImageView(groupIcon));
+                    while (group.getComponentGroupChildren() != null || !group.getComponentGroupChildren().isEmpty()) {
+                        // TODO: deal with nested groups
+                    }
+                } else if (child instanceof Component) {
+                    childName = new TreeItem<>(((Component) child).getName(), new ImageView(componentIcon));
+                }
+
+                if (child != null) {
+                    systemName.getChildren().add(childName);
+                }
+
             });
             rootNode.getChildren().add(systemName);
         });
