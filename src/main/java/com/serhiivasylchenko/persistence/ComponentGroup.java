@@ -11,14 +11,16 @@ import java.util.stream.Collectors;
 @Entity
 @NamedQueries({
         @NamedQuery(name = ComponentGroup.NQ_ALL, query = "SELECT x FROM ComponentGroup x"),
-        @NamedQuery(name = ComponentGroup.NQ_BY_NAME_AND_SYSTEM, query = "SELECT x FROM ComponentGroup x WHERE x.name = :name AND x.system = :system")
+        @NamedQuery(name = ComponentGroup.NQ_BY_NAME_AND_SYSTEM, query = "SELECT x FROM ComponentGroup x WHERE x.name = :name AND x.system = :system"),
+        @NamedQuery(name = ComponentGroup.NQ_BY_SYSTEM_NAME, query = "SELECT x FROM ComponentGroup x WHERE x.system.name = :systemName")
 })
 public class ComponentGroup extends TechnicalEntity implements Group {
 
     private static final long serialVersionUID = 3880001170507004727L;
 
     public static final String NQ_ALL = "nq.group.get.all";
-    public static final String NQ_BY_NAME_AND_SYSTEM = "nq.group.get.by.name";
+    public static final String NQ_BY_NAME_AND_SYSTEM = "nq.group.get.by.name.and.system";
+    public static final String NQ_BY_SYSTEM_NAME = "nq.group.by.system.name";
 
     @ManyToOne
     private System system;

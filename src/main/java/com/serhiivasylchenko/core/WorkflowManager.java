@@ -62,4 +62,18 @@ public class WorkflowManager {
     public List<Component> getComponentList(String systemName) {
         return persistenceBean.find(Component.class, Component.NQ_BY_SYSTEM_NAME, new Parameters().add("systemName", systemName));
     }
+
+    public List<ComponentGroup> getGroupList(String systemName) {
+        List<ComponentGroup> componentGroups = persistenceBean.find(ComponentGroup.class, ComponentGroup.NQ_BY_SYSTEM_NAME, new Parameters().add("systemName", systemName));
+        componentGroups = checkForChildren(componentGroups);
+
+        return componentGroups;
+    }
+
+    private List<ComponentGroup> checkForChildren(List<ComponentGroup> componentGroups) {
+        List<ComponentGroup> withChildren = componentGroups;
+        componentGroups.forEach(componentGroup -> withChildren.addAll(checkForChildren(componentGroup.getComponentGroupChildren())));
+
+        return withChildren;
+    }
 }

@@ -69,8 +69,8 @@ public class DialogController implements Initializable {
             addButton.addEventFilter(ActionEvent.ACTION, event -> {
                 // Check if all necessary fields are set
                 if (((addTabPane.getSelectionModel().getSelectedIndex() == 0) && (compName.getText().isEmpty() || compSystem.getValue().isEmpty())) ||
-                        ((addTabPane.getSelectionModel().getSelectedIndex() == 1) && (groupName.getText().isEmpty() || groupSystem.getValue().isEmpty())) ||
-                        ((addTabPane.getSelectionModel().getSelectedIndex() == 2) && (systemName.getText().isEmpty()))) {
+                        ((addTabPane.getSelectionModel().getSelectedIndex() == 1) && (systemName.getText().isEmpty())) ||
+                        ((addTabPane.getSelectionModel().getSelectedIndex() == 2) && (groupName.getText().isEmpty() || groupSystem.getValue().isEmpty()))) {
                     event.consume();
                 }
             });
@@ -88,11 +88,11 @@ public class DialogController implements Initializable {
                         case 0: // new component
                             mainController.getWorkflowManager().addComponent(compSystem.getValue(), compName.getText(), compDescription.getText());
                             break;
-                        case 1: // new component group
-                            mainController.getWorkflowManager().addComponentGroup(groupSystem.getValue(), groupParent.getValue(), groupName.getText(), groupDescription.getText());
-                            break;
-                        case 2: // new system
+                        case 1: // new system
                             mainController.getWorkflowManager().addSystem(systemName.getText(), systemDescription.getText());
+                            break;
+                        case 2: // new component group
+                            mainController.getWorkflowManager().addComponentGroup(groupSystem.getValue(), groupParent.getValue(), groupName.getText(), groupDescription.getText());
                             break;
                     }
                     mainController.updateComponentList();

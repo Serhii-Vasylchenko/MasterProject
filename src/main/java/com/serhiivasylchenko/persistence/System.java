@@ -17,8 +17,8 @@ public class System extends TechnicalEntity implements Group {
 
     private static final long serialVersionUID = 8937660893306074636L;
 
-    public static final String NQ_ALL = "nq.get.all";
-    public static final String NQ_BY_NAME = "nq.get.by.name";
+    public static final String NQ_ALL = "nq.system.get.all";
+    public static final String NQ_BY_NAME = "nq.system.get.by.name";
 
     @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST)
     private List<Component> components;
