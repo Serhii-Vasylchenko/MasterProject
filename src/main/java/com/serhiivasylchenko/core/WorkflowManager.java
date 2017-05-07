@@ -7,7 +7,6 @@ import com.serhiivasylchenko.utils.Parameters;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,15 +21,30 @@ public class WorkflowManager {
         persistenceBean.setEntityManager(em);
     }
 
+    public void addSystem(String name, String description) {
+        System system = new System(name, description);
+        persistenceBean.persist(system);
+    }
+
+    public void addComponentGroup(String systemName, String parentGroupName, String groupName, String description) {
+        System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
+        ComponentGroup componentGroup = new ComponentGroup(system, groupName, description);
+        if (parentGroupName != null && !parentGroupName.isEmpty()) {
+            ComponentGroup parentGroup = persistenceBean.findSingle(ComponentGroup.class,
+                    ComponentGroup.NQ_BY_NAME_AND_SYSTEM,
+                    new Parameters()
+                            .add("name", parentGroupName)
+                            .add("system", system));
+            if (parentGroup != null) {
+                componentGroup.setParent(parentGroup);
+            }
+        }
+    }
+
     public void addComponent(String systemName, String compName, String description) {
         System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
         Component component = new Component(system, null, compName, description);
         persistenceBean.persist(component);
-    }
-
-    public void addSystem(String name, String description) {
-        System system = new System(name, description);
-        persistenceBean.persist(system);
     }
 
     public void modifyComponent(Long id, Component component) {
@@ -39,18 +53,6 @@ public class WorkflowManager {
 
     public void removeComponent(Long id) {
 
-    }
-
-    public List<Component> getComponentListByGroup(ComponentGroup group) {
-        List<Component> components = new ArrayList<>();
-
-        return components;
-    }
-
-    public ComponentGroup getComponentGroup(Component component) {
-        ComponentGroup componentGroup = null;
-
-        return componentGroup;
     }
 
     public List<System> getSystemList() {

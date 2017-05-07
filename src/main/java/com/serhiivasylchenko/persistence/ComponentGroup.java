@@ -1,9 +1,6 @@
 package com.serhiivasylchenko.persistence;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,23 +9,30 @@ import java.util.stream.Collectors;
  * @author Serhii Vasylchenko
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = ComponentGroup.NQ_ALL, query = "SELECT x FROM ComponentGroup x"),
+        @NamedQuery(name = ComponentGroup.NQ_BY_NAME_AND_SYSTEM, query = "SELECT x FROM ComponentGroup x WHERE x.name = :name AND x.system = :system")
+})
 public class ComponentGroup extends TechnicalEntity implements Group {
 
     private static final long serialVersionUID = 3880001170507004727L;
 
+    public static final String NQ_ALL = "nq.group.get.all";
+    public static final String NQ_BY_NAME_AND_SYSTEM = "nq.group.get.by.name";
+
     @ManyToOne
     private System system;
 
-    @OneToOne
+    @ManyToOne
     private ComponentGroup parent;
 
     @OneToMany
-    private ArrayList<Component> componentChildren;
+    private List<Component> componentChildren;
 
     @OneToMany
-    private ArrayList<ComponentGroup> componentGroupChildren;
+    private List<ComponentGroup> componentGroupChildren;
 
-    public ComponentGroup(String name, String description, System system) {
+    public ComponentGroup(System system, String name, String description) {
         super(name, description);
         this.system = system;
         this.parent = null;
@@ -37,9 +41,6 @@ public class ComponentGroup extends TechnicalEntity implements Group {
     }
 
     public ComponentGroup() {
-        this.parent = null;
-        this.componentGroupChildren = new ArrayList<>();
-        this.componentChildren = new ArrayList<>();
     }
 
     @Override
@@ -87,7 +88,7 @@ public class ComponentGroup extends TechnicalEntity implements Group {
         this.parent = parent;
     }
 
-    public ArrayList<Component> getComponentChildren() {
+    public List<Component> getComponentChildren() {
         return componentChildren;
     }
 
@@ -95,7 +96,7 @@ public class ComponentGroup extends TechnicalEntity implements Group {
         this.componentChildren = componentChildren;
     }
 
-    public ArrayList<ComponentGroup> getComponentGroupChildren() {
+    public List<ComponentGroup> getComponentGroupChildren() {
         return componentGroupChildren;
     }
 

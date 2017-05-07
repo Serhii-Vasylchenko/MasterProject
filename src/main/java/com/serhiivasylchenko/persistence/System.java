@@ -3,7 +3,6 @@ package com.serhiivasylchenko.persistence;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -22,10 +21,10 @@ public class System extends TechnicalEntity implements Group {
     public static final String NQ_BY_NAME = "nq.get.by.name";
 
     @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST)
-    private Set<Component> components;
+    private List<Component> components;
 
     @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST)
-    private Set<ComponentGroup> componentGroups;
+    private List<ComponentGroup> componentGroups;
 
     public System(String name, String description) {
         super(name, description);
@@ -59,19 +58,19 @@ public class System extends TechnicalEntity implements Group {
         return children;
     }
 
-    public Set<Component> getComponents() {
+    public List<Component> getComponents() {
         return components;
     }
 
-    public void setComponents(Set<Component> components) {
+    public void setComponents(List<Component> components) {
         this.components = components;
     }
 
-    public Set<ComponentGroup> getComponentGroups() {
+    public List<ComponentGroup> getComponentGroups() {
         return componentGroups;
     }
 
-    public void setComponentGroups(Set<ComponentGroup> componentGroups) {
+    public void setComponentGroups(List<ComponentGroup> componentGroups) {
         this.componentGroups = componentGroups;
     }
 }

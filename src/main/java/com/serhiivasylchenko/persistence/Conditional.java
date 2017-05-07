@@ -17,16 +17,18 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class Conditional extends CachedPersistable {
 
+    private static final long serialVersionUID = -7464534889459915099L;
+
     @Column(nullable = false, length = 28)
     @Enumerated(EnumType.STRING)
     private Status status = Status.INACTIVE;
 
-    public Conditional() {
-    }
-
     public Conditional(Conditional p, boolean deep) {
         super(p, deep);
         this.status = p.status;
+    }
+
+    public Conditional() {
     }
 
     public Status getStatus() {

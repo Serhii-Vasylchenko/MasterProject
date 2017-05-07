@@ -18,11 +18,11 @@ public abstract class CachedPersistable extends Persistable {
 
     private static final long serialVersionUID = 2016061901L;
 
-    public CachedPersistable() {
-    }
-
     public CachedPersistable(CachedPersistable p, boolean deep) {
         super(p, deep);
+    }
+
+    protected CachedPersistable() {
     }
 }
 

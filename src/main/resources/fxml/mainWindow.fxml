@@ -5,11 +5,8 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane id="mainAnchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.MainController">
-    <fx:define>
-        <ToggleGroup fx:id="evaluateToggleGroup"/>
-    </fx:define>
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.serhiivasylchenko.gui.MainController">
 
     <children>
         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
@@ -64,30 +61,15 @@
                                         <Font size="18.0"/>
                                     </font>
                                 </Label>
-                                <HBox alignment="CENTER" layoutX="14.0" layoutY="76.0" spacing="14.0"
-                                      AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
-                                      AnchorPane.topAnchor="90.0">
-                                    <children>
-                                        <Button alignment="CENTER" layoutX="14.0" layoutY="85.0" mnemonicParsing="false"
-                                                onAction="#addSystem" prefHeight="31.0" prefWidth="200.0"
-                                                text="Add System" AnchorPane.leftAnchor="14.0"
-                                                AnchorPane.topAnchor="90.0">
-                                            <effect>
-                                                <DropShadow blurType="TWO_PASS_BOX" color="#9dff9d" height="90.0"
-                                                            radius="22.0" width="0.0"/>
-                                            </effect>
-                                        </Button>
-                                        <Button alignment="CENTER" layoutX="301.0" layoutY="85.0"
-                                                mnemonicParsing="false" onAction="#addComponent" prefHeight="31.0"
-                                                prefWidth="200.0" text="Add Component" AnchorPane.rightAnchor="14.0"
-                                                AnchorPane.topAnchor="90.0">
-                                            <effect>
-                                                <DropShadow blurType="TWO_PASS_BOX" color="#9dff9d" height="90.0"
-                                                            radius="22.0" width="0.0"/>
-                                            </effect>
-                                        </Button>
-                                    </children>
-                                </HBox>
+                                <Button alignment="CENTER" layoutX="98.0" layoutY="90.0" mnemonicParsing="false"
+                                        onAction="#addEntity" prefHeight="31.0" prefWidth="500.0"
+                                        text="Add new Component / Component Group / System" AnchorPane.leftAnchor="14.0"
+                                        AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0">
+                                    <effect>
+                                        <DropShadow blurType="TWO_PASS_BOX" color="#9dff9d" height="90.0" radius="22.0"
+                                                    width="0.0"/>
+                                    </effect>
+                                </Button>
                             </children>
                         </AnchorPane>
                         <AnchorPane prefWidth="320.0">
@@ -154,10 +136,13 @@
                                             <children>
                                                 <Label layoutX="51.0" layoutY="59.0" text="Mark as:"/>
                                                 <RadioButton layoutX="127.0" layoutY="59.0" mnemonicParsing="false"
-                                                             text="Correct" toggleGroup="$evaluateToggleGroup">
+                                                             text="Correct">
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="evaluationToggleGroup"/>
+                                                    </toggleGroup>
                                                 </RadioButton>
                                                 <RadioButton layoutX="223.0" layoutY="59.0" mnemonicParsing="false"
-                                                             text="Wrong" toggleGroup="$evaluateToggleGroup"/>
+                                                             text="Wrong" toggleGroup="$evaluationToggleGroup"/>
                                             </children>
                                         </HBox>
                                         <Button alignment="CENTER" layoutX="86.0" layoutY="104.0"

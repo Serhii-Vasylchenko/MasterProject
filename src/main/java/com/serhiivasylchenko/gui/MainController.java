@@ -3,6 +3,7 @@ package com.serhiivasylchenko.gui;
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.Component;
 import com.serhiivasylchenko.persistence.ComponentGroup;
+import com.serhiivasylchenko.persistence.Persistable;
 import com.serhiivasylchenko.persistence.System;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  */
 public class MainController implements Initializable {
     public TreeView<String> componentsTreeView;
+    public ToggleGroup evaluationToggleGroup;
 
     private final Image systemIcon = new Image(getClass().getResourceAsStream("/icons/system1_16.png"));
     private final Image componentIcon = new Image(getClass().getResourceAsStream("/icons/component1_16.png"));
@@ -31,64 +33,25 @@ public class MainController implements Initializable {
 
     private WorkflowManager workflowManager = new WorkflowManager();
 
+    private DialogController dialogController = new DialogController();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateComponentList();
+        dialogController.setMainController(this);
         //componentsTreeView.setCellFactory();
+    }
+
+    public WorkflowManager getWorkflowManager() {
+        return workflowManager;
     }
 
     public void runAnalysis() {
 
     }
 
-    public void addSystem() {
-        // Create the custom dialog.
-        Dialog<List<String>> dialog = new Dialog<>();
-        dialog.setTitle("Add new component");
-        dialog.setContentText(null);
-
-        // Set the button types.
-        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        // Fields for the name and description
-        TextField nameField = new TextField();
-        TextField descriptionField = new TextField();
-        descriptionField.setPromptText("optional");
-
-        // Add the content to the grid
-        grid.add(new Label("Name"), 0, 0);
-        grid.add(nameField, 1, 0);
-        grid.add(new Label("Description"), 0, 1);
-        grid.add(descriptionField, 1, 1);
-
-        final Button addButton = (Button) dialog.getDialogPane().lookupButton(addButtonType);
-        addButton.addEventFilter(ActionEvent.ACTION, event -> {
-            if (nameField.getText().trim().isEmpty()) {
-                event.consume();
-            }
-        });
-
-        dialog.getDialogPane().setContent(grid);
-
-        // Request focus on the name field by default.
-        Platform.runLater(nameField::requestFocus);
-
-        // Send the result to workflowManager when the add button is clicked.
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == addButtonType) {
-                workflowManager.addSystem(nameField.getText(), descriptionField.getText());
-                updateComponentList();
-            }
-            return null;
-        });
-
-        dialog.showAndWait();
+    public void addEntity() {
+        dialogController.showAddDialog();
     }
 
     public void addComponent() {
@@ -151,35 +114,38 @@ public class MainController implements Initializable {
         dialog.showAndWait();
     }
 
-    private void updateComponentList() {
+    public void updateComponentList() {
         List<System> systems = workflowManager.getSystemList();
 
         TreeItem<String> rootNode = new TreeItem<>();
-        rootNode.setExpanded(true);
 
-        systems.forEach(system -> {
-            TreeItem<String> systemName = new TreeItem<>(system.getName(), new ImageView(systemIcon));
-            systemName.setExpanded(true);
-            system.getChildren().forEach(child -> {
-                TreeItem<String> childName = null;
-                if (child instanceof ComponentGroup) {
-                    ComponentGroup group = (ComponentGroup) child;
-                    childName = new TreeItem<>(group.getName(), new ImageView(groupIcon));
-                    while (group.getComponentGroupChildren() != null || !group.getComponentGroupChildren().isEmpty()) {
-                        // TODO: deal with nested groups
-                    }
-                } else if (child instanceof Component) {
-                    childName = new TreeItem<>(((Component) child).getName(), new ImageView(componentIcon));
-                }
-
-                if (child != null) {
-                    systemName.getChildren().add(childName);
-                }
-
-            });
-            rootNode.getChildren().add(systemName);
-        });
+        addChildrenToTheNode(rootNode, systems);
 
         componentsTreeView.setRoot(rootNode);
+    }
+
+    private void addChildrenToTheNode(TreeItem<String> node, List<? extends Persistable> children) {
+        // Set the node to be expanded by default
+        node.setExpanded(true);
+
+        children.forEach(child -> {
+            TreeItem<String> childName = null;
+
+            // Assign different icons depending on the class
+            if (child instanceof System) {
+                childName = new TreeItem<>(((System) child).getName(), new ImageView(componentIcon));
+            } else if (child instanceof ComponentGroup) {
+                ComponentGroup group = (ComponentGroup) child;
+                childName = new TreeItem<>(group.getName(), new ImageView(groupIcon));
+                // Other component groups may be nested inside, so we need to check for this
+                addChildrenToTheNode(childName, group.getChildren());
+            } else if (child instanceof Component) {
+                childName = new TreeItem<>(((Component) child).getName(), new ImageView(componentIcon));
+            }
+
+            if (childName != null) {
+                node.getChildren().add(childName);
+            }
+        });
     }
 }

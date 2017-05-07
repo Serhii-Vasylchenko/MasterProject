@@ -7,13 +7,15 @@ import javax.persistence.*;
  */
 @Entity
 @NamedQueries({
+        @NamedQuery(name = Component.NQ_ALL, query = "SELECT x FROM Component x"),
         @NamedQuery(name = Component.NQ_BY_SYSTEM_NAME, query = "SELECT x FROM Component x WHERE x.system.name = :systemName")
 })
 public class Component extends TechnicalEntity {
 
     private static final long serialVersionUID = -2461904212127946257L;
 
-    public static final String NQ_BY_SYSTEM_NAME = "nq.get.by.system";
+    public static final String NQ_ALL = "nq.component.get.all";
+    public static final String NQ_BY_SYSTEM_NAME = "nq.component.get.by.system.name";
 
     @ManyToOne
     private System system;
@@ -28,9 +30,6 @@ public class Component extends TechnicalEntity {
         super(name, description);
         this.system = system;
         this.componentGroup = componentGroup;
-    }
-
-    public Component() {
     }
 
     public AbstractSolver getSolver() {
