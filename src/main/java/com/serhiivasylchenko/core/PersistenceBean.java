@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author Serhii Vasylchenko
  */
+
 public class PersistenceBean {
 
     private EntityManager em;

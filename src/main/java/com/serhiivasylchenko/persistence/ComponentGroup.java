@@ -26,18 +26,18 @@ public class ComponentGroup extends TechnicalEntity implements Group {
     private System system;
 
     @ManyToOne
-    private ComponentGroup parent;
+    private ComponentGroup parentGroup;
 
-    @OneToMany
+    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL)
     private List<Component> componentChildren;
 
-    @OneToMany
+    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL)
     private List<ComponentGroup> componentGroupChildren;
 
     public ComponentGroup(System system, String name, String description) {
         super(name, description);
         this.system = system;
-        this.parent = null;
+        this.parentGroup = null;
         this.componentGroupChildren = new ArrayList<>();
         this.componentChildren = new ArrayList<>();
     }
@@ -45,12 +45,15 @@ public class ComponentGroup extends TechnicalEntity implements Group {
     public ComponentGroup() {
     }
 
-    @Override
-    public Persistable getParent() {
-        return parent;
+    public ComponentGroup getParentGroup() {
+        return parentGroup;
     }
 
     @Override
+    public Persistable getParent() {
+        return parentGroup == null ? system : parentGroup;
+    }
+
     public List<Persistable> getChildren() {
         List<Persistable> children = new ArrayList<>();
         children.addAll(componentGroupChildren);
@@ -58,7 +61,6 @@ public class ComponentGroup extends TechnicalEntity implements Group {
         return children;
     }
 
-    @Override
     public List<Persistable> getChildrenSorted() {
         List<Persistable> children = new ArrayList<>();
         children.addAll(componentGroupChildren.stream()
@@ -86,8 +88,8 @@ public class ComponentGroup extends TechnicalEntity implements Group {
         this.system = system;
     }
 
-    public void setParent(ComponentGroup parent) {
-        this.parent = parent;
+    public void setParentGroup(ComponentGroup parent) {
+        this.parentGroup = parent;
     }
 
     public List<Component> getComponentChildren() {

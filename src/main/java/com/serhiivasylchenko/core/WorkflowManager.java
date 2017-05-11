@@ -4,15 +4,19 @@ import com.serhiivasylchenko.persistence.Component;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.utils.Parameters;
+import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Serhii Vasylchenko
  */
 public class WorkflowManager {
+
+    private static final Logger LOGGER = Logger.getLogger(WorkflowManager.class);
 
     private PersistenceBean persistenceBean = new PersistenceBean();
 
@@ -36,14 +40,29 @@ public class WorkflowManager {
                             .add("name", parentGroupName)
                             .add("system", system));
             if (parentGroup != null) {
-                componentGroup.setParent(parentGroup);
+                componentGroup.setParentGroup(parentGroup);
+            } else {
+                LOGGER.warn("ComponentGroup with the name '" + groupName + "' is not found!");
             }
         }
+        persistenceBean.persist(componentGroup);
     }
 
-    public void addComponent(String systemName, String compName, String description) {
+    public void addComponent(String systemName, String groupName, String compName, String description) {
         System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
-        Component component = new Component(system, null, compName, description);
+        ComponentGroup componentGroup = persistenceBean.findSingle(ComponentGroup.class,
+                ComponentGroup.NQ_BY_NAME_AND_SYSTEM,
+                new Parameters()
+                        .add("name", groupName)
+                        .add("system", system));
+        Component component;
+        if (componentGroup != null) {
+            component = new Component(system, componentGroup, compName, description);
+        } else {
+            component = new Component(system, null, compName, description);
+            LOGGER.warn("ComponentGroup with the name '" + groupName + "' is not found!");
+        }
+
         persistenceBean.persist(component);
     }
 
@@ -71,7 +90,8 @@ public class WorkflowManager {
     }
 
     private List<ComponentGroup> checkForChildren(List<ComponentGroup> componentGroups) {
-        List<ComponentGroup> withChildren = componentGroups;
+        List<ComponentGroup> withChildren = new ArrayList<>();
+        withChildren.addAll(componentGroups);
         componentGroups.forEach(componentGroup -> withChildren.addAll(checkForChildren(componentGroup.getComponentGroupChildren())));
 
         return withChildren;

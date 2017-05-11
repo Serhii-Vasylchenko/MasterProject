@@ -1,0 +1,111 @@
+<hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+                            http://www.hazelcast.com/schema/config/hazelcast-config-3.7.xsd"
+           xmlns="http://www.hazelcast.com/schema/config">
+
+    <instance-name>enp_instance</instance-name>
+
+    <network>
+        <reuse-address>true</reuse-address>
+        <join>
+            <multicast enabled="false"/>
+            <aws enabled="false"/>
+            <tcp-ip enabled="false"/>
+        </join>
+    </network>
+
+    <!--
+      General configuration of hazelcast. A full description of the properties can be found on [1].
+
+      [1] http://docs.hazelcast.org/docs/3.7/manual/html-single/index.html#system-properties
+    -->
+    <properties>
+        <!--
+          Maximum timeout of heartbeat in seconds for a node to assume it is dead.
+        -->
+        <property name="hazelcast.max.no.heartbeat.seconds">30</property>
+
+        <!--
+          Timeout for the heartbeat messages sent by the client to members. If no messages pass between
+          client and member within the given time via this property in milliseconds, the connection will
+          be closed.
+        -->
+        <property name="hazelcast.client.heartbeat.timeout">60000</property>
+    </properties>
+
+    <!--
+      This map is used by Hibernate Second Level Cache and has to be set up at system start to improve
+      performance of certain database queries and requests.
+
+      Some descriptions can be found on the following pages
+      [1] http://docs.hazelcast.org/docs/2.3/manual/html/ch13.html
+      [2] https://github.com/hazelcast/hazelcast-hibernate
+      [3] https://github.com/hazelcast/hazelcast-hibernate5
+      [4] http://docs.hazelcast.org/docs/3.7/manual/html-single/index.html#hibernate-second-level-cache
+    -->
+    <map name="SecondLevel">
+        <!--
+          Number of sync-backups. If 1 is set as the backup-count for example,
+          then all entries of the map will be copied to another JVM for
+          fail-safety. Valid numbers are 0 (no backup), 1, 2, 3.
+        -->
+        <backup-count>1</backup-count>
+
+        <!--
+          Number of async-backups. If 1 is set as the backup-count for example,
+          then all entries of the map will be copied to another JVM for
+          fail-safety. Valid numbers are 0 (no backup), 1, 2, 3.
+        -->
+        <async-backup-count>1</async-backup-count>
+
+        <!--
+          Can we read the local backup entries? Default value is false for
+          strong consistency. Being able to read backup data will give you
+          greater performance.
+        -->
+        <read-backup-data>false</read-backup-data>
+
+        <!--
+          Maximum number of seconds for each entry to stay in the map. Entries that are
+          older than <time-to-live-seconds> and not updated for <time-to-live-seconds>
+          will get automatically evicted from the map.
+          Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
+        -->
+        <time-to-live-seconds>0</time-to-live-seconds>
+
+        <!--
+          Maximum number of seconds for each entry to stay idle in the map. Entries that are
+          idle(not touched) for more than <max-idle-seconds> will get
+          automatically evicted from the map.
+          Entry is touched if get, put or containsKey is called.
+          Any integer between 0 and Integer.MAX_VALUE.
+          0 means infinite. Default is 0.
+        -->
+        <max-idle-seconds>0</max-idle-seconds>
+
+        <!--
+          Valid values are:
+          NONE (no extra eviction, <time-to-live-seconds> may still apply),
+          LRU  (Least Recently Used),
+          LFU  (Least Frequently Used).
+          NONE is the default.
+          Regardless of the eviction policy used, <time-to-live-seconds> will still apply.
+        -->
+        <eviction-policy>LRU</eviction-policy>
+
+        <!--
+          Maximum size of the map. When max size is reached,
+          map is evicted based on the policy defined.
+          Any integer between 0 and Integer.MAX_VALUE. 0 means
+          Integer.MAX_VALUE. Default is 0.
+        -->
+        <max-size policy="per_node">100</max-size>
+
+        <!--
+          When max. size is reached, specified percentage of
+          the map will be evicted. Any integer between 0 and 100.
+          If 25 is set for example, 25% of the entries will get evicted.
+        -->
+        <eviction-percentage>25</eviction-percentage>
+    </map>
+</hazelcast>

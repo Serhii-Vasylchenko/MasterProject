@@ -20,10 +20,10 @@ public class System extends TechnicalEntity implements Group {
     public static final String NQ_ALL = "nq.system.get.all";
     public static final String NQ_BY_NAME = "nq.system.get.by.name";
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL)
     private List<Component> components;
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL)
     private List<ComponentGroup> componentGroups;
 
     public System(String name, String description) {
@@ -38,7 +38,6 @@ public class System extends TechnicalEntity implements Group {
         return null;
     }
 
-    @Override
     public List<Persistable> getChildren() {
         List<Persistable> children = new ArrayList<>();
         children.addAll(componentGroups);
@@ -46,7 +45,6 @@ public class System extends TechnicalEntity implements Group {
         return children;
     }
 
-    @Override
     public List<Persistable> getChildrenSorted() {
         List<Persistable> children = new ArrayList<>();
         children.addAll(componentGroups.stream()

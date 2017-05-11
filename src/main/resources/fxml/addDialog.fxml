@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <TabPane fx:id="addTabPane" tabClosingPolicy="UNAVAILABLE" tabMinWidth="100.0" xmlns="http://javafx.com/javafx/8"
-         xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.DialogController">
+         xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.AddDialogController">
     <tabs>
         <Tab text="Component">
             <content>
@@ -20,13 +20,16 @@
                     </rowConstraints>
                     <children>
                         <Label text="System" GridPane.halignment="CENTER"/>
-                        <Label text="Name" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                        <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                        <Label text="Parent Group" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                        <Label text="Name" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
+                        <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                         <ChoiceBox id="systemChoiceBox" fx:id="compSystem" prefWidth="200.0" GridPane.columnIndex="1"
-                                   GridPane.halignment="CENTER"/>
-                        <TextField fx:id="compName" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                   GridPane.halignment="CENTER" onAction="#loadGroups"/>
+                        <ChoiceBox id="groupChoiceBox" fx:id="compGroup" prefWidth="200.0" GridPane.columnIndex="1"
+                                   GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                        <TextField fx:id="compName" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                         <TextArea fx:id="compDescription" prefHeight="200.0" prefWidth="200.0" promptText="optional"
-                                  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                     </children>
                     <opaqueInsets>
                         <Insets/>
@@ -75,12 +78,12 @@
                         <Label text="Name" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
                         <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                         <ChoiceBox id="systemChoiceBox" fx:id="groupSystem" prefWidth="200.0" GridPane.columnIndex="1"
-                                   GridPane.halignment="CENTER"/>
+                                   GridPane.halignment="CENTER" onAction="#loadParentGroups"/>
                         <TextField fx:id="groupName" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                         <TextArea fx:id="groupDescription" prefHeight="200.0" prefWidth="200.0" promptText="optional"
                                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                         <Label text="Parent Group" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                        <ChoiceBox id="systemChoiceBox" fx:id="groupParent" prefWidth="200.0" GridPane.columnIndex="1"
+                        <ChoiceBox id="groupChoiceBox" fx:id="groupParent" prefWidth="200.0" GridPane.columnIndex="1"
                                    GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                     </children>
                     <columnConstraints>

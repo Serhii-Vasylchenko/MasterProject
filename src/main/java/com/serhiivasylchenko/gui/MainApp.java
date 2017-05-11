@@ -6,8 +6,8 @@ package com.serhiivasylchenko.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
@@ -18,8 +18,11 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/mainWindow.fxml"));
-        Parent root = fxmlLoader.load();
+        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/mainWindow.fxml"));
+        MainController mainController = new MainController();
+        mainLoader.setController(mainController);
+
+        BorderPane root = mainLoader.load();
 
         primaryStage.setScene(new Scene(root));
         primaryStage.setHeight(900);

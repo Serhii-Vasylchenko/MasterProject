@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
         @NamedQuery(name = Component.NQ_ALL, query = "SELECT x FROM Component x"),
-        @NamedQuery(name = Component.NQ_BY_SYSTEM_NAME, query = "SELECT x FROM Component x WHERE x.system.name = :systemName")
+        @NamedQuery(name = Component.NQ_BY_SYSTEM_NAME, query = "SELECT x FROM Component x WHERE x.system.name = :systemName"),
+        @NamedQuery(name = Component.NQ_BY_NAME_AND_SYSTEM, query = "SELECT x FROM Component x WHERE x.name = :name and x.system = :system")
 })
 public class Component extends TechnicalEntity {
 
@@ -16,20 +17,24 @@ public class Component extends TechnicalEntity {
 
     public static final String NQ_ALL = "nq.component.get.all";
     public static final String NQ_BY_SYSTEM_NAME = "nq.component.get.by.system.name";
+    public static final String NQ_BY_NAME_AND_SYSTEM = "nq.component.get.by.name.and.system";
 
     @ManyToOne
     private System system;
 
     @ManyToOne
-    private ComponentGroup componentGroup;
+    private ComponentGroup parentGroup;
 
     @OneToOne
     private AbstractSolver solver;
 
-    public Component(System system, ComponentGroup componentGroup, String name, String description) {
+    public Component(System system, ComponentGroup parentGroup, String name, String description) {
         super(name, description);
         this.system = system;
-        this.componentGroup = componentGroup;
+        this.parentGroup = parentGroup;
+    }
+
+    public Component() {
     }
 
     public AbstractSolver getSolver() {
@@ -48,11 +53,11 @@ public class Component extends TechnicalEntity {
         this.system = system;
     }
 
-    public ComponentGroup getComponentGroup() {
-        return componentGroup;
+    public ComponentGroup getParentGroup() {
+        return parentGroup;
     }
 
-    public void setComponentGroup(ComponentGroup componentGroup) {
-        this.componentGroup = componentGroup;
+    public void setParentGroup(ComponentGroup componentGroup) {
+        this.parentGroup = componentGroup;
     }
 }

@@ -1,7 +1,5 @@
 package com.serhiivasylchenko.persistence;
 
-import com.sun.istack.internal.NotNull;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
@@ -27,7 +25,7 @@ public abstract class TechnicalEntity extends Conditional {
     @OneToOne
     private ParameterList parameterList;
 
-    public TechnicalEntity(@NotNull String name, String description) {
+    public TechnicalEntity(String name, String description) {
         this.name = name;
         this.description = description;
         this.creationTime = LocalDate.now();

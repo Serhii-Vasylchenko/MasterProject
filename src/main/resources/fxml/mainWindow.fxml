@@ -1,162 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.serhiivasylchenko.gui.MainController">
+<BorderPane prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1">
 
-    <children>
-        <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                    AnchorPane.topAnchor="0.0">
-            <bottom>
-                <HBox minHeight="24.0" prefHeight="24.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <Label id="StatusLabel" text="Status">
-                            <HBox.margin>
-                                <Insets left="10.0"/>
-                            </HBox.margin>
-                        </Label>
-                    </children>
-                </HBox>
-            </bottom>
-            <top>
-                <MenuBar minHeight="32.0" BorderPane.alignment="CENTER">
-                    <menus>
-                        <Menu mnemonicParsing="false" text="File">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Add component"/>
-                                <MenuItem mnemonicParsing="false" text="Close"/>
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Edit">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Delete"/>
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="About"/>
-                            </items>
-                        </Menu>
-                    </menus>
-                </MenuBar>
-            </top>
-            <center>
-                <SplitPane dividerPositions="0.333, 0.667" prefHeight="600.0" prefWidth="1000.0"
-                           BorderPane.alignment="CENTER">
+    <fx:define>
+        <fx:include fx:id="addDialog" source="addDialog.fxml"/>
+    </fx:define>
+
+    <bottom>
+        <HBox minHeight="24.0" prefHeight="24.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label id="StatusLabel" text="Status">
+                    <HBox.margin>
+                        <Insets left="10.0"/>
+                    </HBox.margin>
+                </Label>
+            </children>
+        </HBox>
+    </bottom>
+    <top>
+        <MenuBar minHeight="32.0" BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="500.0" prefWidth="320.0">
-                            <children>
-                                <TextField prefHeight="31.0" promptText="Search" AnchorPane.leftAnchor="14.0"
-                                           AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0"/>
-                                <TreeView fx:id="componentsTreeView" editable="true" showRoot="false"
-                                          AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
-                                          AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="135.0"/>
-                                <Label layoutX="14.0" layoutY="8.0" prefHeight="27.0" text="System and Components"
-                                       wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0">
-                                    <font>
-                                        <Font size="18.0"/>
-                                    </font>
-                                </Label>
-                                <Button alignment="CENTER" layoutX="98.0" layoutY="90.0" mnemonicParsing="false"
-                                        onAction="#addEntity" prefHeight="31.0" prefWidth="500.0"
-                                        text="Add new Component / Component Group / System" AnchorPane.leftAnchor="14.0"
-                                        AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0">
-                                    <effect>
-                                        <DropShadow blurType="TWO_PASS_BOX" color="#9dff9d" height="90.0" radius="22.0"
-                                                    width="0.0"/>
-                                    </effect>
-                                </Button>
-                            </children>
-                        </AnchorPane>
-                        <AnchorPane prefWidth="320.0">
-                            <children>
-                                <VBox alignment="BOTTOM_CENTER" layoutX="54.0" layoutY="50.0" spacing="20.0"
-                                      AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0"
-                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
-                                    <children>
-                                        <Button alignment="CENTER" layoutX="85.0" layoutY="627.0"
-                                                mnemonicParsing="false" onAction="#runAnalysis" prefWidth="200.0"
-                                                text="Run" AnchorPane.bottomAnchor="14.0"/>
-                                    </children>
-                                </VBox>
-                                <Label layoutX="14.0" layoutY="14.0" text="Parameter Requirements"
-                                       AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0">
-                                    <font>
-                                        <Font size="18.0"/>
-                                    </font>
-                                </Label>
-                                <GridPane alignment="TOP_CENTER" prefHeight="512.0" prefWidth="285.0"
-                                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                          AnchorPane.topAnchor="45.0">
-                                    <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                    </columnConstraints>
-                                    <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </padding>
-                                    <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                    </rowConstraints>
-                                </GridPane>
-                            </children>
-                        </AnchorPane>
-                        <AnchorPane prefWidth="320.0">
-                            <children>
-                                <Pane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="160.0"
-                                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                      AnchorPane.topAnchor="0.0">
-                                    <children>
-                                        <Label layoutX="14.0" layoutY="8.0" text="Result of Analysis">
-                                            <font>
-                                                <Font size="18.0"/>
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </Pane>
-                                <VBox alignment="CENTER" layoutX="76.0" layoutY="629.0" spacing="20.0"
-                                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                      AnchorPane.rightAnchor="0.0">
-                                    <children>
-                                        <Label layoutX="149.0" layoutY="14.0" text="Evaluation">
-                                            <font>
-                                                <Font name="System Bold" size="15.0"/>
-                                            </font>
-                                        </Label>
-                                        <HBox alignment="CENTER" layoutX="51.0" layoutY="59.0" spacing="20.0">
-                                            <children>
-                                                <Label layoutX="51.0" layoutY="59.0" text="Mark as:"/>
-                                                <RadioButton layoutX="127.0" layoutY="59.0" mnemonicParsing="false"
-                                                             text="Correct">
-                                                    <toggleGroup>
-                                                        <ToggleGroup fx:id="evaluationToggleGroup"/>
-                                                    </toggleGroup>
-                                                </RadioButton>
-                                                <RadioButton layoutX="223.0" layoutY="59.0" mnemonicParsing="false"
-                                                             text="Wrong" toggleGroup="$evaluationToggleGroup"/>
-                                            </children>
-                                        </HBox>
-                                        <Button alignment="CENTER" layoutX="86.0" layoutY="104.0"
-                                                mnemonicParsing="false" prefWidth="200.0" text="Add to training set"/>
-                                    </children>
-                                    <padding>
-                                        <Insets bottom="14.0" top="14.0"/>
-                                    </padding>
-                                </VBox>
-                            </children>
-                        </AnchorPane>
+                        <MenuItem mnemonicParsing="false" text="Add component"/>
+                        <MenuItem mnemonicParsing="false" text="Close"/>
                     </items>
-                </SplitPane>
-            </center>
-        </BorderPane>
-    </children>
-</AnchorPane>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.3, 0.7" prefHeight="600.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="500.0" prefWidth="320.0">
+                    <children>
+                        <TextField prefHeight="31.0" promptText="Search" AnchorPane.leftAnchor="14.0"
+                                   AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0"/>
+                        <TreeView fx:id="componentsTreeView" editable="true" showRoot="false"
+                                  AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
+                                  AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="135.0"/>
+                        <Label layoutX="14.0" layoutY="8.0" prefHeight="27.0" text="System and Components"
+                               wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                        </Label>
+                        <Button alignment="CENTER" layoutX="98.0" layoutY="90.0" mnemonicParsing="false"
+                                onAction="#addEntity" prefHeight="31.0" prefWidth="200.0"
+                                text="Add Component / System / Group" AnchorPane.leftAnchor="14.0"
+                                AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0"/>
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefWidth="320.0">
+                    <children>
+                        <VBox alignment="BOTTOM_CENTER" layoutX="54.0" layoutY="50.0" spacing="20.0"
+                              AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                              AnchorPane.topAnchor="45.0">
+                            <children>
+                                <Button alignment="CENTER" layoutX="85.0" layoutY="627.0" mnemonicParsing="false"
+                                        onAction="#runAnalysis" prefWidth="200.0" text="Run"
+                                        AnchorPane.bottomAnchor="14.0"/>
+                            </children>
+                        </VBox>
+                        <Label layoutX="14.0" layoutY="14.0" text="Parameter Requirements" AnchorPane.leftAnchor="14.0"
+                               AnchorPane.topAnchor="8.0">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                        </Label>
+                        <GridPane alignment="TOP_CENTER" prefHeight="512.0" prefWidth="285.0"
+                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            </columnConstraints>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                            </padding>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                        </GridPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefWidth="320.0">
+                    <children>
+                        <Pane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="160.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Label layoutX="14.0" layoutY="8.0" text="Result of Analysis">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </Pane>
+                        <VBox alignment="CENTER" layoutX="76.0" layoutY="629.0" spacing="20.0"
+                              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                            <children>
+                                <Label layoutX="149.0" layoutY="14.0" text="Evaluation">
+                                    <font>
+                                        <Font name="System Bold" size="15.0"/>
+                                    </font>
+                                </Label>
+                                <HBox alignment="CENTER" layoutX="51.0" layoutY="59.0" spacing="20.0">
+                                    <children>
+                                        <Label layoutX="51.0" layoutY="59.0" text="Mark as:"/>
+                                        <RadioButton layoutX="127.0" layoutY="59.0" mnemonicParsing="false"
+                                                     text="Correct">
+                                            <toggleGroup>
+                                                <ToggleGroup fx:id="evaluationToggleGroup"/>
+                                            </toggleGroup>
+                                        </RadioButton>
+                                        <RadioButton layoutX="223.0" layoutY="59.0" mnemonicParsing="false" text="Wrong"
+                                                     toggleGroup="$evaluationToggleGroup"/>
+                                    </children>
+                                </HBox>
+                                <Button alignment="CENTER" layoutX="86.0" layoutY="104.0" mnemonicParsing="false"
+                                        prefWidth="200.0" text="Add to training set"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="14.0" top="14.0"/>
+                            </padding>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </center>
+</BorderPane>
