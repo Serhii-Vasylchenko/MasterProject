@@ -86,28 +86,51 @@ public class AddDialogController implements Initializable {
         final Button addButton = (Button) dialog.getDialogPane().lookupButton(addButtonType);
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
             // Check if all necessary fields are set
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Wrong data!");
+            alert.setHeaderText(null);
             switch (addTabPane.getSelectionModel().getSelectedIndex()) {
-                case 0:
-                    if ((compName.getText().isEmpty() || compSystem.getValue().isEmpty())) {
+                case 0: // new component
+                    if (compName.getText().isEmpty()) {
                         event.consume();
+                        alert.setContentText("Please set the name of the component");
+                        alert.showAndWait();
+                    } else if (compSystem.getValue() == null) {
+                        event.consume();
+                        alert.setContentText("Please choose the system");
+                        alert.showAndWait();
                     } else if (!validator.validateComponentName(compSystem.getValue(), compName.getText())) {
                         event.consume();
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Wrong data!");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Component name should unique per system!");
+                        alert.setContentText("Component name should unique per system");
+                        alert.showAndWait();
                     }
                     break;
-                case 1:
-
+                case 1: // new system
+                    if (systemName.getText().isEmpty()) {
+                        event.consume();
+                        alert.setContentText("Please set the name of the system");
+                        alert.showAndWait();
+                    } else if (!validator.validateSystemName(systemName.getText())) {
+                        event.consume();
+                        alert.setContentText("System name should be unique");
+                        alert.showAndWait();
+                    }
                     break;
-                case 2:
+                case 2: // new component group
+                    if (groupName.getText().isEmpty()) {
+                        event.consume();
+                        alert.setContentText("Please set the name of the group");
+                        alert.showAndWait();
+                    } else if (groupSystem.getValue() == null) {
+                        event.consume();
+                        alert.setContentText("Please choose the system");
+                        alert.showAndWait();
+                    } else if (!validator.validateGroupName(groupSystem.getValue(), groupName.getText())) {
+                        event.consume();
+                        alert.setContentText("Group name should be unique per system");
+                        alert.showAndWait();
+                    }
                     break;
-            }
-            if (((addTabPane.getSelectionModel().getSelectedIndex() == 0) && (compName.getText().isEmpty() || compSystem.getValue().isEmpty())) ||
-                    ((addTabPane.getSelectionModel().getSelectedIndex() == 1) && (systemName.getText().isEmpty())) ||
-                    ((addTabPane.getSelectionModel().getSelectedIndex() == 2) && (groupName.getText().isEmpty() || groupSystem.getValue().isEmpty()))) {
-                event.consume();
             }
         });
 
