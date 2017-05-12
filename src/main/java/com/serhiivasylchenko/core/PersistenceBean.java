@@ -2,13 +2,11 @@ package com.serhiivasylchenko.core;
 
 import com.serhiivasylchenko.persistence.Persistable;
 import com.serhiivasylchenko.utils.Parameters;
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.QueryHints;
 import org.hibernate.exception.JDBCConnectionException;
 
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -25,6 +23,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PersistenceBean {
 
+    private static final Logger LOGGER = Logger.getLogger(PersistenceBean.class);
+
+    private static PersistenceBean instance;
+
+    @PersistenceContext(unitName = "em")
     private EntityManager em;
 
 //    @Inject
@@ -32,10 +35,27 @@ public class PersistenceBean {
 
     private static final AtomicBoolean connected = new AtomicBoolean(true);
 
-    @PersistenceContext(unitName = "em")
-    public void setEntityManager(EntityManager em) {
-        this.em = em;
+    private PersistenceBean() {
     }
+
+    public static PersistenceBean getInstance() {
+        if (instance == null) {
+            instance = new PersistenceBean();
+        }
+        return instance;
+    }
+
+    public void init() {
+        if (em == null) {
+            em = Persistence.createEntityManagerFactory("em").createEntityManager();
+        }
+//        LOGGER.info("PersistenceBean initialised");
+    }
+
+//    @PersistenceContext(unitName = "em")
+//    public void setEntityManager(EntityManager em) {
+//        this.em = em;
+//    }
 
     public EntityManager getEntityManager() {
         return this.em;
@@ -178,7 +198,7 @@ public class PersistenceBean {
             TypedQuery<T> query = this.em.createNamedQuery(queryName, theClass);
 
             if (parameters != null) {
-                parameters.get().entrySet().forEach(x -> query.setParameter(x.getKey(), x.getValue()));
+                parameters.get().forEach(query::setParameter);
             }
 
             if (entityGraph != null) {

@@ -3,33 +3,36 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<TabPane fx:id="addTabPane" tabClosingPolicy="UNAVAILABLE" tabMinWidth="100.0" xmlns="http://javafx.com/javafx/8"
-         xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.AddDialogController">
+<TabPane fx:id="addTabPane" prefHeight="300.0" tabClosingPolicy="UNAVAILABLE" tabMinWidth="100.0"
+         xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.serhiivasylchenko.gui.AddDialogController">
     <tabs>
         <Tab text="Component">
             <content>
-                <GridPane prefWidth="400.0">
+                <GridPane vgap="10.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="97.0"/>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="283.0"/>
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES"/>
                         <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES"/>
                         <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES"/>
+                        <RowConstraints/>
                     </rowConstraints>
                     <children>
                         <Label text="System" GridPane.halignment="CENTER"/>
                         <Label text="Parent Group" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                         <Label text="Name" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
                         <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
-                        <ChoiceBox id="systemChoiceBox" fx:id="compSystem" prefWidth="200.0" GridPane.columnIndex="1"
-                                   GridPane.halignment="CENTER" onAction="#loadGroups"/>
+                        <ChoiceBox id="systemChoiceBox" fx:id="compSystem" onAction="#loadGroups" prefWidth="200.0"
+                                   GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
                         <ChoiceBox id="groupChoiceBox" fx:id="compGroup" prefWidth="200.0" GridPane.columnIndex="1"
                                    GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                         <TextField fx:id="compName" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                        <TextArea fx:id="compDescription" prefHeight="200.0" prefWidth="200.0" promptText="optional"
-                                  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <TextArea fx:id="compDescription" promptText="optional" GridPane.columnIndex="1"
+                                  GridPane.rowIndex="3"/>
                     </children>
                     <opaqueInsets>
                         <Insets/>
@@ -50,8 +53,8 @@
                         <Label text="Name" GridPane.halignment="CENTER"/>
                         <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                         <TextField fx:id="systemName" GridPane.columnIndex="1"/>
-                        <TextArea fx:id="systemDescription" prefHeight="200.0" prefWidth="200.0" promptText="optional"
-                                  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <TextArea fx:id="systemDescription" promptText="optional" GridPane.columnIndex="1"
+                                  GridPane.rowIndex="1"/>
                     </children>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="97.0"/>
@@ -72,19 +75,19 @@
         </Tab>
         <Tab text="Component Group">
             <content>
-                <GridPane prefWidth="400.0" vgap="10.0">
+                <GridPane vgap="10.0">
                     <children>
                         <Label text="System" GridPane.halignment="CENTER"/>
+                        <Label text="Parent Group" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                         <Label text="Name" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
                         <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
-                        <ChoiceBox id="systemChoiceBox" fx:id="groupSystem" prefWidth="200.0" GridPane.columnIndex="1"
-                                   GridPane.halignment="CENTER" onAction="#loadParentGroups"/>
-                        <TextField fx:id="groupName" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                        <TextArea fx:id="groupDescription" prefHeight="200.0" prefWidth="200.0" promptText="optional"
-                                  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                        <Label text="Parent Group" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                        <ChoiceBox id="systemChoiceBox" fx:id="groupSystem" onAction="#loadParentGroups"
+                                   prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
                         <ChoiceBox id="groupChoiceBox" fx:id="groupParent" prefWidth="200.0" GridPane.columnIndex="1"
                                    GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                        <TextField fx:id="groupName" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <TextArea fx:id="groupDescription" promptText="optional" GridPane.columnIndex="1"
+                                  GridPane.rowIndex="3"/>
                     </children>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="97.0"/>

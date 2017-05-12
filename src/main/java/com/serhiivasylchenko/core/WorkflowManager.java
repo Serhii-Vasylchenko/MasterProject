@@ -6,8 +6,6 @@ import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.utils.Parameters;
 import org.apache.log4j.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +16,12 @@ public class WorkflowManager {
 
     private static final Logger LOGGER = Logger.getLogger(WorkflowManager.class);
 
-    private PersistenceBean persistenceBean = new PersistenceBean();
+    private PersistenceBean persistenceBean = PersistenceBean.getInstance();
 
     public WorkflowManager() {
-        EntityManager em = Persistence.createEntityManagerFactory("em").createEntityManager();
-        persistenceBean.setEntityManager(em);
+//        EntityManager em = Persistence.createEntityManagerFactory("em").createEntityManager();
+//        persistenceBean.setEntityManager(em);
+        persistenceBean.init();
     }
 
     public void addSystem(String name, String description) {

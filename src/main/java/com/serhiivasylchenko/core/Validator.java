@@ -10,10 +10,11 @@ import com.serhiivasylchenko.utils.Parameters;
  */
 public class Validator {
 
-    private PersistenceBean persistenceBean;
+    private PersistenceBean persistenceBean = PersistenceBean.getInstance();
 
     public Validator() {
-        persistenceBean = new PersistenceBean();
+//        persistenceBean = new PersistenceBean();
+        persistenceBean.init();
     }
 
     /**
