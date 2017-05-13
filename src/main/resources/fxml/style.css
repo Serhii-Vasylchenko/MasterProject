@@ -1,0 +1,6 @@
+.refreshButton {
+    /*-fx-graphic: url("/icons/refresh1_24.png");*/
+    -fx-background-image: url("/icons/refresh1_24.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}

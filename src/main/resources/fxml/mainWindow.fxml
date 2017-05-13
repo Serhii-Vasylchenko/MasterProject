@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8"
+<BorderPane prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1">
 
     <fx:define>
@@ -13,13 +12,14 @@
     </fx:define>
 
     <bottom>
-        <HBox minHeight="24.0" prefHeight="24.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <HBox minHeight="24.0" prefHeight="24.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Label id="StatusLabel" text="Status">
+                <Label id="StatusLabel" text="Status:">
                     <HBox.margin>
                         <Insets left="10.0"/>
                     </HBox.margin>
                 </Label>
+                <Label fx:id="status"/>
             </children>
         </HBox>
     </bottom>
@@ -61,10 +61,17 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Button alignment="CENTER" layoutX="98.0" layoutY="90.0" mnemonicParsing="false"
-                                onAction="#addEntity" prefHeight="31.0" prefWidth="200.0"
-                                text="Add Component / System / Group" AnchorPane.leftAnchor="14.0"
-                                AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0"/>
+                        <HBox layoutX="14.0" layoutY="90.0" spacing="10.0" AnchorPane.leftAnchor="14.0"
+                              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0">
+                            <children>
+                                <Button alignment="CENTER" layoutX="98.0" layoutY="90.0" mnemonicParsing="false"
+                                        onAction="#addEntity" prefHeight="31.0" prefWidth="1000.0"
+                                        text="Add Component / System / Group" AnchorPane.leftAnchor="14.0"
+                                        AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0"/>
+                                <Button minWidth="32.0" mnemonicParsing="false" onAction="#updateComponentList"
+                                        styleClass="refreshButton" stylesheets="@style.css"/>
+                            </children>
+                        </HBox>
                     </children>
                 </AnchorPane>
                 <AnchorPane prefWidth="320.0">

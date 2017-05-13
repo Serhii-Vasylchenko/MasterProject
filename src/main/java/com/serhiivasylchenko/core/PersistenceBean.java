@@ -36,6 +36,7 @@ public class PersistenceBean {
     private static final AtomicBoolean connected = new AtomicBoolean(true);
 
     private PersistenceBean() {
+        em = Persistence.createEntityManagerFactory("em").createEntityManager();
     }
 
     public static PersistenceBean getInstance() {
@@ -43,13 +44,6 @@ public class PersistenceBean {
             instance = new PersistenceBean();
         }
         return instance;
-    }
-
-    public void init() {
-        if (em == null) {
-            em = Persistence.createEntityManagerFactory("em").createEntityManager();
-        }
-//        LOGGER.info("PersistenceBean initialised");
     }
 
 //    @PersistenceContext(unitName = "em")

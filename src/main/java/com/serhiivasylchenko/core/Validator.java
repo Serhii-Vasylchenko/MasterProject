@@ -13,12 +13,10 @@ public class Validator {
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
 
     public Validator() {
-//        persistenceBean = new PersistenceBean();
-        persistenceBean.init();
     }
 
     /**
-     * Each componentName should have unique name per system
+     * Each component should have unique name per system
      *
      * @param systemName    name of the system of the component
      * @param componentName name for validation
@@ -42,6 +40,13 @@ public class Validator {
         return system == null;
     }
 
+    /**
+     * Each group should have unique name per system
+     *
+     * @param systemName name of the system of the group
+     * @param groupName  name for validation
+     * @return true on success, false otherwise
+     */
     public boolean validateGroupName(String systemName, String groupName) {
         System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
         ComponentGroup componentGroup = persistenceBean.findSingle(ComponentGroup.class, ComponentGroup.NQ_BY_NAME_AND_SYSTEM,

@@ -3,7 +3,6 @@ package com.serhiivasylchenko.gui;
 import com.serhiivasylchenko.core.Validator;
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.ComponentGroup;
-import com.serhiivasylchenko.persistence.System;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,10 +11,7 @@ import javafx.scene.control.*;
 import org.apache.log4j.Logger;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -25,9 +21,9 @@ import java.util.stream.Collectors;
 public class AddDialogController implements Initializable {
 
     private final Logger LOGGER = Logger.getLogger(AddDialogController.class);
+
     @FXML
     private TabPane addTabPane;
-
     @FXML
     private ChoiceBox<String> compSystem;
     @FXML
@@ -49,8 +45,10 @@ public class AddDialogController implements Initializable {
     @FXML
     private ChoiceBox<String> groupParent;
 
-    private WorkflowManager workflowManager = new WorkflowManager();
+    private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private Validator validator = new Validator();
+    private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
+
     private Map<String, List<String>> groupNamesBySystem = new HashMap<>();
 
     @Override
@@ -62,16 +60,14 @@ public class AddDialogController implements Initializable {
         dialog.setTitle("Add new component/group/system");
         dialog.setContentText(null);
 
-        List<String> systemNames;
+        List<String> systemNames = new ArrayList<>();
 
-        systemNames = workflowManager.getSystemList().stream()
-                .map(System::getName)
-                .collect(Collectors.toList());
-        systemNames.forEach(systemName -> {
-            List<String> groupNames = workflowManager.getGroupList(systemName).stream()
+        workflowManager.getSystemList().forEach(system -> {
+            systemNames.add(system.getName());
+            List<String> groupNames = system.getComponentGroups().stream()
                     .map(ComponentGroup::getName)
                     .collect(Collectors.toList());
-            groupNamesBySystem.put(systemName, groupNames);
+            groupNamesBySystem.put(system.getName(), groupNames);
         });
 
         if (!systemNames.isEmpty()) {
@@ -83,11 +79,11 @@ public class AddDialogController implements Initializable {
         ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
 
+        // Validation on fields
         final Button addButton = (Button) dialog.getDialogPane().lookupButton(addButtonType);
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
-            // Check if all necessary fields are set
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Wrong data!");
+            alert.setTitle("Wrong fields!");
             alert.setHeaderText(null);
             switch (addTabPane.getSelectionModel().getSelectedIndex()) {
                 case 0: // new component
@@ -135,7 +131,6 @@ public class AddDialogController implements Initializable {
         });
 
         dialog.getDialogPane().setContent(addTabPane);
-        //dialog.getDialogPane().setPadding(new Insets(0, 0, 10, 0));
 
         // Request focus on the name field by default.
         //Platform.runLater(compName::requestFocus);
@@ -154,8 +149,9 @@ public class AddDialogController implements Initializable {
                         workflowManager.addComponentGroup(groupSystem.getValue(), groupParent.getValue(), groupName.getText(), groupDescription.getText());
                         break;
                 }
-                //mainController.updateComponentList();
+                componentsTreeUpdater.update();
             }
+            clear();
             return null;
         });
 
@@ -167,6 +163,8 @@ public class AddDialogController implements Initializable {
         List<String> groupNames = groupNamesBySystem.get(compSystem.getValue());
         if (groupNames != null && !groupNames.isEmpty()) {
             compGroup.setItems(FXCollections.observableArrayList(groupNames));
+        } else {
+            compGroup.setItems(FXCollections.emptyObservableList());
         }
     }
 
@@ -174,6 +172,17 @@ public class AddDialogController implements Initializable {
         List<String> groupNames = groupNamesBySystem.get(groupSystem.getValue());
         if (groupNames != null && !groupNames.isEmpty()) {
             groupParent.setItems(FXCollections.observableArrayList(groupNames));
+        } else {
+            groupParent.setItems(FXCollections.emptyObservableList());
         }
+    }
+
+    private void clear() {
+        compName.setText("");
+        compDescription.setText("");
+        systemName.setText("");
+        systemDescription.setText("");
+        groupName.setText("");
+        groupDescription.setText("");
     }
 }

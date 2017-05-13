@@ -2,6 +2,7 @@ package com.serhiivasylchenko.persistence;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +21,10 @@ public class System extends TechnicalEntity implements Group {
     public static final String NQ_ALL = "nq.system.get.all";
     public static final String NQ_BY_NAME = "nq.system.get.by.name";
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Component> components;
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComponentGroup> componentGroups;
 
     public System(String name, String description) {
@@ -57,7 +58,7 @@ public class System extends TechnicalEntity implements Group {
     }
 
     public List<Component> getComponents() {
-        return components;
+        return components == null ? Collections.emptyList() : components;
     }
 
     public void setComponents(List<Component> components) {
@@ -65,7 +66,7 @@ public class System extends TechnicalEntity implements Group {
     }
 
     public List<ComponentGroup> getComponentGroups() {
-        return componentGroups;
+        return componentGroups == null ? Collections.emptyList() : componentGroups;
     }
 
     public void setComponentGroups(List<ComponentGroup> componentGroups) {

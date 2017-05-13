@@ -30,7 +30,8 @@
                                    GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
                         <ChoiceBox id="groupChoiceBox" fx:id="compGroup" prefWidth="200.0" GridPane.columnIndex="1"
                                    GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                        <TextField fx:id="compName" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <TextField fx:id="compName" promptText="unique per system" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="2"/>
                         <TextArea fx:id="compDescription" promptText="optional" GridPane.columnIndex="1"
                                   GridPane.rowIndex="3"/>
                     </children>
@@ -52,7 +53,7 @@
                     <children>
                         <Label text="Name" GridPane.halignment="CENTER"/>
                         <Label text="Description" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                        <TextField fx:id="systemName" GridPane.columnIndex="1"/>
+                        <TextField fx:id="systemName" promptText="unique" GridPane.columnIndex="1"/>
                         <TextArea fx:id="systemDescription" promptText="optional" GridPane.columnIndex="1"
                                   GridPane.rowIndex="1"/>
                     </children>
@@ -85,7 +86,8 @@
                                    prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
                         <ChoiceBox id="groupChoiceBox" fx:id="groupParent" prefWidth="200.0" GridPane.columnIndex="1"
                                    GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                        <TextField fx:id="groupName" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <TextField fx:id="groupName" promptText="unique per system" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="2"/>
                         <TextArea fx:id="groupDescription" promptText="optional" GridPane.columnIndex="1"
                                   GridPane.rowIndex="3"/>
                     </children>

@@ -28,10 +28,10 @@ public class ComponentGroup extends TechnicalEntity implements Group {
     @ManyToOne
     private ComponentGroup parentGroup;
 
-    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Component> componentChildren;
 
-    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComponentGroup> componentGroupChildren;
 
     public ComponentGroup(System system, String name, String description) {

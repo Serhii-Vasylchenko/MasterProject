@@ -26,7 +26,7 @@ public class MainApp extends Application {
 
         primaryStage.setScene(new Scene(root));
         primaryStage.setHeight(900);
-        primaryStage.setWidth(1200);
+        primaryStage.setWidth(1400);
         primaryStage.setTitle("Master Project");
         primaryStage.show();
     }
