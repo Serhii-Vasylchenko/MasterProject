@@ -4,6 +4,7 @@ import com.serhiivasylchenko.core.Validator;
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.gui.ComponentsTreeUpdater;
 import com.serhiivasylchenko.persistence.ComponentGroup;
+import com.serhiivasylchenko.persistence.System;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,30 +14,24 @@ import javafx.scene.layout.GridPane;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Serhii Vasylchenko
  */
 public class AddComponentGroupDialog extends GridPane {
     @FXML
-    private ChoiceBox<String> groupSystem;
+    private ChoiceBox<System> groupSystem;
+    @FXML
+    private ChoiceBox<ComponentGroup> groupParent;
     @FXML
     private TextField groupName;
     @FXML
     private TextArea groupDescription;
-    @FXML
-    private ChoiceBox<String> groupParent;
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private Validator validator = new Validator();
     private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
-
-    private Map<String, List<String>> groupNamesBySystem = new HashMap<>();
 
     public AddComponentGroupDialog() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/dialogs/addComponentGroupDialog.fxml"));
@@ -51,23 +46,27 @@ public class AddComponentGroupDialog extends GridPane {
         }
     }
 
-    public void showDialog() {
+    public void showDialog(System system, ComponentGroup parentGroup) {
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Add new component group");
         dialog.setContentText(null);
 
-        List<String> systemNames = new ArrayList<>();
+        List<System> systems = workflowManager.getSystemList();
 
-        workflowManager.getSystemList().forEach(system -> {
-            systemNames.add(system.getName());
-            List<String> groupNames = system.getComponentGroups().stream()
-                    .map(ComponentGroup::getName)
-                    .collect(Collectors.toList());
-            groupNamesBySystem.put(system.getName(), groupNames);
-        });
+        if (!systems.isEmpty()) {
+            groupSystem.setItems(FXCollections.observableArrayList(systems));
+        }
 
-        if (!systemNames.isEmpty()) {
-            groupSystem.setItems(FXCollections.observableArrayList(systemNames));
+        if (system != null) {
+            groupSystem.getSelectionModel().select(system);
+            loadParentGroups();
+            if (parentGroup != null) {
+                groupParent.getSelectionModel().select(parentGroup);
+            } else {
+                groupParent.getSelectionModel().selectFirst();
+            }
+        } else {
+            groupSystem.getSelectionModel().selectFirst();
         }
 
         // Set the button types.
@@ -117,11 +116,12 @@ public class AddComponentGroupDialog extends GridPane {
 
     @FXML
     private void loadParentGroups() {
-        List<String> groupNames = groupNamesBySystem.get(groupSystem.getValue());
-        if (groupNames != null && !groupNames.isEmpty()) {
-            groupParent.setItems(FXCollections.observableArrayList(groupNames));
+        List<ComponentGroup> componentGroups = groupSystem.getSelectionModel().getSelectedItem().getComponentGroups();
+        if (componentGroups != null && !componentGroups.isEmpty()) {
+            groupParent.setItems(FXCollections.observableArrayList(componentGroups));
         } else {
             groupParent.setItems(FXCollections.emptyObservableList());
+            groupParent.getSelectionModel().selectFirst();
         }
     }
 }

@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
     @FXML
-    private TreeView<String> componentsTreeView;
+    private TreeView<Object> componentsTreeView;
     @FXML
     private ToggleGroup evaluationToggleGroup;
     @FXML
@@ -24,7 +24,7 @@ public class MainController implements Initializable {
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
 
-    private DialogController dialogController = new DialogController();
+    private DialogController dialogController = DialogController.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

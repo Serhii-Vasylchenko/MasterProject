@@ -1,6 +1,9 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
+import com.serhiivasylchenko.persistence.ComponentGroup;
+import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.persistence.TechnicalEntity;
 import javafx.scene.control.*;
 
 import java.util.Optional;
@@ -8,20 +11,34 @@ import java.util.Optional;
 /**
  * @author Serhii Vasylchenko
  */
-public final class ContextMenuTreeCell extends TreeCell<String> {
+public final class ContextMenuTreeCell extends TreeCell<Object> {
 
     private ContextMenu contextMenu = new ContextMenu();
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
+    private DialogController dialogController = DialogController.getInstance();
 
     ContextMenuTreeCell() {
-        MenuItem addMenuItem = new MenuItem("Add new here");
+        MenuItem addComponentMenuItem = new MenuItem("Add new component here");
+        MenuItem addGroupMenuItem = new MenuItem("Add new group here");
         MenuItem deleteMenuItem = new MenuItem("Remove");
-        contextMenu.getItems().addAll(addMenuItem, deleteMenuItem);
-        addMenuItem.setOnAction(event -> {
-            TreeItem<String> systemNode = findSystem(getTreeItem());
-
+        contextMenu.getItems().addAll(addComponentMenuItem, addGroupMenuItem, deleteMenuItem);
+        addComponentMenuItem.setOnAction(event -> {
+            TreeItem<Object> systemNode = findSystem(getTreeItem());
+            if (getTreeItem().getParent().getValue() instanceof System) {
+                dialogController.addComponent((System) systemNode.getValue(), null);
+            } else {
+                dialogController.addComponent((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getParent().getValue());
+            }
+        });
+        addGroupMenuItem.setOnAction(event -> {
+            TreeItem<Object> systemNode = findSystem(getTreeItem());
+            if (getTreeItem().getParent().getValue() instanceof System) {
+                dialogController.addComponentGroup((System) systemNode.getValue(), null);
+            } else {
+                dialogController.addComponentGroup((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getParent().getValue());
+            }
         });
         deleteMenuItem.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -31,32 +48,27 @@ public final class ContextMenuTreeCell extends TreeCell<String> {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                TreeItem<String> systemNode = findSystem(getTreeItem());
-                if (systemNode == getTreeItem()) {
-                    workflowManager.deleteSystem(systemNode.getValue());
-                } else {
-                    workflowManager.deleteEntityFromSystem(systemNode.getValue(), getTreeItem().getValue());
-                }
+                workflowManager.deleteEntity((TechnicalEntity) getTreeItem().getValue());
                 componentsTreeUpdater.update();
             }
         });
     }
 
     @Override
-    public void updateItem(String item, boolean empty) {
+    public void updateItem(Object item, boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setText(null);
             setGraphic(null);
         } else {
-            setText(item);
+            setText(item.toString());
             setGraphic(getTreeItem().getGraphic());
             setContextMenu(contextMenu);
         }
     }
 
-    private TreeItem<String> findSystem(TreeItem<String> node) {
-        while (node.getParent() != getTreeView().getRoot()) {
+    private TreeItem<Object> findSystem(TreeItem<Object> node) {
+        while (!(node.getValue() instanceof System)) {
             node = node.getParent();
         }
         return node;
