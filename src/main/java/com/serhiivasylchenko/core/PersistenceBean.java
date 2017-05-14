@@ -46,11 +46,6 @@ public class PersistenceBean {
         return instance;
     }
 
-//    @PersistenceContext(unitName = "em")
-//    public void setEntityManager(EntityManager em) {
-//        this.em = em;
-//    }
-
     public EntityManager getEntityManager() {
         return this.em;
     }

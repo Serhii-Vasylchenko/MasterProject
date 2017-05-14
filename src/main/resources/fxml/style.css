@@ -1,6 +1,24 @@
 .refreshButton {
     /*-fx-graphic: url("/icons/refresh1_24.png");*/
-    -fx-background-image: url("/icons/refresh1_24.png");
+    -fx-background-image: url("/icons/refresh1_32.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.addComponentButton {
+    -fx-background-image: url("/icons/component1_32.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.addSystemButton {
+    -fx-background-image: url("/icons/system1_32.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.addComponentGroupButton {
+    -fx-background-image: url("/icons/group1_32.png");
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }

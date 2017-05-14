@@ -24,8 +24,7 @@ public class MainController implements Initializable {
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
 
-    @FXML
-    private AddDialogController addDialogController;
+    private DialogController dialogController = new DialogController();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,9 +40,23 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void addEntity() {
-        status.setText("Adding new entity...");
-        addDialogController.showAddDialog();
+    private void addComponent() {
+        status.setText("Adding new component...");
+        dialogController.addComponent();
+        status.setText("Idle");
+    }
+
+    @FXML
+    private void addSystem() {
+        status.setText("Adding new system...");
+        dialogController.addSystem();
+        status.setText("Idle");
+    }
+
+    @FXML
+    private void addComponentGroup() {
+        status.setText("Adding new component group...");
+        dialogController.addComponentGroup();
         status.setText("Idle");
     }
 

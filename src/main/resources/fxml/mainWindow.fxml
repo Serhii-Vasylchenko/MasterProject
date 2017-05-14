@@ -7,9 +7,9 @@
 <BorderPane prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1">
 
-    <fx:define>
-        <fx:include fx:id="addDialog" source="addDialog.fxml"/>
-    </fx:define>
+    <!--<fx:define>-->
+    <!--<fx:include fx:id="dialog" source="dialog.fxml"/>-->
+    <!--</fx:define>-->
 
     <bottom>
         <HBox minHeight="24.0" prefHeight="24.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
@@ -23,28 +23,6 @@
             </children>
         </HBox>
     </bottom>
-    <top>
-        <MenuBar minHeight="32.0" BorderPane.alignment="CENTER">
-            <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Add component"/>
-                        <MenuItem mnemonicParsing="false" text="Close"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Delete"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About"/>
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-    </top>
     <center>
         <SplitPane dividerPositions="0.3, 0.7" prefHeight="600.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
             <items>
@@ -54,7 +32,7 @@
                                    AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0"/>
                         <TreeView fx:id="componentsTreeView" editable="true" showRoot="false"
                                   AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
-                                  AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="135.0"/>
+                                  AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="144.0"/>
                         <Label layoutX="14.0" layoutY="8.0" prefHeight="27.0" text="System and Components"
                                wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0">
                             <font>
@@ -64,12 +42,18 @@
                         <HBox layoutX="14.0" layoutY="90.0" spacing="10.0" AnchorPane.leftAnchor="14.0"
                               AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0">
                             <children>
-                                <Button alignment="CENTER" layoutX="98.0" layoutY="90.0" mnemonicParsing="false"
-                                        onAction="#addEntity" prefHeight="31.0" prefWidth="1000.0"
-                                        text="Add Component / System / Group" AnchorPane.leftAnchor="14.0"
-                                        AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0"/>
-                                <Button minWidth="32.0" mnemonicParsing="false" onAction="#updateComponentList"
-                                        styleClass="refreshButton" stylesheets="@style.css"/>
+                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#addSystem"
+                                        styleClass="addSystemButton" stylesheets="@style.css"/>
+                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
+                                        onAction="#addComponent" styleClass="addComponentButton"
+                                        stylesheets="@style.css"/>
+                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
+                                        onAction="#addComponentGroup" styleClass="addComponentGroupButton"
+                                        stylesheets="@style.css"/>
+                                <Pane prefHeight="40.0" prefWidth="400.0"/>
+                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
+                                        onAction="#updateComponentList" prefWidth="0.0" styleClass="refreshButton"
+                                        stylesheets="@style.css"/>
                             </children>
                         </HBox>
                     </children>
@@ -109,6 +93,26 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                             </rowConstraints>
                         </GridPane>
+                        <MenuBar layoutX="-572.0" layoutY="-9.0" minHeight="32.0">
+                            <menus>
+                                <Menu mnemonicParsing="false" text="File">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="Add component"/>
+                                        <MenuItem mnemonicParsing="false" text="Close"/>
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="Edit">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="Delete"/>
+                                    </items>
+                                </Menu>
+                                <Menu mnemonicParsing="false" text="Help">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" text="About"/>
+                                    </items>
+                                </Menu>
+                            </menus>
+                        </MenuBar>
                     </children>
                 </AnchorPane>
                 <AnchorPane prefWidth="320.0">
