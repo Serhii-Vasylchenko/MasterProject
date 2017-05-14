@@ -34,6 +34,11 @@ public abstract class TechnicalEntity extends Conditional {
     public TechnicalEntity() {
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+
     public String getName() {
         return name;
     }

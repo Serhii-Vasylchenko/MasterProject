@@ -3,6 +3,7 @@ package com.serhiivasylchenko.core;
 import com.serhiivasylchenko.persistence.Component;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.Parameters;
 import org.apache.log4j.Logger;
 
@@ -35,39 +36,23 @@ public class WorkflowManager {
         persistenceBean.persist(system);
     }
 
-    public void addComponentGroup(String systemName, String parentGroupName, String groupName, String description) {
-        System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
+    public void addComponentGroup(System system, ComponentGroup parentGroup, String groupName, String description) {
         ComponentGroup componentGroup = new ComponentGroup(system, groupName, description);
-        if (parentGroupName != null && !parentGroupName.isEmpty()) {
-            ComponentGroup parentGroup = persistenceBean.findSingle(ComponentGroup.class,
-                    ComponentGroup.NQ_BY_NAME_AND_SYSTEM,
-                    new Parameters()
-                            .add("name", parentGroupName)
-                            .add("system", system));
-            if (parentGroup != null) {
-                componentGroup.setParentGroup(parentGroup);
-            } else {
-                LOGGER.warn("ComponentGroup with the name '" + groupName + "' is not found!");
-            }
+        if (parentGroup != null) {
+            componentGroup.setParentGroup(parentGroup);
+        } else {
+            LOGGER.warn("ComponentGroup with the name '" + groupName + "' is not found!");
         }
         persistenceBean.persist(componentGroup);
     }
 
-    public void addComponent(String systemName, String groupName, String compName, String description) {
-        System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
-        ComponentGroup componentGroup = persistenceBean.findSingle(ComponentGroup.class,
-                ComponentGroup.NQ_BY_NAME_AND_SYSTEM,
-                new Parameters()
-                        .add("name", groupName)
-                        .add("system", system));
+    public void addComponent(System system, ComponentGroup componentGroup, String compName, String description) {
         Component component;
         if (componentGroup != null) {
             component = new Component(system, componentGroup, compName, description);
         } else {
             component = new Component(system, null, compName, description);
-            LOGGER.warn("ComponentGroup with the name '" + groupName + "' is not found!");
         }
-
         persistenceBean.persist(component);
     }
 
@@ -83,50 +68,12 @@ public class WorkflowManager {
 
     }
 
-    public void deleteSystem(String systemName) {
-        System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
-        if (system != null) {
-            try {
-                persistenceBean.delete(system);
-            } catch (Exception e) {
-                LOGGER.error("Something wrong on deleting the system '" + systemName + "'", e);
-            }
-            return;
+    public void deleteEntity(TechnicalEntity entity) {
+        try {
+            persistenceBean.delete(entity);
+        } catch (Exception e) {
+            LOGGER.error("Something wrong on deleting the entity '" + entity.toString() + "'", e);
         }
-        LOGGER.error("System with name '" + systemName + "' is not found");
-    }
-
-    public void deleteEntityFromSystem(String systemName, String entityName) {
-        System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
-        if (system == null) {
-            LOGGER.error("System with name '" + systemName + "' is not found");
-            return;
-        }
-        Component component = persistenceBean.findSingle(Component.class, Component.NQ_BY_NAME_AND_SYSTEM,
-                new Parameters()
-                        .add("name", entityName)
-                        .add("system", system));
-        if (component != null) {
-            try {
-                persistenceBean.delete(component);
-            } catch (Exception e) {
-                LOGGER.error("Something wrong on deleting the component '" + entityName + "' in system '" + systemName + "'", e);
-            }
-            return;
-        }
-        ComponentGroup componentGroup = persistenceBean.findSingle(ComponentGroup.class, ComponentGroup.NQ_BY_NAME_AND_SYSTEM,
-                new Parameters()
-                        .add("name", entityName)
-                        .add("system", system));
-        if (componentGroup != null) {
-            try {
-                persistenceBean.delete(componentGroup);
-            } catch (Exception e) {
-                LOGGER.error("Something wrong on deleting the component group '" + entityName + "' in system '" + systemName + "'", e);
-            }
-            return;
-        }
-        LOGGER.warn("Entity with name '" + entityName + "' is not found for the system '" + systemName + "'!");
     }
 
     public List<System> getSystemList() {

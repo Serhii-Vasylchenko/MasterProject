@@ -22,7 +22,7 @@ public class ComponentsTreeUpdater {
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
 
-    private TreeView<String> componentsTreeView;
+    private TreeView<Object> componentsTreeView;
     private final Image systemIcon = new Image(getClass().getResourceAsStream("/icons/system1_16.png"));
     private final Image componentIcon = new Image(getClass().getResourceAsStream("/icons/component1_16.png"));
     private final Image groupIcon = new Image(getClass().getResourceAsStream("/icons/group1_16.png"));
@@ -37,17 +37,17 @@ public class ComponentsTreeUpdater {
         return instance;
     }
 
-    public void setComponentsTreeView(TreeView<String> componentsTreeView) {
+    public void setComponentsTreeView(TreeView<Object> componentsTreeView) {
         this.componentsTreeView = componentsTreeView;
     }
 
     public void update() {
         List<System> systems = workflowManager.getSystemList();
 
-        TreeItem<String> rootNode = new TreeItem<>();
+        TreeItem<Object> rootNode = new TreeItem<>();
         rootNode.setExpanded(true);
         systems.forEach(system -> {
-            TreeItem<String> systemNode = new TreeItem<>(system.getName(), new ImageView(systemIcon));
+            TreeItem<Object> systemNode = new TreeItem<>(system, new ImageView(systemIcon));
 
             List<Persistable> directChildren = new ArrayList<>();
             directChildren.addAll(system.getComponentGroups().stream()
@@ -63,22 +63,22 @@ public class ComponentsTreeUpdater {
         componentsTreeView.setRoot(rootNode);
     }
 
-    private void addChildrenToTheNode(TreeItem<String> node, List<? extends Persistable> children) {
+    private void addChildrenToTheNode(TreeItem<Object> node, List<? extends Persistable> children) {
         // Set the node to be expanded by default
         node.setExpanded(true);
 
         children.forEach(child -> {
-            TreeItem<String> childNode = null;
+            TreeItem<Object> childNode = null;
 
             // Assign different icons depending on the class
             if (child instanceof ComponentGroup) {
                 ComponentGroup group = (ComponentGroup) child;
-                childNode = new TreeItem<>(group.getName(), new ImageView(groupIcon));
+                childNode = new TreeItem<>(group, new ImageView(groupIcon));
                 // Other component groups may be nested inside, so we need to check for this
                 addChildrenToTheNode(childNode, group.getChildren());
             } else if (child instanceof Component) {
                 Component component = (Component) child;
-                childNode = new TreeItem<>(component.getName(), new ImageView(componentIcon));
+                childNode = new TreeItem<>(component, new ImageView(componentIcon));
             }
 
             if (childNode != null) {

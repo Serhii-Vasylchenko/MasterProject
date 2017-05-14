@@ -18,12 +18,11 @@ public class Validator {
     /**
      * Each component should have unique name per system
      *
-     * @param systemName    name of the system of the component
+     * @param system    name of the system of the component
      * @param componentName name for validation
      * @return true on success, false otherwise
      */
-    public boolean validateComponentName(String systemName, String componentName) {
-        System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
+    public boolean validateComponentName(System system, String componentName) {
         Component component = persistenceBean.findSingle(Component.class, Component.NQ_BY_NAME_AND_SYSTEM,
                 new Parameters().add("name", componentName).add("system", system));
         return component == null;
@@ -43,12 +42,11 @@ public class Validator {
     /**
      * Each group should have unique name per system
      *
-     * @param systemName name of the system of the group
+     * @param system name of the system of the group
      * @param groupName  name for validation
      * @return true on success, false otherwise
      */
-    public boolean validateGroupName(String systemName, String groupName) {
-        System system = persistenceBean.findSingle(System.class, System.NQ_BY_NAME, new Parameters().add("name", systemName));
+    public boolean validateGroupName(System system, String groupName) {
         ComponentGroup componentGroup = persistenceBean.findSingle(ComponentGroup.class, ComponentGroup.NQ_BY_NAME_AND_SYSTEM,
                 new Parameters().add("name", groupName).add("system", system));
         return componentGroup == null;

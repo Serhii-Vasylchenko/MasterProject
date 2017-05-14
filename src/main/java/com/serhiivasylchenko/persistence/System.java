@@ -1,6 +1,9 @@
 package com.serhiivasylchenko.persistence;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,10 +24,10 @@ public class System extends TechnicalEntity implements Group {
     public static final String NQ_ALL = "nq.system.get.all";
     public static final String NQ_BY_NAME = "nq.system.get.by.name";
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "system", orphanRemoval = true)
     private List<Component> components;
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "system", orphanRemoval = true)
     private List<ComponentGroup> componentGroups;
 
     public System(String name, String description) {
