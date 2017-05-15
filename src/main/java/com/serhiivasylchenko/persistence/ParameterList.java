@@ -3,20 +3,21 @@ package com.serhiivasylchenko.persistence;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Serhii Vasylchenko
  */
 @Entity
 public class ParameterList extends CachedPersistable {
+
+    private static final long serialVersionUID = -1398177335594023415L;
+
     @Column
-    @OneToMany
-    private Set<Field> fields;
+    @OneToMany(mappedBy = "parameterList", orphanRemoval = true)
+    private List<Field> fields;
 
     public ParameterList() {
-        fields = new HashSet<>();
     }
 
     public void addField(Field field) {
@@ -31,11 +32,11 @@ public class ParameterList extends CachedPersistable {
 
     }
 
-    public Set<Field> getFields() {
+    public List<Field> getFields() {
         return fields;
     }
 
-    public void setFields(Set<Field> fields) {
+    public void setFields(List<Field> fields) {
         this.fields = fields;
     }
 }

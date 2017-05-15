@@ -3,6 +3,7 @@ package com.serhiivasylchenko.core;
 import com.serhiivasylchenko.persistence.Component;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.Parameters;
 
 /**
@@ -50,5 +51,9 @@ public class Validator {
         ComponentGroup componentGroup = persistenceBean.findSingle(ComponentGroup.class, ComponentGroup.NQ_BY_NAME_AND_SYSTEM,
                 new Parameters().add("name", groupName).add("system", system));
         return componentGroup == null;
+    }
+
+    public boolean validateFieldName(TechnicalEntity entity, String fieldName) {
+        return true;
     }
 }
