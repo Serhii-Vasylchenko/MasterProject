@@ -66,9 +66,11 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Pane layoutX="14.0" layoutY="45.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
-                              AnchorPane.topAnchor="45.0">
-                            <fx:include fx:id="parametersPane" source="parametersPane.fxml"/>
+                        <Pane layoutX="14.0" layoutY="45.0" prefHeight="500.0" AnchorPane.leftAnchor="14.0"
+                              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0">
+                            <children>
+                                <fx:include fx:id="parametersPane" source="parametersPane.fxml"/>
+                            </children>
                         </Pane>
                         <VBox alignment="BOTTOM_CENTER" layoutX="54.0" layoutY="50.0" spacing="20.0"
                               AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

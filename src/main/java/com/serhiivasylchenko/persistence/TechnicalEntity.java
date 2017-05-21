@@ -1,5 +1,6 @@
 package com.serhiivasylchenko.persistence;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
@@ -22,13 +23,14 @@ public abstract class TechnicalEntity extends Conditional {
     @Column
     private LocalDate creationTime;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private ParameterList parameterList;
 
     public TechnicalEntity(String name, String description) {
         this.name = name;
         this.description = description;
         this.creationTime = LocalDate.now();
+        this.parameterList = new ParameterList();
     }
 
     public TechnicalEntity() {

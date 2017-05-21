@@ -20,18 +20,6 @@ public class ParameterList extends CachedPersistable {
     public ParameterList() {
     }
 
-    public void addField(Field field) {
-        fields.add(field);
-    }
-
-    public void modifyField(Long id, Field modifiedField) {
-
-    }
-
-    public void removeField(Long id) {
-
-    }
-
     public List<Field> getFields() {
         return fields;
     }

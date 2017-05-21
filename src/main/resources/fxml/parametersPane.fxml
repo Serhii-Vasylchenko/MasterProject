@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -8,13 +7,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<VBox alignment="CENTER" spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<VBox fx:id="vBox" alignment="CENTER" disable="true" maxWidth="1.7976931348623157E308" spacing="14.0"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.serhiivasylchenko.gui.ParametersPaneController">
     <children>
-        <HBox alignment="CENTER_LEFT" prefWidth="550.0" spacing="14.0">
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
                 <ImageView fx:id="iconImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true"/>
-                <Label fx:id="name" text="System Name">
+                <Label fx:id="name" text="Entity Name">
                     <font>
                         <Font size="20.0"/>
                     </font>
@@ -25,29 +25,30 @@
                 <Insets bottom="10.0" left="20.0" top="10.0"/>
             </padding>
         </HBox>
-        <ScrollPane hbarPolicy="NEVER" prefViewportHeight="32.0" prefViewportWidth="200.0">
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308"
+                    VBox.vgrow="ALWAYS">
             <content>
-                <GridPane fx:id="parameterGridPane" prefHeight="30.0" prefWidth="287.0">
+                <GridPane fx:id="parameterGridPane" hgap="5.0" vgap="10.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="10.0" prefWidth="149.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="138.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="50.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="50.0"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="30.0" vgrow="ALWAYS"/>
                     </rowConstraints>
-                    <children>
-                        <Button mnemonicParsing="false" onAction="#addNewField" text="Add new field"
-                                GridPane.halignment="CENTER">
-                            <font>
-                                <Font name="System Italic" size="15.0"/>
-                            </font>
-                        </Button>
-                    </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0"/>
+                    </padding>
                 </GridPane>
             </content>
             <padding>
                 <Insets bottom="10.0" top="10.0"/>
             </padding>
         </ScrollPane>
+        <Button mnemonicParsing="false" onAction="#addNewField" text="Add new field">
+            <font>
+                <Font name="System Italic" size="15.0"/>
+            </font>
+        </Button>
     </children>
 </VBox>

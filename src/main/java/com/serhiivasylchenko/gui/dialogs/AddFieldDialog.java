@@ -1,6 +1,8 @@
 package com.serhiivasylchenko.gui.dialogs;
 
+import com.serhiivasylchenko.core.PersistenceBean;
 import com.serhiivasylchenko.core.Validator;
+import com.serhiivasylchenko.gui.GUIUpdater;
 import com.serhiivasylchenko.persistence.Field;
 import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.FieldType;
@@ -27,6 +29,9 @@ public class AddFieldDialog extends GridPane {
     private ChoiceBox<FieldType> fieldType;
 
     private Validator validator = new Validator();
+    private GUIUpdater guiUpdater = GUIUpdater.getInstance();
+    private PersistenceBean persistenceBean = PersistenceBean.getInstance();
+
 
     public AddFieldDialog() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/dialogs/addFieldDialog.fxml"));
@@ -82,9 +87,10 @@ public class AddFieldDialog extends GridPane {
 
         // Send the result to workflowManager when the add button is clicked.
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == dialog.getDialogPane().getButtonTypes().get(0)) {
-                Field field = new Field(fieldName.getText(), fieldType.getValue());
-                entity.getParameterList().addField(field);
+            if (dialogButton == addButtonType) {
+                Field field = new Field(entity.getParameterList(), fieldName.getText(), fieldType.getValue());
+                persistenceBean.persist(field);
+//                guiUpdater.updateParameters(entity);
             }
             fieldName.setText("");
             return null;

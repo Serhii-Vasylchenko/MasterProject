@@ -36,7 +36,8 @@ public class Field extends CachedPersistable {
     @Column
     private List<String> choiceStrings;
 
-    public Field(String name, FieldType fieldType) {
+    public Field(ParameterList parameterList, String name, FieldType fieldType) {
+        this.parameterList = parameterList;
         this.name = name;
         this.fieldType = fieldType;
     }

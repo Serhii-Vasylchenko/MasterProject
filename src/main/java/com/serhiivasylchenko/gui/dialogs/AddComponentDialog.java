@@ -2,7 +2,7 @@ package com.serhiivasylchenko.gui.dialogs;
 
 import com.serhiivasylchenko.core.Validator;
 import com.serhiivasylchenko.core.WorkflowManager;
-import com.serhiivasylchenko.gui.ComponentsTreeUpdater;
+import com.serhiivasylchenko.gui.GUIUpdater;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
 import javafx.application.Platform;
@@ -32,7 +32,7 @@ public class AddComponentDialog extends GridPane {
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private Validator validator = new Validator();
-    private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
+    private GUIUpdater guiUpdater = GUIUpdater.getInstance();
 
     public AddComponentDialog() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/dialogs/addComponentDialog.fxml"));
@@ -106,7 +106,7 @@ public class AddComponentDialog extends GridPane {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == dialog.getDialogPane().getButtonTypes().get(0)) {
                 workflowManager.addComponent(compSystem.getValue(), compGroup.getValue(), compName.getText(), compDescription.getText());
-                componentsTreeUpdater.update();
+                guiUpdater.updateComponentTree();
             }
             compName.setText("");
             compDescription.setText("");

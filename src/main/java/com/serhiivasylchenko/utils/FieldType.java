@@ -6,7 +6,6 @@ package com.serhiivasylchenko.utils;
 public enum FieldType {
     INT_NUMBER("Integer number"),
     FLOAT_NUMBER("Float number"),
-    TEXT("Text"),
     CHOICE_BOX("Choice box");
 
     private final String name;

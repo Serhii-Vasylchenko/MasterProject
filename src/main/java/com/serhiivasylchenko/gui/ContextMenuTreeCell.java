@@ -16,7 +16,7 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
     private ContextMenu contextMenu = new ContextMenu();
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
-    private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
+    private GUIUpdater guiUpdater = GUIUpdater.getInstance();
     private DialogController dialogController = DialogController.getInstance();
 
     ContextMenuTreeCell() {
@@ -49,7 +49,7 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 workflowManager.deleteEntity((TechnicalEntity) getTreeItem().getValue());
-                componentsTreeUpdater.update();
+                guiUpdater.updateComponentTree();
             }
         });
     }

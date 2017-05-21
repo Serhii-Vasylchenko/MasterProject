@@ -9,6 +9,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +18,23 @@ import java.util.stream.Collectors;
 /**
  * @author Serhii Vasylchenko
  */
-public class ComponentsTreeUpdater {
-    private static ComponentsTreeUpdater instance;
+public class GUIUpdater {
+    private static GUIUpdater instance;
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
 
     private TreeView<Object> componentsTreeView;
+    private GridPane parametersGridPane;
     private final Image systemIcon = new Image(getClass().getResourceAsStream("/icons/system1_16.png"));
     private final Image componentIcon = new Image(getClass().getResourceAsStream("/icons/component1_16.png"));
     private final Image groupIcon = new Image(getClass().getResourceAsStream("/icons/group1_16.png"));
 
-    private ComponentsTreeUpdater() {
+    private GUIUpdater() {
     }
 
-    public static ComponentsTreeUpdater getInstance() {
+    public static GUIUpdater getInstance() {
         if (instance == null) {
-            instance = new ComponentsTreeUpdater();
+            instance = new GUIUpdater();
         }
         return instance;
     }
@@ -41,7 +43,11 @@ public class ComponentsTreeUpdater {
         this.componentsTreeView = componentsTreeView;
     }
 
-    public void update() {
+    public void setParametersGridPane(GridPane parametersGridPane) {
+        this.parametersGridPane = parametersGridPane;
+    }
+
+    public void updateComponentTree() {
         List<System> systems = workflowManager.getSystemList();
 
         TreeItem<Object> rootNode = new TreeItem<>();
@@ -86,4 +92,6 @@ public class ComponentsTreeUpdater {
             }
         });
     }
+
+
 }

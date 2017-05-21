@@ -1,9 +1,7 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
-import com.serhiivasylchenko.persistence.Component;
-import com.serhiivasylchenko.persistence.ComponentGroup;
-import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.persistence.TechnicalEntity;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -26,7 +24,7 @@ public class MainController implements Initializable {
     private Label status;
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
-    private ComponentsTreeUpdater componentsTreeUpdater = ComponentsTreeUpdater.getInstance();
+    private GUIUpdater guiUpdater = GUIUpdater.getInstance();
 
     private DialogController dialogController = DialogController.getInstance();
     @FXML
@@ -37,16 +35,13 @@ public class MainController implements Initializable {
         componentsTreeView.setCellFactory(p -> new ContextMenuTreeCell());
         componentsTreeView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             TreeItem<Object> selectedItem = componentsTreeView.getSelectionModel().getSelectedItem();
-            if (selectedItem.getValue() instanceof System) {
-                parametersPaneController.showSystemParameters((System) selectedItem.getValue());
-            } else if (selectedItem.getValue() instanceof Component) {
-                parametersPaneController.showComponentParameters((Component) selectedItem.getValue());
-            } else if (selectedItem.getValue() instanceof ComponentGroup) {
-                parametersPaneController.showComponentCroupParameters((ComponentGroup) selectedItem.getValue());
+            // Selected item can be null, if the tree was recreated, for example on update
+            if (selectedItem != null) {
+                parametersPaneController.showEntityParameters((TechnicalEntity) selectedItem.getValue());
             }
         });
 
-        componentsTreeUpdater.setComponentsTreeView(componentsTreeView);
+        guiUpdater.setComponentsTreeView(componentsTreeView);
 
         updateComponentList();
     }
@@ -80,7 +75,7 @@ public class MainController implements Initializable {
     @FXML
     private void updateComponentList() {
         status.setText("Updating component list...");
-        componentsTreeUpdater.update();
+        guiUpdater.updateComponentTree();
         status.setText("Idle");
     }
 
