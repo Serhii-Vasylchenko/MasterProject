@@ -2,20 +2,22 @@ package com.serhiivasylchenko.persistence;
 
 import com.serhiivasylchenko.utils.FieldType;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * @author Serhii Vasylchenko
  */
 @Entity
+@NamedQueries(
+        @NamedQuery(name = Field.FIELD_GET_BY_PARAMETER_LIST, query = "SELECT x FROM Field x WHERE x.parameterList = :parameterList")
+)
 @SuppressWarnings("unused")
 public class Field extends CachedPersistable {
 
     private static final long serialVersionUID = -5386828594342673263L;
+
+    public static final String FIELD_GET_BY_PARAMETER_LIST = "field.get.by.parameter.list";
 
     @Column
     private String name;

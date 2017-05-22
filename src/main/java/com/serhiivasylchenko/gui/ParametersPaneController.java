@@ -3,6 +3,7 @@ package com.serhiivasylchenko.gui;
 import com.serhiivasylchenko.core.PersistenceBean;
 import com.serhiivasylchenko.persistence.*;
 import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.utils.Parameters;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
@@ -78,7 +79,8 @@ public class ParametersPaneController implements Initializable {
         // Clear previous grid first
         parameterGridPane.getChildren().clear();
 
-        List<Field> fields = entity.getParameterList().getFields();
+        List<Field> fields = persistenceBean.find(Field.class, Field.FIELD_GET_BY_PARAMETER_LIST,
+                new Parameters().add("parameterList", entity.getParameterList()));
 
         int i = 0;
         for (Field field : fields) {
