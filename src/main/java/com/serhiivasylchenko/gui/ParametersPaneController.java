@@ -1,16 +1,16 @@
 package com.serhiivasylchenko.gui;
 
+import com.serhiivasylchenko.core.PersistenceBean;
 import com.serhiivasylchenko.persistence.*;
 import com.serhiivasylchenko.persistence.System;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -41,6 +41,7 @@ public class ParametersPaneController implements Initializable {
 
     private DialogController dialogController = DialogController.getInstance();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
+    private PersistenceBean persistenceBean = PersistenceBean.getInstance();
 
     private TechnicalEntity entity;
 
@@ -97,13 +98,31 @@ public class ParametersPaneController implements Initializable {
                     ((ChoiceBox<String>) fieldValue).setItems(FXCollections.observableList(field.getChoiceStrings()));
                     break;
             }
-            parameterGridPane.addRow(i, fieldName, fieldValue);
+            Button editFieldNameButton = new Button();
+            Button deleteFieldButton = new Button();
+
+            editFieldNameButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.EDIT, "14px"));
+            deleteFieldButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "14px"));
+
+            editFieldNameButton.setOnAction(event -> {
+                addNewField();
+            });
+            deleteFieldButton.setOnAction(event -> {
+                try {
+                    persistenceBean.delete(field);
+                    updateParameters();
+                } catch (Exception e) {
+                    Logger.getLogger(this.getClass()).error(null, e);
+                }
+            });
+
+            parameterGridPane.addRow(i, fieldName, fieldValue, editFieldNameButton, deleteFieldButton);
             GridPane.setHalignment(fieldName, HPos.CENTER);
             GridPane.setHalignment(fieldValue, HPos.CENTER);
+            GridPane.setHalignment(editFieldNameButton, HPos.CENTER);
+            GridPane.setHalignment(deleteFieldButton, HPos.CENTER);
 
             i++;
         }
-//        scrollPane.resize(400, 60 * i);
-//        scrollPane.setHvalue(30 * i);
     }
 }

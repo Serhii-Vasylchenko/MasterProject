@@ -61,6 +61,14 @@ public class Field extends CachedPersistable {
         this.fieldType = fieldType;
     }
 
+    public ParameterList getParameterList() {
+        return parameterList;
+    }
+
+    public void setParameterList(ParameterList parameterList) {
+        this.parameterList = parameterList;
+    }
+
     public int getIntValue() {
         return intValue;
     }

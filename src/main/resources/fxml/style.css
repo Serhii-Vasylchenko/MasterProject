@@ -1,8 +1,10 @@
 .refreshButton {
     /*-fx-graphic: url("/icons/refresh1_24.png");*/
-    -fx-background-image: url("/icons/refresh1_32.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+    /*-fx-background-image: url("/icons/refresh1_32.png");*/
+    /*-fx-background-repeat: no-repeat;*/
+    /*-fx-background-position: center;*/
+    /*-fx-background-color: transparent;*/
+    /*-fx-background-insets: 0;*/
 }
 
 .addComponentButton {
@@ -17,8 +19,12 @@
     -fx-background-position: center;
 }
 
-.addComponentGroupButton {
-    -fx-background-image: url("/icons/group1_32.png");
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+.refreshButtonIcon {
+    -glyph-size: 30;
+    -glyph-name: REFRESH;
+}
+
+.addComponentButtonIcon {
+    -glyph-size: 30;
+    -glyph-name: OBJECT_GROUP;
 }

@@ -22,7 +22,7 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
     ContextMenuTreeCell() {
         MenuItem addComponentMenuItem = new MenuItem("Add new component here");
         MenuItem addGroupMenuItem = new MenuItem("Add new group here");
-        MenuItem deleteMenuItem = new MenuItem("Remove");
+        MenuItem deleteMenuItem = new MenuItem("Delete");
         contextMenu.getItems().addAll(addComponentMenuItem, addGroupMenuItem, deleteMenuItem);
         addComponentMenuItem.setOnAction(event -> {
             TreeItem<Object> systemNode = findSystem(getTreeItem());

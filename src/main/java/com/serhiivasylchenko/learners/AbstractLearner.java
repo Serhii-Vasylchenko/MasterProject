@@ -3,5 +3,6 @@ package com.serhiivasylchenko.learners;
 /**
  * @author Serhii Vasylchenko
  */
-public class AbstractLearner {
+public interface AbstractLearner {
+    void addToTraningSet();
 }

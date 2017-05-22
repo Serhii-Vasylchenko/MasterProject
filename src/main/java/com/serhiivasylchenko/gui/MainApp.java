@@ -19,8 +19,8 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/mainWindow.fxml"));
-        MainController mainController = new MainController();
-        mainLoader.setController(mainController);
+//        MainController mainController = new MainController();
+//        mainLoader.setController(mainController);
 
         BorderPane root = mainLoader.load();
 

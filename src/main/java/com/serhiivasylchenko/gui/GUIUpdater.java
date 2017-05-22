@@ -5,6 +5,8 @@ import com.serhiivasylchenko.persistence.Component;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.Persistable;
 import com.serhiivasylchenko.persistence.System;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
@@ -79,7 +81,7 @@ public class GUIUpdater {
             // Assign different icons depending on the class
             if (child instanceof ComponentGroup) {
                 ComponentGroup group = (ComponentGroup) child;
-                childNode = new TreeItem<>(group, new ImageView(groupIcon));
+                childNode = new TreeItem<>(group, GlyphsDude.createIcon(FontAwesomeIcon.OBJECT_GROUP, "16px"));
                 // Other component groups may be nested inside, so we need to check for this
                 addChildrenToTheNode(childNode, group.getChildren());
             } else if (child instanceof Component) {
