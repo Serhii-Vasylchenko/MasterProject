@@ -1,6 +1,7 @@
 package com.serhiivasylchenko.persistence;
 
 import com.serhiivasylchenko.utils.FieldType;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,6 +34,10 @@ public class Field extends CachedPersistable {
 
     @Column
     private float floatValue;
+
+    @Column
+    @ColumnDefault(value = "-1") // -1 means no option selected
+    private int selectedStringIndex;
 
     @ElementCollection
     @Column
@@ -85,6 +90,14 @@ public class Field extends CachedPersistable {
 
     public void setFloatValue(float floatValue) {
         this.floatValue = floatValue;
+    }
+
+    public int getSelectedStringIndex() {
+        return selectedStringIndex;
+    }
+
+    public void setSelectedStringIndex(int selectedStringIndex) {
+        this.selectedStringIndex = selectedStringIndex;
     }
 
     public List<String> getChoiceStrings() {

@@ -10,10 +10,10 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.apache.log4j.Logger;
@@ -82,26 +82,19 @@ public class ParametersPaneController implements Initializable {
         List<Field> fields = persistenceBean.find(Field.class, Field.FIELD_GET_BY_PARAMETER_LIST,
                 new Parameters().add("parameterList", entity.getParameterList()));
 
+        // Create field labels and setters
+
         int i = 0;
         for (Field field : fields) {
+            // Label for the field
             Label fieldName = new Label(field.getName());
-            Node fieldValue = null;
-            switch (field.getFieldType()) {
-                case INT_NUMBER:
-                    fieldValue = new TextField(); // TODO: custom integer field
-                    ((TextField) fieldValue).setPromptText("integer value");
-                    break;
-                case FLOAT_NUMBER:
-                    fieldValue = new TextField(); // TODO: custom float field
-                    ((TextField) fieldValue).setPromptText("float value");
-                    break;
-                case CHOICE_BOX:
-                    fieldValue = new ChoiceBox<String>();
-                    ((ChoiceBox<String>) fieldValue).setItems(FXCollections.observableList(field.getChoiceStrings()));
-                    break;
-            }
+
+            // Create buttons for edit and delete
             Button editFieldNameButton = new Button();
             Button deleteFieldButton = new Button();
+
+            editFieldNameButton.setMaxSize(16, 16);
+            deleteFieldButton.setMaxSize(16, 16);
 
             editFieldNameButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.EDIT, "14px"));
             deleteFieldButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "14px"));
@@ -118,9 +111,50 @@ public class ParametersPaneController implements Initializable {
                 }
             });
 
-            parameterGridPane.addRow(i, fieldName, fieldValue, editFieldNameButton, deleteFieldButton);
+            // Value setter for this field
+            switch (field.getFieldType()) {
+                case INT_NUMBER:
+                    TextField intField = new TextField(); // TODO: custom integer field
+                    intField.setText(String.valueOf(field.getIntValue()));
+                    intField.setTooltip(new Tooltip("integer value"));
+                    intField.setOnKeyPressed(event -> {
+                        if (event.getCode().equals(KeyCode.ENTER)) {
+                            field.setIntValue(Integer.valueOf(intField.getText()));
+                            persistenceBean.persist(field);
+                        }
+                    });
+                    parameterGridPane.addRow(i, fieldName, intField, editFieldNameButton, deleteFieldButton);
+                    GridPane.setHalignment(intField, HPos.CENTER);
+                    break;
+                case FLOAT_NUMBER:
+                    TextField floatField = new TextField(); // TODO: custom float field
+                    floatField.setText(String.valueOf(field.getFloatValue()));
+                    floatField.setTooltip(new Tooltip("float value"));
+                    floatField.setPromptText("float value");
+                    floatField.setOnKeyPressed(event -> {
+                        if (event.getCode().equals(KeyCode.ENTER)) {
+                            field.setFloatValue(Float.valueOf(floatField.getText()));
+                        }
+                    });
+                    parameterGridPane.addRow(i, fieldName, floatField, editFieldNameButton, deleteFieldButton);
+                    GridPane.setHalignment(floatField, HPos.CENTER);
+                    break;
+                case CHOICE_BOX:
+                    ChoiceBox<String> choiceBox = new ChoiceBox<>();
+                    if (field.getChoiceStrings() != null) {
+                        choiceBox.setItems(FXCollections.observableList(field.getChoiceStrings()));
+                        choiceBox.getSelectionModel().select(field.getSelectedStringIndex());
+                    }
+                    choiceBox.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+                        // -1 means no option selected
+                        field.setSelectedStringIndex((Integer) newValue);
+                    });
+                    parameterGridPane.addRow(i, fieldName, choiceBox, editFieldNameButton, deleteFieldButton);
+                    GridPane.setHalignment(choiceBox, HPos.CENTER);
+                    break;
+            }
+
             GridPane.setHalignment(fieldName, HPos.CENTER);
-            GridPane.setHalignment(fieldValue, HPos.CENTER);
             GridPane.setHalignment(editFieldNameButton, HPos.CENTER);
             GridPane.setHalignment(deleteFieldButton, HPos.CENTER);
 
