@@ -11,17 +11,14 @@ import java.util.List;
  */
 @Entity
 @NamedQueries(
-        @NamedQuery(name = Field.FIELD_GET_BY_PARAMETER_LIST, query = "SELECT x FROM Field x WHERE x.parameterList = :parameterList")
+        @NamedQuery(name = Field.FIELD_GET_BY_PARAMETER_LIST_ORDERED, query = "SELECT x FROM Field x WHERE x.parameterList = :parameterList ORDER BY x.id")
 )
 @SuppressWarnings("unused")
-public class Field extends CachedPersistable {
+public class Field extends Named {
 
     private static final long serialVersionUID = -5386828594342673263L;
 
-    public static final String FIELD_GET_BY_PARAMETER_LIST = "field.get.by.parameter.list";
-
-    @Column
-    private String name;
+    public static final String FIELD_GET_BY_PARAMETER_LIST_ORDERED = "field.get.by.parameter.list";
 
     @Column
     private FieldType fieldType;
@@ -44,20 +41,12 @@ public class Field extends CachedPersistable {
     private List<String> choiceStrings;
 
     public Field(ParameterList parameterList, String name, FieldType fieldType) {
+        super(name);
         this.parameterList = parameterList;
-        this.name = name;
         this.fieldType = fieldType;
     }
 
     public Field() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public FieldType getFieldType() {

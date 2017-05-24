@@ -15,7 +15,7 @@ import javax.persistence.MappedSuperclass;
  * Conditional represents any entity which has different status like active or inactive
  */
 @MappedSuperclass
-public abstract class Conditional extends CachedPersistable {
+public abstract class Conditional extends Named {
 
     private static final long serialVersionUID = -7464534889459915099L;
 
@@ -26,6 +26,10 @@ public abstract class Conditional extends CachedPersistable {
     public Conditional(Conditional p, boolean deep) {
         super(p, deep);
         this.status = p.status;
+    }
+
+    public Conditional(String name) {
+        super(name);
     }
 
     public Conditional() {

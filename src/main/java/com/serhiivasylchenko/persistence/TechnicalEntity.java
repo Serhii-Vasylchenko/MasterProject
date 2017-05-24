@@ -14,9 +14,6 @@ public abstract class TechnicalEntity extends Conditional {
 
     private static final long serialVersionUID = -8572714188110426056L;
 
-    @Column(nullable = false)
-    private String name;
-
     @Column
     private String description;
 
@@ -27,26 +24,13 @@ public abstract class TechnicalEntity extends Conditional {
     private ParameterList parameterList;
 
     public TechnicalEntity(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
         this.creationTime = LocalDate.now();
         this.parameterList = new ParameterList();
     }
 
     public TechnicalEntity() {
-    }
-
-    @Override
-    public String toString() {
-        return getName();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {

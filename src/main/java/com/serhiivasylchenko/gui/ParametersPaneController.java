@@ -79,7 +79,7 @@ public class ParametersPaneController implements Initializable {
         // Clear previous grid first
         parameterGridPane.getChildren().clear();
 
-        List<Field> fields = persistenceBean.find(Field.class, Field.FIELD_GET_BY_PARAMETER_LIST,
+        List<Field> fields = persistenceBean.find(Field.class, Field.FIELD_GET_BY_PARAMETER_LIST_ORDERED,
                 new Parameters().add("parameterList", entity.getParameterList()));
 
         // Create field labels and setters
@@ -100,7 +100,7 @@ public class ParametersPaneController implements Initializable {
             deleteFieldButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "14px"));
 
             editFieldNameButton.setOnAction(event -> {
-                addNewField();
+                dialogController.changeName(field);
             });
             deleteFieldButton.setOnAction(event -> {
                 try {
