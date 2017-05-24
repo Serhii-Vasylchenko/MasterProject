@@ -9,17 +9,22 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.apache.log4j.Logger;
+import org.controlsfx.control.Notifications;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -89,26 +94,53 @@ public class ParametersPaneController implements Initializable {
             // Label for the field
             Label fieldName = new Label(field.getName());
 
-            // Create buttons for edit and delete
+            // Create buttons for save, edit and delete
+            Button saveFieldValueButton = new Button();
             Button editFieldNameButton = new Button();
             Button deleteFieldButton = new Button();
 
-            editFieldNameButton.setMaxSize(16, 16);
-            deleteFieldButton.setMaxSize(16, 16);
+            saveFieldValueButton.setTooltip(new Tooltip("Save value"));
+            editFieldNameButton.setTooltip(new Tooltip("Change name"));
+            deleteFieldButton.setTooltip(new Tooltip("Delete field"));
 
+            saveFieldValueButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            editFieldNameButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            deleteFieldButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            saveFieldValueButton.setPrefSize(16, 16);
+            editFieldNameButton.setPrefSize(16, 16);
+            deleteFieldButton.setPrefSize(16, 16);
+            saveFieldValueButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            editFieldNameButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            deleteFieldButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
+            saveFieldValueButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SAVE, "14px"));
             editFieldNameButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.EDIT, "14px"));
             deleteFieldButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "14px"));
+
+            HBox buttonBox = new HBox();
+            buttonBox.setSpacing(4);
+            buttonBox.setAlignment(Pos.CENTER);
+            buttonBox.getChildren().addAll(saveFieldValueButton, editFieldNameButton, deleteFieldButton);
 
             editFieldNameButton.setOnAction(event -> {
                 dialogController.changeName(field);
             });
             deleteFieldButton.setOnAction(event -> {
-                try {
-                    persistenceBean.delete(field);
-                    updateParameters();
-                } catch (Exception e) {
-                    Logger.getLogger(this.getClass()).error(null, e);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Dialog");
+                alert.setHeaderText("Confirm deletion");
+                alert.setContentText("Are you sure you want to delete this field? There would be no way back!");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    try {
+                        persistenceBean.delete(field);
+                        updateParameters();
+                    } catch (Exception e) {
+                        Logger.getLogger(this.getClass()).error(null, e);
+                    }
                 }
+
             });
 
             // Value setter for this field
@@ -117,28 +149,51 @@ public class ParametersPaneController implements Initializable {
                     TextField intField = new TextField(); // TODO: custom integer field
                     intField.setText(String.valueOf(field.getIntValue()));
                     intField.setTooltip(new Tooltip("integer value"));
+
+                    // Saving the value on enter
                     intField.setOnKeyPressed(event -> {
                         if (event.getCode().equals(KeyCode.ENTER)) {
                             field.setIntValue(Integer.valueOf(intField.getText()));
                             persistenceBean.persist(field);
+                            showSuccessNotification(field);
                         }
                     });
-                    parameterGridPane.addRow(i, fieldName, intField, editFieldNameButton, deleteFieldButton);
-                    GridPane.setHalignment(intField, HPos.CENTER);
+
+                    // Saving the value on button click
+                    saveFieldValueButton.setOnAction(event -> {
+                        field.setIntValue(Integer.valueOf(intField.getText()));
+                        persistenceBean.persist(field);
+                        showSuccessNotification(field);
+                    });
+
+                    parameterGridPane.addRow(i, fieldName, intField, buttonBox);
                     break;
+
                 case FLOAT_NUMBER:
                     TextField floatField = new TextField(); // TODO: custom float field
                     floatField.setText(String.valueOf(field.getFloatValue()));
                     floatField.setTooltip(new Tooltip("float value"));
                     floatField.setPromptText("float value");
+
+                    // Saving the value on enter
                     floatField.setOnKeyPressed(event -> {
                         if (event.getCode().equals(KeyCode.ENTER)) {
                             field.setFloatValue(Float.valueOf(floatField.getText()));
+                            persistenceBean.persist(field);
+                            showSuccessNotification(field);
                         }
                     });
-                    parameterGridPane.addRow(i, fieldName, floatField, editFieldNameButton, deleteFieldButton);
-                    GridPane.setHalignment(floatField, HPos.CENTER);
+
+                    // Saving the value on button click
+                    saveFieldValueButton.setOnAction(event -> {
+                        field.setFloatValue(Integer.valueOf(floatField.getText()));
+                        persistenceBean.persist(field);
+                        showSuccessNotification(field);
+                    });
+
+                    parameterGridPane.addRow(i, fieldName, floatField, buttonBox);
                     break;
+
                 case CHOICE_BOX:
                     ChoiceBox<String> choiceBox = new ChoiceBox<>();
                     if (field.getChoiceStrings() != null) {
@@ -149,16 +204,26 @@ public class ParametersPaneController implements Initializable {
                         // -1 means no option selected
                         field.setSelectedStringIndex((Integer) newValue);
                     });
-                    parameterGridPane.addRow(i, fieldName, choiceBox, editFieldNameButton, deleteFieldButton);
-                    GridPane.setHalignment(choiceBox, HPos.CENTER);
+                    parameterGridPane.addRow(i, fieldName, choiceBox, buttonBox);
                     break;
             }
 
-            GridPane.setHalignment(fieldName, HPos.CENTER);
-            GridPane.setHalignment(editFieldNameButton, HPos.CENTER);
-            GridPane.setHalignment(deleteFieldButton, HPos.CENTER);
-
             i++;
         }
+    }
+
+    @FXML
+    private void editEntityName() {
+        this.dialogController.changeName(entity);
+    }
+
+    private void showSuccessNotification(Field field) {
+        Notifications.create()
+                .text("Value for field " + field.getName() + " is saved!")
+                .graphic(GlyphsDude.createIcon(FontAwesomeIcon.CHECK_CIRCLE, "32px"))
+                .hideAfter(Duration.seconds(4))
+                .owner(parameterGridPane)
+                .position(Pos.BASELINE_RIGHT)
+                .show();
     }
 }

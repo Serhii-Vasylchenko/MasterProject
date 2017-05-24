@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane prefHeight="800.0" prefWidth="1400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8"
+<BorderPane prefHeight="800.0" prefWidth="1400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.MainController">
 
     <!--<fx:define>-->
@@ -45,19 +45,20 @@
                             <children>
                                 <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#addSystem"
                                         styleClass="addSystemButton"/>
-                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
+                                <Button maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
                                         onAction="#addComponent" styleClass="addComponentButton"/>
-                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
-                                        onAction="#addComponentGroup">
+                                <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0"
+                                        mnemonicParsing="false" onAction="#addComponentGroup">
                                     <graphic>
-                                        <FontAwesomeIconView styleClass="addComponentButtonIcon"/>
+                                        <FontAwesomeIconView glyphName="OBJECT_GROUP" size="32"/>
                                     </graphic>
                                 </Button>
                                 <Pane prefHeight="40.0" prefWidth="400.0"/>
-                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
-                                        onAction="#updateComponentList" prefWidth="0.0" styleClass="refreshButton">
+                                <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0"
+                                        mnemonicParsing="false" onAction="#updateComponentList"
+                                        styleClass="refreshButton">
                                     <graphic>
-                                        <FontAwesomeIconView styleClass="refreshButtonIcon"/>
+                                        <FontAwesomeIconView glyphName="REFRESH" size="32"/>
                                     </graphic>
                                 </Button>
                             </children>
