@@ -1,13 +1,16 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
+import com.serhiivasylchenko.gui.filtering.FilterableTreeItem;
+import com.serhiivasylchenko.gui.filtering.TreeItemPredicate;
 import com.serhiivasylchenko.persistence.Component;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.Persistable;
 import com.serhiivasylchenko.persistence.System;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.scene.control.TreeItem;
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +35,7 @@ public class GUIUpdater {
 
     private TreeView<Object> componentsTreeView;
     private GridPane parametersGridPane;
+    private TextField searchTextField;
     private final Image systemIcon = new Image(getClass().getResourceAsStream("/icons/system1_16.png"));
     private final Image componentIcon = new Image(getClass().getResourceAsStream("/icons/component1_16.png"));
 
@@ -52,13 +57,18 @@ public class GUIUpdater {
         this.parametersGridPane = parametersGridPane;
     }
 
+    public void setSearchTextField(TextField searchTextField) {
+        this.searchTextField = searchTextField;
+    }
+
     public void updateComponentTree() {
         List<System> systems = workflowManager.getSystemList();
 
-        TreeItem<Object> rootNode = new TreeItem<>();
+        FilterableTreeItem<Object> rootNode = new FilterableTreeItem<>(null);
         rootNode.setExpanded(true);
         systems.forEach(system -> {
-            TreeItem<Object> systemNode = new TreeItem<>(system, new ImageView(systemIcon));
+            FilterableTreeItem<Object> systemNode = new FilterableTreeItem<>(system);
+            systemNode.setGraphic(new ImageView(systemIcon));
 
             List<Persistable> directChildren = new ArrayList<>();
             directChildren.addAll(workflowManager.getComponentGroupList(system).stream()
@@ -69,39 +79,55 @@ public class GUIUpdater {
                     .collect(Collectors.toList()));
 
             addChildrenToTheNode(systemNode, directChildren);
-            rootNode.getChildren().add(systemNode);
+            rootNode.getInternalChildren().add(systemNode);
         });
+
+        rootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+            if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
+                return null;
+            return TreeItemPredicate.create(entity -> entity.toString().contains(searchTextField.getText()));
+        }, searchTextField.textProperty()));
+
         componentsTreeView.setRoot(rootNode);
     }
 
-    private void addChildrenToTheNode(TreeItem<Object> node, List<? extends Persistable> children) {
+    private void addChildrenToTheNode(FilterableTreeItem<Object> node, List<? extends Persistable> children) {
         // Set the node to be expanded by default
         node.setExpanded(true);
 
         children.forEach(child -> {
-            TreeItem<Object> childNode = null;
+            FilterableTreeItem<Object> childNode = null;
 
             // Assign different icons depending on the class
             if (child instanceof ComponentGroup) {
                 ComponentGroup group = (ComponentGroup) child;
-                childNode = new TreeItem<>(group, GlyphsDude.createIcon(FontAwesomeIcon.OBJECT_GROUP, "16px"));
+                childNode = new FilterableTreeItem<>(group);
+                childNode.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.OBJECT_GROUP, "16px"));
+
                 // Other component groups may be nested inside, so we need to check for this
                 List<Persistable> directChildren = new ArrayList<>();
-                directChildren.addAll(workflowManager.getComponentList(group));
                 directChildren.addAll(workflowManager.getComponentGroupList(group));
+                directChildren.addAll(workflowManager.getComponentList(group));
                 addChildrenToTheNode(childNode, directChildren);
             } else if (child instanceof Component) {
                 Component component = (Component) child;
-                childNode = new TreeItem<>(component, new ImageView(componentIcon));
+                childNode = new FilterableTreeItem<>(component);
+                childNode.setGraphic(new ImageView(componentIcon));
             }
 
             if (childNode != null) {
-                node.getChildren().add(childNode);
+                node.getInternalChildren().add(childNode);
             } else {
                 LOGGER.warn("Unknown entity on updating components tree view!");
             }
         });
     }
 
+    public void filterComponentsTree(String input) {
+        if (input == null || Objects.equals(input, "")) {
+            updateComponentTree();
+        } else {
 
+        }
+    }
 }

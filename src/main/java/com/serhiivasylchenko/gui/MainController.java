@@ -4,10 +4,7 @@ import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.TechnicalEntity;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +19,8 @@ public class MainController implements Initializable {
     private ToggleGroup evaluationToggleGroup;
     @FXML
     private Label status;
+    @FXML
+    private TextField searchTextField;
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
@@ -42,6 +41,7 @@ public class MainController implements Initializable {
         });
 
         guiUpdater.setComponentsTreeView(componentsTreeView);
+        guiUpdater.setSearchTextField(searchTextField);
 
         updateComponentList();
     }
@@ -79,5 +79,8 @@ public class MainController implements Initializable {
         status.setText("Idle");
     }
 
+    @FXML
+    private void filterComponentsTree() {
 
+    }
 }

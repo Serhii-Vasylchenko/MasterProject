@@ -200,10 +200,21 @@ public class ParametersPaneController implements Initializable {
                         choiceBox.setItems(FXCollections.observableList(field.getChoiceStrings()));
                         choiceBox.getSelectionModel().select(field.getSelectedStringIndex());
                     }
+
+                    // Saving the value on change of selected line
                     choiceBox.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-                        // -1 means no option selected
-                        field.setSelectedStringIndex((Integer) newValue);
+                        field.setSelectedStringIndex(choiceBox.getSelectionModel().getSelectedIndex());
+                        persistenceBean.persist(field);
+                        showSuccessNotification(field);
                     });
+
+                    // Saving the value on button click
+                    saveFieldValueButton.setOnAction(event -> {
+                        field.setSelectedStringIndex(choiceBox.getSelectionModel().getSelectedIndex());
+                        persistenceBean.persist(field);
+                        showSuccessNotification(field);
+                    });
+
                     parameterGridPane.addRow(i, fieldName, choiceBox, buttonBox);
                     break;
             }

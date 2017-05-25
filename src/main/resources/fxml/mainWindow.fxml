@@ -5,6 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.textfield.CustomTextField?>
 <BorderPane prefHeight="800.0" prefWidth="1400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.MainController">
 
@@ -29,8 +30,18 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="500.0" prefWidth="320.0">
                     <children>
-                        <TextField prefHeight="31.0" promptText="Search" AnchorPane.leftAnchor="14.0"
-                                   AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0"/>
+                        <CustomTextField id="searchTextField" fx:id="searchTextField" layoutX="14.0" layoutY="48.0"
+                                         onAction="#filterComponentsTree" promptText="Search"
+                                         AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
+                                         AnchorPane.topAnchor="45.0">
+                            <left>
+                                <Label styleClass="searchBoxLabel">
+                                    <graphic>
+                                        <FontAwesomeIconView styleClass="searchBoxLabelIcon"/>
+                                    </graphic>
+                                </Label>
+                            </left>
+                        </CustomTextField>
                         <TreeView fx:id="componentsTreeView" editable="true" showRoot="false"
                                   AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
                                   AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="144.0"/>
@@ -73,8 +84,8 @@
                                 <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Pane layoutX="14.0" layoutY="45.0" maxHeight="300.0" AnchorPane.leftAnchor="14.0"
-                              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0">
+                        <Pane layoutX="14.0" layoutY="45.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
+                              AnchorPane.topAnchor="45.0">
                             <children>
                                 <fx:include fx:id="parametersPane" source="parametersPane.fxml"/>
                             </children>

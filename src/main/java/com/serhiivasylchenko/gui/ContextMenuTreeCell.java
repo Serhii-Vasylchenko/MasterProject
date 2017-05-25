@@ -2,6 +2,7 @@ package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.ComponentGroup;
+import com.serhiivasylchenko.persistence.Named;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.persistence.TechnicalEntity;
 import javafx.scene.control.*;
@@ -22,8 +23,9 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
     ContextMenuTreeCell() {
         MenuItem addComponentMenuItem = new MenuItem("Add new component here");
         MenuItem addGroupMenuItem = new MenuItem("Add new group here");
+        MenuItem renameMenuItem = new MenuItem("Rename");
         MenuItem deleteMenuItem = new MenuItem("Delete");
-        contextMenu.getItems().addAll(addComponentMenuItem, addGroupMenuItem, deleteMenuItem);
+        contextMenu.getItems().addAll(addComponentMenuItem, addGroupMenuItem, renameMenuItem, deleteMenuItem);
         addComponentMenuItem.setOnAction(event -> {
             TreeItem<Object> systemNode = findSystem(getTreeItem());
             if (getTreeItem().getParent().getValue() instanceof System) {
@@ -38,6 +40,11 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
                 dialogController.addComponentGroup((System) systemNode.getValue(), null);
             } else {
                 dialogController.addComponentGroup((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getParent().getValue());
+            }
+        });
+        renameMenuItem.setOnAction(event -> {
+            if (Named.class.isAssignableFrom(getTreeItem().getValue().getClass())) {
+                dialogController.changeName((Named) getTreeItem().getValue());
             }
         });
         deleteMenuItem.setOnAction(event -> {
