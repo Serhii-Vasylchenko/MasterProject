@@ -6,32 +6,59 @@ import com.serhiivasylchenko.gui.GUIUpdater;
 import com.serhiivasylchenko.persistence.Field;
 import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.FieldType;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * @author Serhii Vasylchenko
  */
-public class AddFieldDialog extends GridPane {
+public class AddFieldDialog extends VBox implements Initializable {
     @FXML
     private TextField fieldName;
     @FXML
     private ChoiceBox<FieldType> fieldType;
+    @FXML
+    private VBox mainVBox;
+
+    private VBox choiceStringsBox;
+    private VBox insideVBox;
+
+    private Dialog<List<String>> dialog;
 
     private Validator validator = new Validator();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        choiceStringsBox = new VBox();
+        choiceStringsBox.setAlignment(Pos.CENTER);
+        choiceStringsBox.setSpacing(14);
+
+        insideVBox = new VBox();
+        insideVBox.setAlignment(Pos.CENTER);
+        insideVBox.setSpacing(14);
+        insideVBox.setFillWidth(false);
+    }
 
     public AddFieldDialog() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/dialogs/addFieldDialog.fxml"));
@@ -47,8 +74,8 @@ public class AddFieldDialog extends GridPane {
     }
 
     public void showDialog(TechnicalEntity entity) {
-        Dialog<List<String>> dialog = new Dialog<>();
-        dialog.setTitle("Add new component");
+        dialog = new Dialog<>();
+        dialog.setTitle("Add new field");
         dialog.setContentText(null);
 
         fieldType.setItems(FXCollections.observableList(Arrays.asList(FieldType.values())));
@@ -89,6 +116,14 @@ public class AddFieldDialog extends GridPane {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
                 Field field = new Field(entity.getParameterList(), fieldName.getText(), fieldType.getValue());
+                if (fieldType.getValue() == FieldType.CHOICE_BOX) {
+                    List<String> choiceStrings = insideVBox.getChildren().stream()
+                            .map(child -> (HBox) child)
+                            .map(hBox -> (TextField) hBox.getChildren().get(0))
+                            .map(TextField::getText)
+                            .collect(Collectors.toList());
+                    field.setChoiceStrings(choiceStrings);
+                }
                 persistenceBean.persist(field);
 //                guiUpdater.updateParameters(entity);
             }
@@ -97,5 +132,58 @@ public class AddFieldDialog extends GridPane {
         });
 
         dialog.showAndWait();
+    }
+
+    @FXML
+    private void onFieldTypeChange() {
+        if (fieldType.getSelectionModel().getSelectedItem() == FieldType.CHOICE_BOX) {
+            buildChoiceStringsBox();
+        } else {
+            mainVBox.getChildren().remove(choiceStringsBox);
+            dialog.getDialogPane().getScene().getWindow().sizeToScene();
+        }
+    }
+
+    private void buildChoiceStringsBox() {
+        choiceStringsBox.getChildren().clear();
+        insideVBox.getChildren().clear();
+
+        Button addChoiceButton = new Button("Add choice");
+
+        addChoiceButton.setOnAction(event -> {
+            insideVBox.getChildren().add(buildChoice());
+            dialog.getDialogPane().getScene().getWindow().sizeToScene();
+        });
+
+        insideVBox.getChildren().add(buildChoice());
+
+        choiceStringsBox.getChildren().addAll(insideVBox, addChoiceButton);
+
+        mainVBox.getChildren().add(choiceStringsBox);
+
+        dialog.getDialogPane().getScene().getWindow().sizeToScene();
+    }
+
+    private HBox buildChoice() {
+        HBox hBox = new HBox(10);
+        hBox.setAlignment(Pos.CENTER);
+
+        TextField choiceTextField = new TextField();
+        choiceTextField.setPromptText("Write choice string here");
+
+        Button deleteChoiceButton = new Button();
+        deleteChoiceButton.setTooltip(new Tooltip("delete choice"));
+        deleteChoiceButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        deleteChoiceButton.setPrefSize(20, 20);
+        deleteChoiceButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        deleteChoiceButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "16px"));
+        deleteChoiceButton.setOnAction(event -> {
+            insideVBox.getChildren().remove(hBox);
+            dialog.getDialogPane().getScene().getWindow().sizeToScene();
+        });
+
+        hBox.getChildren().addAll(choiceTextField, deleteChoiceButton);
+
+        return hBox;
     }
 }

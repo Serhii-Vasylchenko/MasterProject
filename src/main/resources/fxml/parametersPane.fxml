@@ -31,8 +31,8 @@
                 <Insets bottom="10.0" left="20.0" top="10.0"/>
             </padding>
         </HBox>
-        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308"
-                    VBox.vgrow="ALWAYS">
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0"
+                    maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
             <content>
                 <GridPane fx:id="parameterGridPane" hgap="5.0" vgap="10.0">
                     <columnConstraints>
