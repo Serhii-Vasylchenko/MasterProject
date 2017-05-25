@@ -26,6 +26,7 @@ public class DialogController implements Initializable {
     private final Logger LOGGER = Logger.getLogger(DialogController.class);
 
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
+    private GUIUpdater guiUpdater = GUIUpdater.getInstance();
 
     private AddComponentDialog addComponentDialog = new AddComponentDialog();
     private AddSystemDialog addSystemDialog = new AddSystemDialog();
@@ -82,6 +83,7 @@ public class DialogController implements Initializable {
         result.ifPresent(name -> {
             namedEntity.setName(name);
             persistenceBean.persist(namedEntity);
+            guiUpdater.updateComponentTree();
         });
     }
 }

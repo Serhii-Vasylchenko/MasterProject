@@ -7,7 +7,6 @@ import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.Parameters;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,22 +79,19 @@ public class WorkflowManager {
         return persistenceBean.find(System.class, System.NQ_ALL, new Parameters());
     }
 
-    public List<Component> getComponentList(String systemName) {
-        return persistenceBean.find(Component.class, Component.NQ_BY_SYSTEM_NAME, new Parameters().add("systemName", systemName));
+    public List<Component> getComponentList(System system) {
+        return persistenceBean.find(Component.class, Component.NQ_BY_SYSTEM, new Parameters().add("system", system));
     }
 
-    public List<ComponentGroup> getGroupList(String systemName) {
-        List<ComponentGroup> componentGroups = persistenceBean.find(ComponentGroup.class, ComponentGroup.NQ_BY_SYSTEM_NAME, new Parameters().add("systemName", systemName));
-        componentGroups = checkForChildren(componentGroups);
-
-        return componentGroups;
+    public List<ComponentGroup> getComponentGroupList(System system) {
+        return persistenceBean.find(ComponentGroup.class, ComponentGroup.NQ_BY_SYSTEM, new Parameters().add("system", system));
     }
 
-    private List<ComponentGroup> checkForChildren(List<ComponentGroup> componentGroups) {
-        List<ComponentGroup> withChildren = new ArrayList<>();
-        withChildren.addAll(componentGroups);
-        componentGroups.forEach(componentGroup -> withChildren.addAll(checkForChildren(componentGroup.getComponentGroupChildren())));
+    public List<Component> getComponentList(ComponentGroup componentGroup) {
+        return persistenceBean.find(Component.class, Component.NQ_BY_PARENT_GROUP, new Parameters().add("parentGroup", componentGroup));
+    }
 
-        return withChildren;
+    public List<ComponentGroup> getComponentGroupList(ComponentGroup componentGroup) {
+        return persistenceBean.find(ComponentGroup.class, ComponentGroup.NQ_BY_PARENT_GROUP, new Parameters().add("parentGroup", componentGroup));
     }
 }

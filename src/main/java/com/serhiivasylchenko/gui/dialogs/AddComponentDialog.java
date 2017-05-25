@@ -118,7 +118,7 @@ public class AddComponentDialog extends GridPane {
 
     @FXML
     private void loadGroups() {
-        List<ComponentGroup> componentGroups = compSystem.getSelectionModel().getSelectedItem().getComponentGroups();
+        List<ComponentGroup> componentGroups = workflowManager.getComponentGroupList(compSystem.getSelectionModel().getSelectedItem());
         if (componentGroups != null && !componentGroups.isEmpty()) {
             compGroup.setItems(FXCollections.observableArrayList(componentGroups));
         } else {

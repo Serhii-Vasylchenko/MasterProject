@@ -11,14 +11,14 @@ import java.util.List;
  */
 @Entity
 @NamedQueries(
-        @NamedQuery(name = Field.FIELD_GET_BY_PARAMETER_LIST_ORDERED, query = "SELECT x FROM Field x WHERE x.parameterList = :parameterList ORDER BY x.id")
+        @NamedQuery(name = Field.NQ_BY_PARAMETER_LIST_ORDERED, query = "SELECT x FROM Field x WHERE x.parameterList = :parameterList ORDER BY x.id")
 )
 @SuppressWarnings("unused")
 public class Field extends Named {
 
     private static final long serialVersionUID = -5386828594342673263L;
 
-    public static final String FIELD_GET_BY_PARAMETER_LIST_ORDERED = "field.get.by.parameter.list";
+    public static final String NQ_BY_PARAMETER_LIST_ORDERED = "nq.field.get.by.parameter.list";
 
     @Column
     private FieldType fieldType;

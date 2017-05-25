@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
         @NamedQuery(name = Component.NQ_ALL, query = "SELECT x FROM Component x"),
-        @NamedQuery(name = Component.NQ_BY_SYSTEM_NAME, query = "SELECT x FROM Component x WHERE x.system.name = :systemName"),
+        @NamedQuery(name = Component.NQ_BY_SYSTEM, query = "SELECT x FROM Component x WHERE x.system = :system"),
+        @NamedQuery(name = Component.NQ_BY_PARENT_GROUP, query = "SELECT x FROM Component x WHERE x.parentGroup = :parentGroup"),
         @NamedQuery(name = Component.NQ_BY_NAME_AND_SYSTEM, query = "SELECT x FROM Component x WHERE x.name = :name and x.system = :system")
 })
 public class Component extends TechnicalEntity {
@@ -16,7 +17,8 @@ public class Component extends TechnicalEntity {
     private static final long serialVersionUID = -2461904212127946257L;
 
     public static final String NQ_ALL = "nq.component.get.all";
-    public static final String NQ_BY_SYSTEM_NAME = "nq.component.get.by.system.name";
+    public static final String NQ_BY_SYSTEM = "nq.component.get.by.system";
+    public static final String NQ_BY_PARENT_GROUP = "nq.component.get.by.parent.group";
     public static final String NQ_BY_NAME_AND_SYSTEM = "nq.component.get.by.name.and.system";
 
     @ManyToOne

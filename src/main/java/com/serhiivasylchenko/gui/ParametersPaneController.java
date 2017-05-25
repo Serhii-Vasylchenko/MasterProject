@@ -84,7 +84,7 @@ public class ParametersPaneController implements Initializable {
         // Clear previous grid first
         parameterGridPane.getChildren().clear();
 
-        List<Field> fields = persistenceBean.find(Field.class, Field.FIELD_GET_BY_PARAMETER_LIST_ORDERED,
+        List<Field> fields = persistenceBean.find(Field.class, Field.NQ_BY_PARAMETER_LIST_ORDERED,
                 new Parameters().add("parameterList", entity.getParameterList()));
 
         // Create field labels and setters
@@ -106,16 +106,16 @@ public class ParametersPaneController implements Initializable {
             saveFieldValueButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
             editFieldNameButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
             deleteFieldButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            saveFieldValueButton.setPrefSize(16, 16);
-            editFieldNameButton.setPrefSize(16, 16);
-            deleteFieldButton.setPrefSize(16, 16);
+            saveFieldValueButton.setPrefSize(20, 20);
+            editFieldNameButton.setPrefSize(20, 20);
+            deleteFieldButton.setPrefSize(20, 20);
             saveFieldValueButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
             editFieldNameButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
             deleteFieldButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-            saveFieldValueButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SAVE, "14px"));
-            editFieldNameButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.EDIT, "14px"));
-            deleteFieldButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "14px"));
+            saveFieldValueButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SAVE, "16px"));
+            editFieldNameButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.EDIT, "16px"));
+            deleteFieldButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "16px"));
 
             HBox buttonBox = new HBox();
             buttonBox.setSpacing(4);

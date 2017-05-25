@@ -36,8 +36,9 @@
             <content>
                 <GridPane fx:id="parameterGridPane" hgap="5.0" vgap="10.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="50.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="50.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" minWidth="50.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" minWidth="50.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" minWidth="50.0"/>
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="30.0" vgrow="ALWAYS"/>
