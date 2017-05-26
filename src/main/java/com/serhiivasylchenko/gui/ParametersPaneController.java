@@ -1,6 +1,7 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.PersistenceBean;
+import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.*;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.utils.Parameters;
@@ -39,15 +40,18 @@ public class ParametersPaneController implements Initializable {
     @FXML
     private Label name;
     @FXML
+    private TextArea descriptionTextArea;
+    @FXML
     private ScrollPane scrollPane;
     @FXML
     private GridPane parameterGridPane;
     @FXML
-    private VBox vBox;
+    private VBox mainVBox;
 
     private DialogController dialogController = DialogController.getInstance();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
+    private WorkflowManager workflowManager = WorkflowManager.getInstance();
 
     private TechnicalEntity entity;
 
@@ -58,7 +62,7 @@ public class ParametersPaneController implements Initializable {
 
     public void showEntityParameters(TechnicalEntity entity) {
         this.entity = entity;
-        vBox.setDisable(false);
+        mainVBox.setDisable(false);
 
         if (entity instanceof System) {
             iconImage.setImage(new Image(getClass().getResourceAsStream("/icons/system1_32.png")));
@@ -71,6 +75,23 @@ public class ParametersPaneController implements Initializable {
         }
 
         name.setText(entity.toString());
+        ContextMenu contextMenu = new ContextMenu();
+        descriptionTextArea.setText(entity.getDescription());
+        MenuItem saveMenuItem = new MenuItem("Save");
+        saveMenuItem.setOnAction(event -> {
+            entity.setDescription(descriptionTextArea.getText());
+            persistenceBean.persist(entity);
+            Notifications.create()
+                    .text("Description for the entity '" + entity.getName() + "' is saved!")
+                    .graphic(GlyphsDude.createIcon(FontAwesomeIcon.CHECK_CIRCLE, "32px"))
+                    .hideAfter(Duration.seconds(4))
+                    .owner(parameterGridPane)
+                    .position(Pos.BASELINE_RIGHT)
+                    .show();
+        });
+        contextMenu.getItems().add(saveMenuItem);
+        descriptionTextArea.setContextMenu(contextMenu);
+
         updateParameters();
     }
 
@@ -230,11 +251,31 @@ public class ParametersPaneController implements Initializable {
 
     private void showSuccessNotification(Field field) {
         Notifications.create()
-                .text("Value for field " + field.getName() + " is saved!")
+                .text("Value for field '" + field.getName() + "' is saved!")
                 .graphic(GlyphsDude.createIcon(FontAwesomeIcon.CHECK_CIRCLE, "32px"))
                 .hideAfter(Duration.seconds(4))
                 .owner(parameterGridPane)
                 .position(Pos.BASELINE_RIGHT)
                 .show();
+    }
+
+    @FXML
+    private void deleteEntity() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Confirm deletion");
+        alert.setContentText("Are you sure you want to delete this element and all its children? There would be no way back!");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            this.workflowManager.deleteEntity(entity);
+            this.guiUpdater.updateComponentTree();
+            this.reset();
+        }
+    }
+
+    public void reset() {
+        this.mainVBox.setDisable(true);
+        this.iconImage.setImage(null);
     }
 }
