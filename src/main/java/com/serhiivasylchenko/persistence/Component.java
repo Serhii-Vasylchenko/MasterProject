@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Entity
 @NamedQueries({
         @NamedQuery(name = Component.NQ_ALL, query = "SELECT x FROM Component x"),
-        @NamedQuery(name = Component.NQ_BY_SYSTEM, query = "SELECT x FROM Component x WHERE x.system = :system"),
-        @NamedQuery(name = Component.NQ_BY_PARENT_GROUP, query = "SELECT x FROM Component x WHERE x.parentGroup = :parentGroup"),
+        @NamedQuery(name = Component.NQ_BY_SYSTEM, query = "SELECT x FROM Component x WHERE x.system = :system ORDER BY x.id"),
+        @NamedQuery(name = Component.NQ_BY_PARENT_GROUP, query = "SELECT x FROM Component x WHERE x.parentGroup = :parentGroup ORDER BY x.id"),
         @NamedQuery(name = Component.NQ_BY_NAME_AND_SYSTEM, query = "SELECT x FROM Component x WHERE x.name = :name and x.system = :system")
 })
 public class Component extends TechnicalEntity {

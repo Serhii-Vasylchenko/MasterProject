@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 @NamedQueries({
         @NamedQuery(name = ComponentGroup.NQ_ALL, query = "SELECT x FROM ComponentGroup x"),
         @NamedQuery(name = ComponentGroup.NQ_BY_NAME_AND_SYSTEM, query = "SELECT x FROM ComponentGroup x WHERE x.name = :name AND x.system = :system"),
-        @NamedQuery(name = ComponentGroup.NQ_BY_SYSTEM, query = "SELECT x FROM ComponentGroup x WHERE x.system = :system"),
-        @NamedQuery(name = ComponentGroup.NQ_BY_PARENT_GROUP, query = "SELECT x FROM ComponentGroup x WHERE x.parentGroup = :parentGroup")
+        @NamedQuery(name = ComponentGroup.NQ_BY_SYSTEM, query = "SELECT x FROM ComponentGroup x WHERE x.system = :system ORDER BY x.id"),
+        @NamedQuery(name = ComponentGroup.NQ_BY_PARENT_GROUP, query = "SELECT x FROM ComponentGroup x WHERE x.parentGroup = :parentGroup ORDER BY x.id")
 })
 public class ComponentGroup extends TechnicalEntity implements Group {
 

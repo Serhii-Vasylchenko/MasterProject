@@ -1,10 +1,10 @@
 package com.serhiivasylchenko.core;
 
-import com.serhiivasylchenko.persistence.Component;
-import com.serhiivasylchenko.persistence.ComponentGroup;
+import com.serhiivasylchenko.persistence.*;
 import com.serhiivasylchenko.persistence.System;
-import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.Parameters;
+
+import java.util.List;
 
 /**
  * @author Serhii Vasylchenko
@@ -54,6 +54,13 @@ public class Validator {
     }
 
     public boolean validateFieldName(TechnicalEntity entity, String fieldName) {
+        List<Field> fields = persistenceBean.find(Field.class, Field.NQ_BY_PARAMETER_LIST_ORDERED,
+                new Parameters().add("parameterList", entity.getParameterList()));
+        for (Field field : fields) {
+            if (field.getName().equals(fieldName)) {
+                return false;
+            }
+        }
         return true;
     }
 }

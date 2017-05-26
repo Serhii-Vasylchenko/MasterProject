@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 @Entity
 @NamedQueries({
-        @NamedQuery(name = System.NQ_ALL, query = "SELECT x FROM System x"),
+        @NamedQuery(name = System.NQ_ALL, query = "SELECT x FROM System x ORDER BY x.id"),
         @NamedQuery(name = System.NQ_BY_NAME, query = "SELECT x FROM System x WHERE x.name = :name")
 })
 public class System extends TechnicalEntity implements Group {
