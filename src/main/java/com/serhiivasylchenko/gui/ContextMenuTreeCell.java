@@ -26,27 +26,39 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
         MenuItem renameMenuItem = new MenuItem("Rename");
         MenuItem deleteMenuItem = new MenuItem("Delete");
         contextMenu.getItems().addAll(addComponentMenuItem, addGroupMenuItem, renameMenuItem, deleteMenuItem);
+
         addComponentMenuItem.setOnAction(event -> {
             TreeItem<Object> systemNode = findSystem(getTreeItem());
-            if (getTreeItem().getParent().getValue() instanceof System) {
-                dialogController.addComponent((System) systemNode.getValue(), null);
+            if (getTreeItem().getValue() instanceof ComponentGroup) {
+                dialogController.addComponent((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getValue());
             } else {
-                dialogController.addComponent((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getParent().getValue());
+                if (getTreeItem().getParent().getValue() instanceof System) {
+                    dialogController.addComponent((System) systemNode.getValue(), null);
+                } else {
+                    dialogController.addComponent((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getParent().getValue());
+                }
             }
         });
+
         addGroupMenuItem.setOnAction(event -> {
             TreeItem<Object> systemNode = findSystem(getTreeItem());
-            if (getTreeItem().getParent().getValue() instanceof System) {
-                dialogController.addComponentGroup((System) systemNode.getValue(), null);
+            if (getTreeItem().getValue() instanceof ComponentGroup) {
+                dialogController.addComponentGroup((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getValue());
             } else {
-                dialogController.addComponentGroup((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getParent().getValue());
+                if (getTreeItem().getParent().getValue() instanceof System) {
+                    dialogController.addComponentGroup((System) systemNode.getValue(), null);
+                } else {
+                    dialogController.addComponentGroup((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getParent().getValue());
+                }
             }
         });
+
         renameMenuItem.setOnAction(event -> {
             if (Named.class.isAssignableFrom(getTreeItem().getValue().getClass())) {
                 dialogController.changeName((Named) getTreeItem().getValue());
             }
         });
+
         deleteMenuItem.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
