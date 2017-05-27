@@ -35,6 +35,8 @@ public class AddFieldDialog extends VBox implements Initializable {
     @FXML
     private TextField fieldName;
     @FXML
+    private TextArea fieldDescription;
+    @FXML
     private ChoiceBox<FieldType> fieldType;
     @FXML
     private VBox mainVBox;
@@ -115,7 +117,7 @@ public class AddFieldDialog extends VBox implements Initializable {
         // Send the result to workflowManager when the add button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
-                Field field = new Field(entity.getParameterList(), fieldName.getText(), fieldType.getValue());
+                Field field = new Field(entity.getParameterList(), fieldName.getText(), fieldDescription.getText(), fieldType.getValue());
                 if (fieldType.getValue() == FieldType.CHOICE_BOX) {
                     List<String> choiceStrings = insideVBox.getChildren().stream()
                             .map(child -> (HBox) child)

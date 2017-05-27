@@ -108,12 +108,20 @@ public class ParametersPaneController implements Initializable {
         List<Field> fields = persistenceBean.find(Field.class, Field.NQ_BY_PARAMETER_LIST_ORDERED,
                 new Parameters().add("parameterList", entity.getParameterList()));
 
-        // Create field labels and setters
+        // Create field labels, setters adn control buttons
 
         int i = 0;
         for (Field field : fields) {
             // Label for the field
             Label fieldName = new Label(field.getName());
+            fieldName.setTooltip(new Tooltip(field.getDescription()));
+
+//            TitledPane titledPane = new TitledPane();
+//            Accordion accordion = new Accordion();
+//            titledPane.setText(field.getName());
+//            titledPane.setTooltip(new Tooltip(field.getDescription()));
+//            titledPane.setContent(new TextArea(field.getDescription()));
+//            accordion.getPanes().add(titledPane);
 
             // Create buttons for save, edit and delete
             Button saveFieldValueButton = new Button();

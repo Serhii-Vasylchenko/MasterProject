@@ -40,9 +40,13 @@ public class Field extends Named {
     @Column
     private List<String> choiceStrings;
 
-    public Field(ParameterList parameterList, String name, FieldType fieldType) {
+    @Column
+    private String description;
+
+    public Field(ParameterList parameterList, String name, String description, FieldType fieldType) {
         super(name);
         this.parameterList = parameterList;
+        this.description = description;
         this.fieldType = fieldType;
     }
 
@@ -95,5 +99,13 @@ public class Field extends Named {
 
     public void setChoiceStrings(List<String> choiceStrings) {
         this.choiceStrings = choiceStrings;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

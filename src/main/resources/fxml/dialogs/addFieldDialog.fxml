@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <fx:root fx:id="mainVBox" alignment="CENTER" spacing="14.0" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <javafx.scene.layout.GridPane vgap="10.0">
             <children>
-                <Label text="Name" GridPane.halignment="CENTER"/>
-                <Label text="Type" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                <Label text="Name"/>
+                <Label text="Description" GridPane.rowIndex="1"/>
+                <Label text="Type" GridPane.rowIndex="2"/>
                 <TextField fx:id="fieldName" promptText="unique" GridPane.columnIndex="1"/>
+                <TextArea fx:id="fieldDescription" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                          GridPane.rowIndex="1"/>
                 <ChoiceBox fx:id="fieldType" onAction="#onFieldTypeChange" prefWidth="200.0" GridPane.columnIndex="1"
-                           GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+                           GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
             </children>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="97.0"/>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0"
+                                   prefWidth="97.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="283.0"/>
             </columnConstraints>
             <opaqueInsets>
@@ -28,6 +30,7 @@
             </padding>
             <rowConstraints>
                 <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES"/>
                 <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES"/>
             </rowConstraints>
         </javafx.scene.layout.GridPane>
