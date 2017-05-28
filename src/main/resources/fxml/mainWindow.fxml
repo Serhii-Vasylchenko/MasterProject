@@ -2,24 +2,13 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
-
-<BorderPane prefHeight="800.0" prefWidth="1400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.serhiivasylchenko.gui.MainController">
+<BorderPane prefHeight="800.0" prefWidth="1400.0" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.serhiivasylchenko.gui.MainController">
 
     <!--<fx:define>-->
     <!--<fx:include fx:id="dialog" source="dialog.fxml"/>-->
@@ -42,93 +31,151 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="500.0" prefWidth="320.0">
                     <children>
-                        <CustomTextField id="searchTextField" fx:id="searchTextField" layoutX="14.0" layoutY="48.0" onAction="#filterComponentsTree" promptText="Search" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0">
-                            <left>
-                                <Label styleClass="searchBoxLabel">
-                                    <graphic>
-                                        <FontAwesomeIconView styleClass="searchBoxLabelIcon" />
-                                    </graphic>
+                        <VBox layoutX="14.0" layoutY="8.0" spacing="10.0" AnchorPane.bottomAnchor="14.0"
+                              AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
+                            <children>
+                                <Label prefHeight="27.0" text="System and Components" wrapText="true">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
                                 </Label>
-                            </left>
-                        </CustomTextField>
-                        <TreeView fx:id="componentsTreeView" editable="true" showRoot="false" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="144.0" />
-                        <Label layoutX="14.0" layoutY="8.0" prefHeight="27.0" text="System and Components" wrapText="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <HBox layoutX="14.0" layoutY="90.0" spacing="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0">
-                            <children>
-                                <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#addSystem" styleClass="addSystemButton" />
-                                <Button maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#addComponent" styleClass="addComponentButton" />
-                                <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#addComponentGroup">
-                                    <graphic>
-                                        <FontAwesomeIconView glyphName="OBJECT_GROUP" size="32" />
-                                    </graphic>
-                                </Button>
-                                <Pane prefHeight="40.0" prefWidth="400.0" />
-                                <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#updateComponentList" styleClass="refreshButton">
-                                    <graphic>
-                                        <FontAwesomeIconView glyphName="REFRESH" size="32" />
-                                    </graphic>
-                                </Button>
-                            </children>
+                                <Separator/>
+                                <CustomTextField id="searchTextField" fx:id="searchTextField"
+                                                 onAction="#filterComponentsTree" promptText="Search">
+                                    <left>
+                                        <Label styleClass="searchBoxLabel">
+                                            <graphic>
+                                                <FontAwesomeIconView styleClass="searchBoxLabelIcon"/>
+                                            </graphic>
+                                        </Label>
+                                    </left>
+                                </CustomTextField>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
+                                                onAction="#addSystem" styleClass="addSystemButton"/>
+                                        <Button maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false"
+                                                onAction="#addComponent" styleClass="addComponentButton"/>
+                                        <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0"
+                                                mnemonicParsing="false" onAction="#addComponentGroup">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="OBJECT_GROUP" size="32"/>
+                                            </graphic>
+                                        </Button>
+                                        <Separator orientation="VERTICAL" HBox.hgrow="SOMETIMES"/>
+                                        <Pane HBox.hgrow="SOMETIMES"/>
+                                        <Separator orientation="VERTICAL" HBox.hgrow="ALWAYS"/>
+                                        <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0"
+                                                mnemonicParsing="false" onAction="#updateComponentList"
+                                                styleClass="refreshButton">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="REFRESH" size="32"/>
+                                            </graphic>
+                                        </Button>
+                                    </children>
                         </HBox>
-                    </children>
-                </AnchorPane>
-                <AnchorPane prefWidth="320.0">
-                    <children>
-                        <Label layoutX="14.0" layoutY="14.0" text="Parameter Requirements" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="8.0">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <VBox AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="45.0">
-                            <children>
-                                <fx:include fx:id="parametersPane" source="parametersPane.fxml" />
-                            </children>
-                        </VBox>
-                        <VBox alignment="BOTTOM_CENTER" layoutX="54.0" layoutY="50.0" spacing="20.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                            <children>
-                                <Button alignment="CENTER" disable="true" layoutX="85.0" layoutY="627.0" mnemonicParsing="false" onAction="#runAnalysis" prefWidth="200.0" text="Run" AnchorPane.bottomAnchor="14.0" />
+                                <Separator prefWidth="200.0"/>
+                                <TreeView fx:id="componentsTreeView" editable="true" maxWidth="1.7976931348623157E308"
+                                          showRoot="false" VBox.vgrow="SOMETIMES"/>
                             </children>
                         </VBox>
                     </children>
                 </AnchorPane>
                 <AnchorPane prefWidth="320.0">
                     <children>
-                        <Pane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox layoutY="8.0" spacing="10.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
+                              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
                             <children>
-                                <Label layoutX="14.0" layoutY="8.0" text="Result of Analysis">
+                                <Label text="Configuration">
+                                    <font>
+                                        <Font size="18.0"/>
+                                    </font>
+                                </Label>
+                                <Separator/>
+                                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
+                                         VBox.vgrow="ALWAYS">
+                                    <tabs>
+                                        <Tab closable="false" text="Parameters &amp; Details">
+                                            <content>
+                                                <VBox spacing="14.0">
+                                                    <children>
+                                                        <fx:include fx:id="parametersPane"
+                                                                    source="parametersPane.fxml"/>
+                                                        <Pane VBox.vgrow="ALWAYS"/>
+                                                        <VBox alignment="BOTTOM_CENTER" spacing="20.0">
+                                                            <children>
+                                                                <Button alignment="CENTER" disable="true" layoutX="85.0"
+                                                                        layoutY="627.0" mnemonicParsing="false"
+                                                                        onAction="#runAnalysis"
+                                                                        text="Run analysis for this configuration"
+                                                                        AnchorPane.bottomAnchor="14.0"/>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                    <padding>
+                                                        <Insets bottom="14.0" left="14.0" right="14.0"/>
+                                                    </padding>
+                                                </VBox>
+                                            </content>
+                                        </Tab>
+                                        <Tab closable="false" text="Training &amp; Learning">
+                                            <content>
+                                                <VBox alignment="TOP_CENTER" spacing="14.0">
+                                                    <children>
+                                                        <fx:include fx:id="trainingPane" source="trainingPane.fxml"/>
+                                                    </children>
+                                                    <padding>
+                                                        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+                                                    </padding>
+                                                </VBox>
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+                <AnchorPane prefWidth="320.0">
+                    <children>
+                        <VBox spacing="10.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
+                              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
+                            <children>
+                                <Label text="Result of Analysis">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
                                 </Label>
-                            </children>
-                        </Pane>
-                        <VBox alignment="CENTER" layoutX="76.0" layoutY="629.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                            <children>
-                                <Label layoutX="149.0" layoutY="14.0" text="Evaluation">
-                                    <font>
-                                        <Font name="System Bold" size="15.0" />
-                                    </font>
-                                </Label>
-                                <HBox alignment="CENTER" layoutX="51.0" layoutY="59.0" spacing="20.0">
+                                <Separator prefWidth="200.0"/>
+                                <Pane VBox.vgrow="SOMETIMES"/>
+                                <VBox alignment="CENTER" spacing="20.0">
                                     <children>
-                                        <Label layoutX="51.0" layoutY="59.0" text="Mark as:" />
-                                        <RadioButton layoutX="127.0" layoutY="59.0" mnemonicParsing="false" text="Correct">
-                                            <toggleGroup>
-                                                <ToggleGroup fx:id="evaluationToggleGroup" />
-                                            </toggleGroup>
-                                        </RadioButton>
-                                        <RadioButton layoutX="223.0" layoutY="59.0" mnemonicParsing="false" text="Wrong" toggleGroup="$evaluationToggleGroup" />
+                                        <Label layoutX="149.0" layoutY="14.0" text="Evaluation">
+                                            <font>
+                                                <Font name="System Bold" size="15.0"/>
+                                            </font>
+                                        </Label>
+                                        <HBox alignment="CENTER" layoutX="51.0" layoutY="59.0" spacing="20.0">
+                                            <children>
+                                                <Label layoutX="51.0" layoutY="59.0" text="Mark as:"/>
+                                                <RadioButton layoutX="127.0" layoutY="59.0" mnemonicParsing="false"
+                                                             text="Correct">
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="evaluationToggleGroup"/>
+                                                    </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton layoutX="223.0" layoutY="59.0" mnemonicParsing="false"
+                                                             text="Wrong" toggleGroup="$evaluationToggleGroup"/>
+                                            </children>
+                                        </HBox>
+                                        <Button alignment="CENTER" layoutX="86.0" layoutY="104.0"
+                                                mnemonicParsing="false" prefWidth="200.0" text="Add to training set"/>
                                     </children>
-                                </HBox>
-                                <Button alignment="CENTER" layoutX="86.0" layoutY="104.0" mnemonicParsing="false" prefWidth="200.0" text="Add to training set" />
+                                    <padding>
+                                        <Insets bottom="14.0" top="14.0"/>
+                                    </padding>
+                                </VBox>
                             </children>
-                            <padding>
-                                <Insets bottom="14.0" top="14.0" />
-                            </padding>
                         </VBox>
                     </children>
                 </AnchorPane>

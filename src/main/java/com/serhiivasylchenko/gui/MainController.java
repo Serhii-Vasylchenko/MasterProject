@@ -24,10 +24,12 @@ public class MainController implements Initializable {
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
-
     private DialogController dialogController = DialogController.getInstance();
+
     @FXML
     private ParametersPaneController parametersPaneController;
+    @FXML
+    private TrainingPaneController trainingPaneController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

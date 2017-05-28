@@ -37,3 +37,8 @@
     -glyph-size: 16;
     -glyph-name: SEARCH;
 }
+
+.infoButton {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
