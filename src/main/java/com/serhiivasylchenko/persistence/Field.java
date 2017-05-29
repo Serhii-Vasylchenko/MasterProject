@@ -1,9 +1,13 @@
 package com.serhiivasylchenko.persistence;
 
 import com.serhiivasylchenko.utils.FieldType;
+import org.datavec.api.writable.Writable;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -14,7 +18,7 @@ import java.util.List;
         @NamedQuery(name = Field.NQ_BY_PARAMETER_LIST_ORDERED, query = "SELECT x FROM Field x WHERE x.parameterList = :parameterList ORDER BY x.id")
 )
 @SuppressWarnings("unused")
-public class Field extends Named {
+public class Field extends Named implements Writable {
 
     private static final long serialVersionUID = -5386828594342673263L;
 
@@ -119,5 +123,43 @@ public class Field extends Named {
 
     public void setTarget(boolean target) {
         isTarget = target;
+    }
+
+    @Override
+    public void write(DataOutput dataOutput) throws IOException {
+        if (this.intValue != 0) {
+            dataOutput.writeInt(this.intValue);
+        } else if (this.floatValue != 0) {
+            dataOutput.writeFloat(this.floatValue);
+        } else if (this.selectedStringIndex != -1) {
+            dataOutput.writeInt(this.selectedStringIndex);
+        } else {
+            dataOutput.writeInt(0);
+        }
+    }
+
+    @Override
+    public void readFields(DataInput dataInput) throws IOException {
+
+    }
+
+    @Override
+    public double toDouble() {
+        return 0;
+    }
+
+    @Override
+    public float toFloat() {
+        return 0;
+    }
+
+    @Override
+    public int toInt() {
+        return 0;
+    }
+
+    @Override
+    public long toLong() {
+        return 0;
     }
 }

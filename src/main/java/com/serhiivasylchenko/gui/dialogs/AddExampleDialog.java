@@ -5,6 +5,7 @@ import com.serhiivasylchenko.persistence.Component;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.Field;
 import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.utils.Constants;
 import com.serhiivasylchenko.utils.Parameters;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -15,18 +16,20 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.apache.log4j.Logger;
+import org.datavec.api.records.writer.impl.csv.CSVRecordWriter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * @author Serhii Vasylchenko
  */
 public class AddExampleDialog extends VBox implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(AddExampleDialog.class);
 
     @FXML
     private ChoiceBox<String> useForChoiceBox;
@@ -73,12 +76,23 @@ public class AddExampleDialog extends VBox implements Initializable {
             alert.setTitle("Wrong fields!");
             alert.setHeaderText(null);
 
+            if (useForChoiceBox.getValue() == null) {
+                alert.setContentText("Select usage of this example!");
+                alert.show();
+                event.consume();
+            }
+
             inputFieldsGridPane.getChildren().forEach(node -> {
-                if (useForChoiceBox.getValue() == null) {
-                    alert.setContentText("Select usage of this example!");
+                if ((node instanceof TextField && ((TextField) node).getText().isEmpty()) ||
+                        (node instanceof ChoiceBox && ((ChoiceBox<String>) node).getValue() == null)) {
+                    alert.setContentText("All fields should be set!");
                     alert.show();
                     event.consume();
-                } else if ((node instanceof TextField && ((TextField) node).getText().isEmpty()) ||
+                }
+            });
+
+            targetFieldsGridPane.getChildren().forEach(node -> {
+                if ((node instanceof TextField && ((TextField) node).getText().isEmpty()) ||
                         (node instanceof ChoiceBox && ((ChoiceBox<String>) node).getValue() == null)) {
                     alert.setContentText("All fields should be set!");
                     alert.show();
@@ -156,10 +170,39 @@ public class AddExampleDialog extends VBox implements Initializable {
         // Send the result to workflowManager when the add button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
+                String dir = AddExampleDialog.class.getClassLoader().getResource(Constants.datasetPath).getFile();
+                dir = dir.replace("%20", " ");
+                String useFor = useForChoiceBox.getSelectionModel().getSelectedItem();
+                String fileName = system.toString().replace(" ", "") + "-" + useFor + ".csv";
+                File datasetFile = new File(dir + fileName);
+
+                if (!datasetFile.exists()) {
+                    try {
+                        datasetFile.createNewFile();
+                    } catch (IOException e) {
+                        LOGGER.error("File was not created!", e);
+                    }
+                }
+
+                try {
+                    CSVRecordWriter csvRecordWriter = new CSVRecordWriter(datasetFile, true);
+
+                    List<Field> inputFields = new ArrayList<>();
+                    List<Field> targetFields = new ArrayList<>();
+
+                    inputFieldsGridPane.getChildren().forEach(node -> {
+
+                    });
+
+                } catch (FileNotFoundException e) {
+                    LOGGER.error("Writing to file failed!");
+                }
+
 
             }
 
             // clear dialog
+            useForChoiceBox.getSelectionModel().select(-1);
             targetFieldsGridPane.getChildren().clear();
             inputFieldsGridPane.getChildren().clear();
             return null;
