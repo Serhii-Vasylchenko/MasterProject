@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
         @NamedQuery(name = System.NQ_ALL, query = "SELECT x FROM System x ORDER BY x.id"),
         @NamedQuery(name = System.NQ_BY_NAME, query = "SELECT x FROM System x WHERE x.name = :name")
 })
+@SuppressWarnings("unused")
 public class System extends TechnicalEntity implements Group {
 
     private static final long serialVersionUID = 8937660893306074636L;
@@ -29,6 +30,9 @@ public class System extends TechnicalEntity implements Group {
 
     @OneToMany(mappedBy = "system", orphanRemoval = true)
     private List<ComponentGroup> componentGroups;
+
+    @OneToMany(mappedBy = "system", orphanRemoval = true)
+    private List<SystemTrainingConf> systemTrainingConf;
 
     public System(String name, String description) {
         super(name, description);
@@ -74,5 +78,13 @@ public class System extends TechnicalEntity implements Group {
 
     public void setComponentGroups(List<ComponentGroup> componentGroups) {
         this.componentGroups = componentGroups;
+    }
+
+    public List<SystemTrainingConf> getSystemTrainingConf() {
+        return systemTrainingConf;
+    }
+
+    public void setSystemTrainingConf(List<SystemTrainingConf> systemTrainingConf) {
+        this.systemTrainingConf = systemTrainingConf;
     }
 }

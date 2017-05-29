@@ -85,7 +85,7 @@
                         <HBox alignment="CENTER" spacing="14.0">
                             <children>
                                 <Label text="Select learner:"/>
-                                <ChoiceBox prefWidth="150.0"/>
+                                <ChoiceBox fx:id="useForChoiceBox" prefWidth="150.0"/>
                             </children>
                         </HBox>
                         <Separator/>

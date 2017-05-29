@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
-<BorderPane prefHeight="800.0" prefWidth="1400.0" stylesheets="@../css/style.css"
+<BorderPane minHeight="500.0" minWidth="1000.0" prefHeight="800.0" prefWidth="1400.0" stylesheets="@../css/style.css"
             xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.serhiivasylchenko.gui.MainController">
 
@@ -31,8 +31,9 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="500.0" prefWidth="320.0">
                     <children>
-                        <VBox layoutX="14.0" layoutY="8.0" spacing="10.0" AnchorPane.bottomAnchor="14.0"
-                              AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
+                        <VBox layoutX="14.0" layoutY="8.0" minWidth="300.0" spacing="10.0"
+                              AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
+                              AnchorPane.topAnchor="8.0">
                             <children>
                                 <Label prefHeight="27.0" text="System and Components" wrapText="true">
                                     <font>
@@ -83,8 +84,8 @@
                 </AnchorPane>
                 <AnchorPane prefWidth="320.0">
                     <children>
-                        <VBox layoutY="8.0" spacing="10.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
-                              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
+                        <VBox layoutY="8.0" minWidth="400.0" spacing="10.0" AnchorPane.bottomAnchor="14.0"
+                              AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
                             <children>
                                 <Label text="Configuration">
                                     <font>
@@ -138,8 +139,8 @@
                 </AnchorPane>
                 <AnchorPane prefWidth="320.0">
                     <children>
-                        <VBox spacing="10.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0"
-                              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
+                        <VBox minWidth="300.0" spacing="10.0" AnchorPane.bottomAnchor="14.0"
+                              AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="8.0">
                             <children>
                                 <Label text="Result of Analysis">
                                     <font>

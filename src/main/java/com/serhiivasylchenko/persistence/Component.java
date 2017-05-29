@@ -1,6 +1,9 @@
 package com.serhiivasylchenko.persistence;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * @author Serhii Vasylchenko
@@ -27,9 +30,6 @@ public class Component extends TechnicalEntity {
     @ManyToOne
     private ComponentGroup parentGroup;
 
-    @OneToOne
-    private AbstractSolver solver;
-
     public Component(System system, ComponentGroup parentGroup, String name, String description) {
         super(name, description);
         this.system = system;
@@ -37,14 +37,6 @@ public class Component extends TechnicalEntity {
     }
 
     public Component() {
-    }
-
-    public AbstractSolver getSolver() {
-        return solver;
-    }
-
-    public void setSolver(AbstractSolver solver) {
-        this.solver = solver;
     }
 
     public System getSystem() {

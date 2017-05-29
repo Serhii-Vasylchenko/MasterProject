@@ -43,6 +43,10 @@ public class Field extends Named {
     @Column
     private String description;
 
+    @Column
+//    @ColumnDefault(value = "false")
+    private boolean isTarget;
+
     public Field(ParameterList parameterList, String name, String description, FieldType fieldType) {
         super(name);
         this.parameterList = parameterList;
@@ -107,5 +111,13 @@ public class Field extends Named {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isTarget() {
+        return isTarget;
+    }
+
+    public void setTarget(boolean target) {
+        isTarget = target;
     }
 }

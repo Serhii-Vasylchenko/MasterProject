@@ -17,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.apache.log4j.Logger;
@@ -52,6 +51,7 @@ public class ParametersPaneController implements Initializable {
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
+    private SharedData sharedData = SharedData.getInstanse();
 
     private TechnicalEntity entity;
 
@@ -62,6 +62,7 @@ public class ParametersPaneController implements Initializable {
 
     public void showEntityParameters(TechnicalEntity entity) {
         this.entity = entity;
+        this.sharedData.setSelectedEntity(entity);
         mainVBox.setDisable(false);
 
         if (entity instanceof System) {
@@ -127,29 +128,32 @@ public class ParametersPaneController implements Initializable {
             Button saveFieldValueButton = new Button();
             Button editFieldNameButton = new Button();
             Button deleteFieldButton = new Button();
+            Button setTargetButton = new Button();
 
             saveFieldValueButton.setTooltip(new Tooltip("Save value"));
             editFieldNameButton.setTooltip(new Tooltip("Change name"));
             deleteFieldButton.setTooltip(new Tooltip("Delete field"));
+            setTargetButton.setTooltip(new Tooltip("Set as target field"));
 
-            saveFieldValueButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            editFieldNameButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            deleteFieldButton.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            saveFieldValueButton.setPrefSize(20, 20);
-            editFieldNameButton.setPrefSize(20, 20);
-            deleteFieldButton.setPrefSize(20, 20);
-            saveFieldValueButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            editFieldNameButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            deleteFieldButton.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            saveFieldValueButton.setMinSize(20, 20);
+            editFieldNameButton.setMinSize(20, 20);
+            deleteFieldButton.setMinSize(20, 20);
+            setTargetButton.setMinSize(20, 20);
+
+            saveFieldValueButton.setMaxSize(20, 20);
+            editFieldNameButton.setMaxSize(20, 20);
+            deleteFieldButton.setMaxSize(20, 20);
+            setTargetButton.setMaxSize(20, 20);
 
             saveFieldValueButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SAVE, "16px"));
             editFieldNameButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.EDIT, "16px"));
             deleteFieldButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REMOVE, "16px"));
+            setTargetButton.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.DOT_CIRCLE_ALT, "16px"));
 
             HBox buttonBox = new HBox();
             buttonBox.setSpacing(4);
             buttonBox.setAlignment(Pos.CENTER);
-            buttonBox.getChildren().addAll(saveFieldValueButton, editFieldNameButton, deleteFieldButton);
+            buttonBox.getChildren().addAll(saveFieldValueButton, editFieldNameButton, deleteFieldButton, setTargetButton);
 
             editFieldNameButton.setOnAction(event -> {
                 dialogController.changeName(field);
@@ -176,8 +180,15 @@ public class ParametersPaneController implements Initializable {
             switch (field.getFieldType()) {
                 case INT_NUMBER:
                     TextField intField = new TextField(); // TODO: custom integer field
-                    intField.setText(String.valueOf(field.getIntValue()));
                     intField.setTooltip(new Tooltip("integer value"));
+
+                    if (!field.isTarget()) {
+                        intField.setText(String.valueOf(field.getIntValue()));
+                    } else {
+                        intField.setPromptText("Target field");
+                        intField.setText("");
+                        intField.setDisable(true);
+                    }
 
                     // Saving the value on enter
                     intField.setOnKeyPressed(event -> {
@@ -195,14 +206,37 @@ public class ParametersPaneController implements Initializable {
                         showSuccessNotification(field);
                     });
 
+                    // Set as target
+                    setTargetButton.setOnAction(event -> {
+                        if (!field.isTarget()) {
+                            field.setTarget(true);
+                            intField.setPromptText("Target field");
+                            intField.setText("");
+                            intField.setDisable(true);
+                        } else {
+                            field.setTarget(false);
+                            intField.setPromptText("");
+                            intField.setText(String.valueOf(field.getIntValue()));
+                            intField.setDisable(false);
+                        }
+                        persistenceBean.persist(field);
+                        showTargetNotification(field);
+                    });
+
                     parameterGridPane.addRow(i, fieldName, intField, buttonBox);
                     break;
 
                 case FLOAT_NUMBER:
                     TextField floatField = new TextField(); // TODO: custom float field
-                    floatField.setText(String.valueOf(field.getFloatValue()));
                     floatField.setTooltip(new Tooltip("float value"));
-                    floatField.setPromptText("float value");
+
+                    if (!field.isTarget()) {
+                        floatField.setText(String.valueOf(field.getFloatValue()));
+                    } else {
+                        floatField.setPromptText("Target field");
+                        floatField.setText("");
+                        floatField.setDisable(true);
+                    }
 
                     // Saving the value on enter
                     floatField.setOnKeyPressed(event -> {
@@ -220,6 +254,23 @@ public class ParametersPaneController implements Initializable {
                         showSuccessNotification(field);
                     });
 
+                    // Set as target
+                    setTargetButton.setOnAction(event -> {
+                        if (!field.isTarget()) {
+                            field.setTarget(true);
+                            floatField.setPromptText("Target field");
+                            floatField.setText("");
+                            floatField.setDisable(true);
+                        } else {
+                            field.setTarget(false);
+                            floatField.setPromptText("");
+                            floatField.setText(String.valueOf(field.getIntValue()));
+                            floatField.setDisable(false);
+                        }
+                        persistenceBean.persist(field);
+                        showTargetNotification(field);
+                    });
+
                     parameterGridPane.addRow(i, fieldName, floatField, buttonBox);
                     break;
 
@@ -228,6 +279,16 @@ public class ParametersPaneController implements Initializable {
                     if (field.getChoiceStrings() != null) {
                         choiceBox.setItems(FXCollections.observableList(field.getChoiceStrings()));
                         choiceBox.getSelectionModel().select(field.getSelectedStringIndex());
+                    }
+
+                    if (!field.isTarget()) {
+                        if (field.getChoiceStrings() != null) {
+                            choiceBox.setItems(FXCollections.observableList(field.getChoiceStrings()));
+                            choiceBox.getSelectionModel().select(field.getSelectedStringIndex());
+                        }
+                    } else {
+                        choiceBox.getSelectionModel().select(-1);
+                        choiceBox.setDisable(true);
                     }
 
                     // Saving the value on change of selected line
@@ -242,6 +303,21 @@ public class ParametersPaneController implements Initializable {
                         field.setSelectedStringIndex(choiceBox.getSelectionModel().getSelectedIndex());
                         persistenceBean.persist(field);
                         showSuccessNotification(field);
+                    });
+
+                    // Set as target
+                    setTargetButton.setOnAction(event -> {
+                        if (!field.isTarget()) {
+                            field.setTarget(true);
+                            choiceBox.getSelectionModel().select(-1);
+                            choiceBox.setDisable(true);
+                        } else {
+                            field.setTarget(false);
+                            choiceBox.getSelectionModel().select(field.getSelectedStringIndex());
+                            choiceBox.setDisable(false);
+                        }
+                        persistenceBean.persist(field);
+                        showTargetNotification(field);
                     });
 
                     parameterGridPane.addRow(i, fieldName, choiceBox, buttonBox);
@@ -261,6 +337,17 @@ public class ParametersPaneController implements Initializable {
         Notifications.create()
                 .text("Value for field '" + field.getName() + "' is saved!")
                 .graphic(GlyphsDude.createIcon(FontAwesomeIcon.CHECK_CIRCLE, "32px"))
+                .hideAfter(Duration.seconds(4))
+                .owner(parameterGridPane)
+                .position(Pos.BASELINE_RIGHT)
+                .show();
+    }
+
+    private void showTargetNotification(Field field) {
+        String diff = field.isTarget() ? "" : "not ";
+        Notifications.create()
+                .text("Status of field'" + field.getName() + "' is changed to '" + diff + "target'!")
+                .graphic(GlyphsDude.createIcon(FontAwesomeIcon.DOT_CIRCLE_ALT, "32px"))
                 .hideAfter(Duration.seconds(4))
                 .owner(parameterGridPane)
                 .position(Pos.BASELINE_RIGHT)

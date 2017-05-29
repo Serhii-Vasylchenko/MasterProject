@@ -39,7 +39,8 @@
             </padding>
         </HBox>
         <TextArea fx:id="descriptionTextArea" maxHeight="200.0" prefHeight="100.0" prefWidth="200.0" promptText="Description" VBox.vgrow="ALWAYS" />
-        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0"
+                    maxWidth="1.7976931348623157E308" minHeight="51.0" VBox.vgrow="ALWAYS">
             <content>
                 <GridPane fx:id="parameterGridPane" hgap="5.0" vgap="10.0">
                     <columnConstraints>
@@ -51,12 +52,12 @@
                         <RowConstraints minHeight="30.0" vgrow="ALWAYS" />
                     </rowConstraints>
                     <padding>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets left="10.0" right="10.0"/>
                     </padding>
                 </GridPane>
             </content>
             <padding>
-                <Insets bottom="10.0" top="10.0" />
+                <Insets bottom="10.0" top="10.0"/>
             </padding>
         </ScrollPane>
         <Button mnemonicParsing="false" onAction="#addNewField" text="Add new field">

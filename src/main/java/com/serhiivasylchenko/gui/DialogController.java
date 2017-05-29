@@ -1,10 +1,7 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.PersistenceBean;
-import com.serhiivasylchenko.gui.dialogs.AddComponentDialog;
-import com.serhiivasylchenko.gui.dialogs.AddComponentGroupDialog;
-import com.serhiivasylchenko.gui.dialogs.AddFieldDialog;
-import com.serhiivasylchenko.gui.dialogs.AddSystemDialog;
+import com.serhiivasylchenko.gui.dialogs.*;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.Named;
 import com.serhiivasylchenko.persistence.System;
@@ -32,6 +29,7 @@ public class DialogController implements Initializable {
     private AddSystemDialog addSystemDialog = new AddSystemDialog();
     private AddComponentGroupDialog addComponentGroupDialog = new AddComponentGroupDialog();
     private AddFieldDialog addFieldDialog = new AddFieldDialog();
+    private AddExampleDialog addExampleDialog = new AddExampleDialog();
 
     private static DialogController instance;
 
@@ -85,5 +83,9 @@ public class DialogController implements Initializable {
             persistenceBean.persist(namedEntity);
             guiUpdater.updateComponentTree();
         });
+    }
+
+    void addExample(System system) {
+        addExampleDialog.showDialog(system);
     }
 }
