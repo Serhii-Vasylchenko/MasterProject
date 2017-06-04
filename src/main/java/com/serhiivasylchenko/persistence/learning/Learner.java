@@ -10,9 +10,14 @@ import javax.persistence.*;
  * @author Serhii Vasylchenko
  */
 @Entity
-public abstract class AbstractLearner extends Named {
+@NamedQueries(
+        @NamedQuery(name = Learner.NQ_BY_SYSTEM_ORDERED, query = "SELECT x FROM Learner x WHERE x.system = :system ORDER BY x.id")
+)
+public class Learner extends Named {
 
     private static final long serialVersionUID = -1361182570280398360L;
+
+    public static final String NQ_BY_SYSTEM_ORDERED = "nq.learner.get.by.system.ordered";
 
     @ManyToOne
     private System system;
@@ -23,12 +28,14 @@ public abstract class AbstractLearner extends Named {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private AbstractConfiguration configuration;
 
-    public AbstractLearner(String name, LearnerType learnerType) {
+    public Learner(System system, String name, LearnerType learnerType, AbstractConfiguration configuration) {
         super(name);
+        this.system = system;
         this.type = learnerType;
+        this.configuration = configuration;
     }
 
-    protected AbstractLearner() {
+    protected Learner() {
     }
 
     public System getSystem() {

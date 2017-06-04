@@ -4,6 +4,7 @@ import com.serhiivasylchenko.core.PersistenceBean;
 import com.serhiivasylchenko.learners.LearningUtils;
 import com.serhiivasylchenko.persistence.Field;
 import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.Constants;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -26,7 +27,7 @@ import java.util.ResourceBundle;
 /**
  * @author Serhii Vasylchenko
  */
-public class AddExampleDialog extends VBox implements Initializable {
+public class AddExampleDialog extends VBox implements Initializable, IDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AddExampleDialog.class);
 
@@ -56,6 +57,13 @@ public class AddExampleDialog extends VBox implements Initializable {
         } catch (IOException e) {
             Logger.getLogger(this.getClass()).error("FXML loading error in class '" + this.getClass().getSimpleName() + "'", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void showDialog(TechnicalEntity entity) {
+        if (entity instanceof System) {
+            this.showDialog((System) entity);
         }
     }
 

@@ -16,7 +16,7 @@ public abstract class AbstractConfiguration extends CachedPersistable {
     private static final long serialVersionUID = -3685822835055646148L;
 
     @OneToOne
-    private AbstractLearner learner;
+    private Learner learner;
 
     /**
      * Override in child classes, used buy GUI to get fields for configuration
@@ -30,18 +30,23 @@ public abstract class AbstractConfiguration extends CachedPersistable {
     /**
      * Override in child classes, used buy GUI to set configuration fields
      */
-    public void setConfigurableFields() {
+    public void setConfigurableFields(List<String> fieldValues) {
+
+    }
+
+    public void initDefault() {
+
     }
 
     protected AbstractConfiguration() {
         super();
     }
 
-    public AbstractLearner getLearner() {
+    public Learner getLearner() {
         return learner;
     }
 
-    public void setLearner(AbstractLearner learner) {
+    public void setLearner(Learner learner) {
         this.learner = learner;
     }
 }

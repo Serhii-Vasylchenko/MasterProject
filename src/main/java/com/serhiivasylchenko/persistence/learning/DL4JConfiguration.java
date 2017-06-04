@@ -1,24 +1,29 @@
 package com.serhiivasylchenko.persistence.learning;
 
 import com.serhiivasylchenko.utils.FieldType;
-import javafx.fxml.Initializable;
+import org.apache.log4j.Logger;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import java.net.URL;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * @author Serhii Vasylchenko
  */
 
 @Entity
-public class DL4JConfiguration extends AbstractConfiguration implements Initializable {
+@NamedQueries(
+        @NamedQuery(name = DL4JConfiguration.NQ_BY_LEARNER, query = "select x FROM DL4JConfiguration x WHERE x.learner = :learner")
+)
+public class DL4JConfiguration extends AbstractConfiguration {
 
     private static final long serialVersionUID = -9028081644961906615L;
+
+    private static final Logger LOGGER = Logger.getLogger(DL4JConfiguration.class);
+
+    public static final String NQ_BY_LEARNER = "nq.configuration.get.by.learner";
+
+    private static final Integer NUM_PARAMETERS = 5; // number of configurable parameters
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private LearnerParameter seed;
@@ -46,46 +51,53 @@ public class DL4JConfiguration extends AbstractConfiguration implements Initiali
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.seed.setFieldType(FieldType.INT_NUMBER);
+    public void initDefault() {
+        this.seed = new LearnerParameter(this, "Seed", "", FieldType.INT_NUMBER, true);
         this.seed.setIntValue(123);
-        this.seed.setConfigurable(true);
 
-        this.learningRate.setFieldType(FieldType.FLOAT_NUMBER);
+        this.learningRate = new LearnerParameter(this, "Learning Rate", "", FieldType.FLOAT_NUMBER, true);
         this.learningRate.setFloatValue(0.01f);
-        this.learningRate.setConfigurable(true);
 
-        this.batchSize.setFieldType(FieldType.INT_NUMBER);
+        this.batchSize = new LearnerParameter(this, "Batch Size", "", FieldType.INT_NUMBER, true);
         this.batchSize.setIntValue(50);
-        this.batchSize.setConfigurable(true);
 
-        this.numEpochs.setFieldType(FieldType.INT_NUMBER);
+        this.numEpochs = new LearnerParameter(this, "Number of Epochs", "", FieldType.INT_NUMBER, true);
         this.numEpochs.setIntValue(30);
-        this.numEpochs.setConfigurable(true);
 
+        this.numInputs = new LearnerParameter(this, "Number of inputs", "", FieldType.INT_NUMBER, false);
         this.numInputs.setFieldType(FieldType.INT_NUMBER);
 
-        this.numOutputs.setFieldType(FieldType.INT_NUMBER);
+        this.numOutputs = new LearnerParameter(this, "Number of target fields", "", FieldType.INT_NUMBER, false);
         this.numOutputs.setIntValue(1);
-        this.numOutputs.setConfigurable(true);
 
-        this.numHiddenNodes.setFieldType(FieldType.INT_NUMBER);
+        this.numHiddenNodes = new LearnerParameter(this, "Number of hidden nodes", "", FieldType.INT_NUMBER, true);
         this.numHiddenNodes.setIntValue(20);
-        this.numHiddenNodes.setConfigurable(true);
     }
-
 
     @Override
     public List<LearnerParameter> getConfigurableFields() {
-        List<LearnerParameter> parameters = new ArrayList<>();
+        List<LearnerParameter> parameters = new ArrayList<>(NUM_PARAMETERS);
 
+        parameters.add(this.seed);
+        parameters.add(this.learningRate);
+        parameters.add(this.batchSize);
+        parameters.add(this.numEpochs);
+        parameters.add(this.numHiddenNodes);
 
         return parameters;
     }
 
     @Override
-    public void setConfigurableFields() {
-        super.setConfigurableFields();
+    public void setConfigurableFields(List<String> fieldValues) {
+        if (fieldValues.size() == NUM_PARAMETERS) {
+            this.seed.setIntValue(Integer.valueOf(fieldValues.get(0)));
+            this.learningRate.setFloatValue(Float.valueOf(fieldValues.get(1)));
+            this.batchSize.setIntValue(Integer.valueOf(fieldValues.get(2)));
+            this.numEpochs.setIntValue(Integer.valueOf(fieldValues.get(3)));
+            this.numHiddenNodes.setIntValue(Integer.valueOf(fieldValues.get(4)));
+        } else {
+            LOGGER.error("Number of parameters to set is not equal to " + NUM_PARAMETERS);
+        }
     }
 
     public LearnerParameter getSeed() {

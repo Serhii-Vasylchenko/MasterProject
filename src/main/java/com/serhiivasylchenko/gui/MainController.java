@@ -40,8 +40,8 @@ public class MainController implements Initializable {
             TreeItem<TechnicalEntity> selectedItem = componentsTreeView.getSelectionModel().getSelectedItem();
             // Selected item can be null, if the tree was recreated, for example on update
             if (selectedItem != null) {
-                parametersPaneController.showEntityParameters((TechnicalEntity) selectedItem.getValue());
-                trainingPaneController.lookupSystem((TechnicalEntity) selectedItem.getValue());
+                parametersPaneController.showEntityParameters(selectedItem.getValue());
+                trainingPaneController.updateSelectedEntity(selectedItem.getValue());
             }
         });
 

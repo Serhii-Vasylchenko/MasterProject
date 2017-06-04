@@ -30,6 +30,7 @@ public class DialogController implements Initializable {
     private AddComponentGroupDialog addComponentGroupDialog = new AddComponentGroupDialog();
     private AddFieldDialog addFieldDialog = new AddFieldDialog();
     private AddExampleDialog addExampleDialog = new AddExampleDialog();
+    private AddLearnerDialog addLearnerDialog = new AddLearnerDialog();
 
     private static DialogController instance;
 
@@ -87,5 +88,9 @@ public class DialogController implements Initializable {
 
     void addExample(System system) {
         addExampleDialog.showDialog(system);
+    }
+
+    void addLearner(System system) {
+        addLearnerDialog.showDialog(system);
     }
 }

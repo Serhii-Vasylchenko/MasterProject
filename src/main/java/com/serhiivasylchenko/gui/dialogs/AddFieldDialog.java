@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * @author Serhii Vasylchenko
  */
-public class AddFieldDialog extends VBox implements Initializable {
+public class AddFieldDialog extends VBox implements Initializable, IDialog {
     @FXML
     private TextField fieldName;
     @FXML
@@ -75,6 +75,7 @@ public class AddFieldDialog extends VBox implements Initializable {
         }
     }
 
+    @Override
     public void showDialog(TechnicalEntity entity) {
         dialog = new Dialog<>();
         dialog.setTitle("Add new field");

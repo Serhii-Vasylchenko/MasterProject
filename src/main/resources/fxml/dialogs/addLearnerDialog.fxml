@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <fx:root fx:id="mainVBox" alignment="CENTER" spacing="14.0" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-
+    <children>
+        <Label fx:id="dialogName" text="Dialog Name"/>
+        <GridPane hgap="5.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="80.0"/>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <Label text="Name"/>
+                <Label text="Type" GridPane.rowIndex="1"/>
+                <ChoiceBox fx:id="learnerType" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <TextField fx:id="learnerName" GridPane.columnIndex="1"/>
+            </children>
+        </GridPane>
+    </children>
 </fx:root>

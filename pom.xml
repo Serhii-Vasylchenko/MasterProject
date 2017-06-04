@@ -100,6 +100,12 @@
             <artifactId>fontawesomefx</artifactId>
             <version>8.9</version>
         </dependency>
+        <!--<dependency>-->
+        <!--<groupId>de.jensd</groupId>-->
+        <!--<artifactId>fontawesomefx-commons</artifactId>-->
+        <!--<version>8.15</version>-->
+        <!--<type>pom</type>-->
+        <!--</dependency>-->
         <!-- CONTROLS FX -->
         <dependency>
             <groupId>org.controlsfx</groupId>

@@ -1,6 +1,6 @@
 package com.serhiivasylchenko.persistence;
 
-import com.serhiivasylchenko.persistence.learning.AbstractLearner;
+import com.serhiivasylchenko.persistence.learning.Learner;
 import com.serhiivasylchenko.persistence.learning.SystemTrainingConf;
 
 import javax.persistence.*;
@@ -34,8 +34,8 @@ public class System extends TechnicalEntity implements Group {
     @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SystemTrainingConf> systemTrainingConf;
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AbstractLearner> learners;
+    @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Learner> learners;
 
     public System(String name, String description) {
         super(name, description);
@@ -91,11 +91,11 @@ public class System extends TechnicalEntity implements Group {
         this.systemTrainingConf = systemTrainingConf;
     }
 
-    public List<AbstractLearner> getLearners() {
+    public List<Learner> getLearners() {
         return learners;
     }
 
-    public void setLearners(List<AbstractLearner> learners) {
+    public void setLearners(List<Learner> learners) {
         this.learners = learners;
     }
 }
