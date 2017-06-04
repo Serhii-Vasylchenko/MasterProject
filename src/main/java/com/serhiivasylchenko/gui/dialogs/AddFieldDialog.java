@@ -130,6 +130,7 @@ public class AddFieldDialog extends VBox implements Initializable {
 //                guiUpdater.updateParameters(entity);
             }
             fieldName.setText("");
+            fieldDescription.setText("");
             return null;
         });
 

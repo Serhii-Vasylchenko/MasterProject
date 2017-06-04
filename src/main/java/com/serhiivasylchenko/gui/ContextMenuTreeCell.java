@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * @author Serhii Vasylchenko
  */
-public final class ContextMenuTreeCell extends TreeCell<Object> {
+public final class ContextMenuTreeCell extends TreeCell<TechnicalEntity> {
 
     private ContextMenu contextMenu = new ContextMenu();
 
@@ -28,7 +28,7 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
         contextMenu.getItems().addAll(addComponentMenuItem, addGroupMenuItem, renameMenuItem, deleteMenuItem);
 
         addComponentMenuItem.setOnAction(event -> {
-            TreeItem<Object> systemNode = findSystem(getTreeItem());
+            TreeItem<TechnicalEntity> systemNode = findSystem(getTreeItem());
             if (getTreeItem().getValue() instanceof ComponentGroup) {
                 dialogController.addComponent((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getValue());
             } else {
@@ -41,7 +41,7 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
         });
 
         addGroupMenuItem.setOnAction(event -> {
-            TreeItem<Object> systemNode = findSystem(getTreeItem());
+            TreeItem<TechnicalEntity> systemNode = findSystem(getTreeItem());
             if (getTreeItem().getValue() instanceof ComponentGroup) {
                 dialogController.addComponentGroup((System) systemNode.getValue(), (ComponentGroup) getTreeItem().getValue());
             } else {
@@ -55,7 +55,7 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
 
         renameMenuItem.setOnAction(event -> {
             if (Named.class.isAssignableFrom(getTreeItem().getValue().getClass())) {
-                dialogController.changeName((Named) getTreeItem().getValue());
+                dialogController.changeName(getTreeItem().getValue());
             }
         });
 
@@ -67,14 +67,14 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                workflowManager.deleteEntity((TechnicalEntity) getTreeItem().getValue());
+                workflowManager.deleteEntity(getTreeItem().getValue());
                 guiUpdater.updateComponentTree();
             }
         });
     }
 
     @Override
-    public void updateItem(Object item, boolean empty) {
+    public void updateItem(TechnicalEntity item, boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setText(null);
@@ -86,7 +86,7 @@ public final class ContextMenuTreeCell extends TreeCell<Object> {
         }
     }
 
-    private TreeItem<Object> findSystem(TreeItem<Object> node) {
+    private TreeItem<TechnicalEntity> findSystem(TreeItem<TechnicalEntity> node) {
         while (!(node.getValue() instanceof System)) {
             node = node.getParent();
         }

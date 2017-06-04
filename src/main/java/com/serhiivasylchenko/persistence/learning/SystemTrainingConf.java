@@ -1,4 +1,7 @@
-package com.serhiivasylchenko.persistence;
+package com.serhiivasylchenko.persistence.learning;
+
+import com.serhiivasylchenko.persistence.CachedPersistable;
+import com.serhiivasylchenko.persistence.System;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,11 +23,6 @@ public class SystemTrainingConf extends CachedPersistable {
 
     @Column
     private String pathToTestSet;
-
-    public SystemTrainingConf(System system) {
-        this.system = system;
-
-    }
 
     public SystemTrainingConf() {
     }

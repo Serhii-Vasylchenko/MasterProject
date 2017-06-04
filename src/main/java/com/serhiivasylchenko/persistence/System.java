@@ -1,9 +1,9 @@
 package com.serhiivasylchenko.persistence;
 
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import com.serhiivasylchenko.persistence.learning.AbstractLearner;
+import com.serhiivasylchenko.persistence.learning.SystemTrainingConf;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,14 +25,17 @@ public class System extends TechnicalEntity implements Group {
     public static final String NQ_ALL = "nq.system.get.all";
     public static final String NQ_BY_NAME = "nq.system.get.by.name";
 
-    @OneToMany(mappedBy = "system", orphanRemoval = true)
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Component> components;
 
-    @OneToMany(mappedBy = "system", orphanRemoval = true)
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComponentGroup> componentGroups;
 
-    @OneToMany(mappedBy = "system", orphanRemoval = true)
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SystemTrainingConf> systemTrainingConf;
+
+    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AbstractLearner> learners;
 
     public System(String name, String description) {
         super(name, description);
@@ -86,5 +89,13 @@ public class System extends TechnicalEntity implements Group {
 
     public void setSystemTrainingConf(List<SystemTrainingConf> systemTrainingConf) {
         this.systemTrainingConf = systemTrainingConf;
+    }
+
+    public List<AbstractLearner> getLearners() {
+        return learners;
+    }
+
+    public void setLearners(List<AbstractLearner> learners) {
+        this.learners = learners;
     }
 }

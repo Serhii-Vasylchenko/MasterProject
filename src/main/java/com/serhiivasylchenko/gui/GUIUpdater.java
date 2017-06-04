@@ -3,9 +3,7 @@ package com.serhiivasylchenko.gui;
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.gui.filtering.FilterableTreeItem;
 import com.serhiivasylchenko.gui.filtering.TreeItemPredicate;
-import com.serhiivasylchenko.persistence.Component;
-import com.serhiivasylchenko.persistence.ComponentGroup;
-import com.serhiivasylchenko.persistence.Persistable;
+import com.serhiivasylchenko.persistence.*;
 import com.serhiivasylchenko.persistence.System;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -33,7 +31,7 @@ public class GUIUpdater {
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
 
-    private TreeView<Object> componentsTreeView;
+    private TreeView<TechnicalEntity> componentsTreeView;
     private GridPane parametersGridPane;
     private TextField searchTextField;
     private final Image systemIcon = new Image(getClass().getResourceAsStream("/icons/system1_16.png"));
@@ -49,7 +47,7 @@ public class GUIUpdater {
         return instance;
     }
 
-    public void setComponentsTreeView(TreeView<Object> componentsTreeView) {
+    public void setComponentsTreeView(TreeView<TechnicalEntity> componentsTreeView) {
         this.componentsTreeView = componentsTreeView;
     }
 
@@ -64,10 +62,10 @@ public class GUIUpdater {
     public void updateComponentTree() {
         List<System> systems = workflowManager.getSystemList();
 
-        FilterableTreeItem<Object> rootNode = new FilterableTreeItem<>(null);
+        FilterableTreeItem<TechnicalEntity> rootNode = new FilterableTreeItem<>(null);
         rootNode.setExpanded(true);
         systems.forEach(system -> {
-            FilterableTreeItem<Object> systemNode = new FilterableTreeItem<>(system);
+            FilterableTreeItem<TechnicalEntity> systemNode = new FilterableTreeItem<>(system);
             systemNode.setGraphic(new ImageView(systemIcon));
 
             List<Persistable> directChildren = new ArrayList<>();
@@ -91,12 +89,12 @@ public class GUIUpdater {
         componentsTreeView.setRoot(rootNode);
     }
 
-    private void addChildrenToTheNode(FilterableTreeItem<Object> node, List<? extends Persistable> children) {
+    private void addChildrenToTheNode(FilterableTreeItem<TechnicalEntity> node, List<? extends Persistable> children) {
         // Set the node to be expanded by default
         node.setExpanded(true);
 
         children.forEach(child -> {
-            FilterableTreeItem<Object> childNode = null;
+            FilterableTreeItem<TechnicalEntity> childNode = null;
 
             // Assign different icons depending on the class
             if (child instanceof ComponentGroup) {

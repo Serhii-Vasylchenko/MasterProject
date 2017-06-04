@@ -1,9 +1,9 @@
 package com.serhiivasylchenko.learners.dl4j;
 
-import com.serhiivasylchenko.learners.AbstractConfiguration;
 import com.serhiivasylchenko.learners.AbstractInput;
 import com.serhiivasylchenko.learners.AbstractResult;
 import com.serhiivasylchenko.learners.ILearner;
+import com.serhiivasylchenko.persistence.learning.AbstractConfiguration;
 import com.serhiivasylchenko.utils.DataType;
 
 /**

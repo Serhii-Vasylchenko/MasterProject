@@ -14,13 +14,15 @@ import java.util.ResourceBundle;
  */
 public class MainController implements Initializable {
     @FXML
-    private TreeView<Object> componentsTreeView;
+    private TreeView<TechnicalEntity> componentsTreeView;
     @FXML
     private ToggleGroup evaluationToggleGroup;
     @FXML
     private Label status;
     @FXML
     private TextField searchTextField;
+    @FXML
+    private TabPane configurationTabPane;
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
@@ -35,11 +37,16 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         componentsTreeView.setCellFactory(p -> new ContextMenuTreeCell());
         componentsTreeView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            TreeItem<Object> selectedItem = componentsTreeView.getSelectionModel().getSelectedItem();
+            TreeItem<TechnicalEntity> selectedItem = componentsTreeView.getSelectionModel().getSelectedItem();
             // Selected item can be null, if the tree was recreated, for example on update
             if (selectedItem != null) {
                 parametersPaneController.showEntityParameters((TechnicalEntity) selectedItem.getValue());
+                trainingPaneController.lookupSystem((TechnicalEntity) selectedItem.getValue());
             }
+        });
+
+        configurationTabPane.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+
         });
 
         guiUpdater.setComponentsTreeView(componentsTreeView);

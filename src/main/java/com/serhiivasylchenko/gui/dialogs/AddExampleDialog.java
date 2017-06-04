@@ -1,28 +1,27 @@
 package com.serhiivasylchenko.gui.dialogs;
 
 import com.serhiivasylchenko.core.PersistenceBean;
-import com.serhiivasylchenko.persistence.Component;
-import com.serhiivasylchenko.persistence.ComponentGroup;
+import com.serhiivasylchenko.learners.LearningUtils;
 import com.serhiivasylchenko.persistence.Field;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.utils.Constants;
-import com.serhiivasylchenko.utils.Parameters;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.apache.log4j.Logger;
-import org.datavec.api.records.writer.impl.csv.CSVRecordWriter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * @author Serhii Vasylchenko
@@ -81,46 +80,16 @@ public class AddExampleDialog extends VBox implements Initializable {
                 alert.show();
                 event.consume();
             }
-
-            inputFieldsGridPane.getChildren().forEach(node -> {
-                if ((node instanceof TextField && ((TextField) node).getText().isEmpty()) ||
-                        (node instanceof ChoiceBox && ((ChoiceBox<String>) node).getValue() == null)) {
-                    alert.setContentText("All fields should be set!");
-                    alert.show();
-                    event.consume();
-                }
-            });
-
-            targetFieldsGridPane.getChildren().forEach(node -> {
-                if ((node instanceof TextField && ((TextField) node).getText().isEmpty()) ||
-                        (node instanceof ChoiceBox && ((ChoiceBox<String>) node).getValue() == null)) {
-                    alert.setContentText("All fields should be set!");
-                    alert.show();
-                    event.consume();
-                }
-            });
+            if (!validateFields(inputFieldsGridPane) || !validateFields(targetFieldsGridPane)) {
+                alert.setContentText("All fields should be set!");
+                alert.show();
+                event.consume();
+            }
         });
 
         systemName.setText("New example for system '" + system.toString() + "'");
 
-        Map<String, Field> fieldMap = new LinkedHashMap<>();
-
-        // Add all system fields first
-        List<Field> systemFields = persistenceBean.find(Field.class, Field.NQ_BY_PARAMETER_LIST_ORDERED,
-                new Parameters().add("parameterList", system.getParameterList()));
-        systemFields.forEach(field -> fieldMap.put(system.toString() + "->" + field.getName(), field));
-
-        // Then all component groups fields
-        persistenceBean.find(ComponentGroup.class, ComponentGroup.NQ_BY_SYSTEM, new Parameters().add("system", system))
-                .forEach(group -> group.getParameterList().getFields()
-                        .forEach(field -> fieldMap.put(group.toString() + "->" + field.getName(), field))
-                );
-
-        // Then all component fields
-        persistenceBean.find(Component.class, Component.NQ_BY_SYSTEM, new Parameters().add("system", system))
-                .forEach(component -> component.getParameterList().getFields()
-                        .forEach(field -> fieldMap.put(component.toString() + "->" + field.getName(), field))
-                );
+        Map<String, Field> fieldMap = LearningUtils.fieldWithNameMap(system);
 
         int input = 0;
         int target = 0;
@@ -170,35 +139,46 @@ public class AddExampleDialog extends VBox implements Initializable {
         // Send the result to workflowManager when the add button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
-                String dir = AddExampleDialog.class.getClassLoader().getResource(Constants.datasetPath).getFile();
-                dir = dir.replace("%20", " ");
-                String useFor = useForChoiceBox.getSelectionModel().getSelectedItem();
-                String fileName = system.toString().replace(" ", "") + "-" + useFor + ".csv";
-                File datasetFile = new File(dir + fileName);
+                URL url = AddExampleDialog.class.getClassLoader().getResource(Constants.datasetPath);
+                if (url != null) {
+                    String dir = url.getFile();
+                    dir = dir.replace("%20", " ");
+                    String useFor = useForChoiceBox.getSelectionModel().getSelectedItem();
+                    String fileName = system.toString().replace(" ", "") + "-" + useFor + ".csv";
+                    File datasetFile = new File(dir + fileName);
 
-                if (!datasetFile.exists()) {
                     try {
                         datasetFile.createNewFile();
                     } catch (IOException e) {
                         LOGGER.error("File was not created!", e);
                     }
+
+                    List<Field> inputFields = LearningUtils.getInputFields(system);
+                    List<Field> targetFields = LearningUtils.getTargetFields(system);
+
+                    List<String> inputFieldValues = LearningUtils.collectFieldValues(inputFieldsGridPane);
+                    List<String> targetFieldValues = LearningUtils.collectFieldValues(targetFieldsGridPane);
+
+                    if (inputFields.size() == inputFieldValues.size() && targetFields.size() == targetFieldValues.size()) {
+
+                        for (int i = 0; i < inputFields.size(); i++) {
+                            switch (inputFields.get(i).getFieldType()) {
+                                case INT_NUMBER:
+                                    inputFields.get(i).setIntValue(Integer.valueOf(inputFieldValues.get(i)));
+                            }
+                        }
+
+                        for (int i = 0; i < targetFields.size(); i++) {
+                            switch (targetFields.get(i).getFieldType()) {
+                                case INT_NUMBER:
+                                    targetFields.get(i).setIntValue(Integer.valueOf(targetFieldValues.get(i)));
+                            }
+                        }
+                    }
+
+                    LearningUtils.writeCSV(datasetFile, inputFields);
+                    LearningUtils.writeCSV(datasetFile, targetFields);
                 }
-
-                try {
-                    CSVRecordWriter csvRecordWriter = new CSVRecordWriter(datasetFile, true);
-
-                    List<Field> inputFields = new ArrayList<>();
-                    List<Field> targetFields = new ArrayList<>();
-
-                    inputFieldsGridPane.getChildren().forEach(node -> {
-
-                    });
-
-                } catch (FileNotFoundException e) {
-                    LOGGER.error("Writing to file failed!");
-                }
-
-
             }
 
             // clear dialog
@@ -211,5 +191,15 @@ public class AddExampleDialog extends VBox implements Initializable {
         dialog.getDialogPane().setContent(this);
 
         dialog.showAndWait();
+    }
+
+    private boolean validateFields(GridPane gridPane) {
+        for (Node node : gridPane.getChildren()) {
+            if ((node instanceof TextField && ((TextField) node).getText().isEmpty()) ||
+                    (node instanceof ChoiceBox && ((ChoiceBox<String>) node).getValue() == null)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

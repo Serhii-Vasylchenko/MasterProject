@@ -1,5 +1,6 @@
 package com.serhiivasylchenko.learners;
 
+import com.serhiivasylchenko.persistence.learning.AbstractConfiguration;
 import com.serhiivasylchenko.utils.DataType;
 
 /**

@@ -93,8 +93,8 @@
                                     </font>
                                 </Label>
                                 <Separator/>
-                                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
-                                         VBox.vgrow="ALWAYS">
+                                <TabPane fx:id="configurationTabPane" prefHeight="200.0" prefWidth="200.0"
+                                         tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                                     <tabs>
                                         <Tab closable="false" text="Parameters &amp; Details">
                                             <content>
