@@ -18,7 +18,7 @@ public class SystemTrainingConf extends CachedPersistable {
 
     public static final String NQ_BY_SYSTEM_ORDERED = "nq.training.conf.get.by.system.ordered";
 
-    @ManyToOne
+    @OneToOne
     private System system;
 
     @Column
@@ -26,6 +26,12 @@ public class SystemTrainingConf extends CachedPersistable {
 
     @Column
     private String pathToTestSet;
+
+    public SystemTrainingConf(System system) {
+        this.system = system;
+        this.pathToTrainingSet = this.system.toString().replace(" ", "") + "-Training.csv";
+        this.pathToTestSet = this.system.toString().replace(" ", "") + "-Testing.csv";
+    }
 
     public SystemTrainingConf() {
     }

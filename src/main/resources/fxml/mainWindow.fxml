@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
@@ -41,8 +41,7 @@
                                     </font>
                                 </Label>
                                 <Separator/>
-                                <CustomTextField id="searchTextField" fx:id="searchTextField"
-                                                 onAction="#filterComponentsTree" promptText="Search">
+                                <CustomTextField id="searchTextField" fx:id="searchTextField" promptText="Search">
                                     <left>
                                         <Label styleClass="searchBoxLabel">
                                             <graphic>
@@ -149,33 +148,46 @@
                                 </Label>
                                 <Separator prefWidth="200.0"/>
                                 <Pane VBox.vgrow="SOMETIMES"/>
-                                <VBox alignment="CENTER" spacing="20.0">
-                                    <children>
-                                        <Label layoutX="149.0" layoutY="14.0" text="Evaluation">
-                                            <font>
-                                                <Font name="System Bold" size="15.0"/>
-                                            </font>
-                                        </Label>
-                                        <HBox alignment="CENTER" layoutX="51.0" layoutY="59.0" spacing="20.0">
+                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="300.0"
+                                            maxWidth="1.7976931348623157E308">
+                                    <content>
+                                        <VBox alignment="CENTER" spacing="20.0">
                                             <children>
-                                                <Label layoutX="51.0" layoutY="59.0" text="Mark as:"/>
-                                                <RadioButton layoutX="127.0" layoutY="59.0" mnemonicParsing="false"
-                                                             text="Correct">
-                                                    <toggleGroup>
-                                                        <ToggleGroup fx:id="evaluationToggleGroup"/>
-                                                    </toggleGroup>
-                                                </RadioButton>
-                                                <RadioButton layoutX="223.0" layoutY="59.0" mnemonicParsing="false"
-                                                             text="Wrong" toggleGroup="$evaluationToggleGroup"/>
+                                                <Label layoutX="149.0" layoutY="14.0" text="Evaluation">
+                                                    <font>
+                                                        <Font name="System Bold" size="15.0"/>
+                                                    </font>
+                                                </Label>
+                                                <HBox alignment="CENTER" layoutX="51.0" layoutY="59.0" spacing="20.0">
+                                                    <children>
+                                                        <Label layoutX="51.0" layoutY="59.0" text="Mark as:"/>
+                                                        <RadioButton layoutX="127.0" layoutY="59.0"
+                                                                     mnemonicParsing="false" text="Correct">
+                                                            <toggleGroup>
+                                                                <ToggleGroup fx:id="evaluationToggleGroup"/>
+                                                            </toggleGroup>
+                                                        </RadioButton>
+                                                        <RadioButton layoutX="223.0" layoutY="59.0"
+                                                                     mnemonicParsing="false" text="Wrong"
+                                                                     toggleGroup="$evaluationToggleGroup"/>
+                                                    </children>
+                                                </HBox>
+                                                <Button alignment="CENTER" layoutX="86.0" layoutY="104.0"
+                                                        mnemonicParsing="false" prefWidth="200.0"
+                                                        text="Add to training set"/>
                                             </children>
-                                        </HBox>
-                                        <Button alignment="CENTER" layoutX="86.0" layoutY="104.0"
-                                                mnemonicParsing="false" prefWidth="200.0" text="Add to training set"/>
-                                    </children>
+                                            <padding>
+                                                <Insets left="14.0" right="14.0"/>
+                                            </padding>
+                                        </VBox>
+                                    </content>
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
                                     <padding>
                                         <Insets bottom="14.0" top="14.0"/>
                                     </padding>
-                                </VBox>
+                                </ScrollPane>
                             </children>
                         </VBox>
                     </children>

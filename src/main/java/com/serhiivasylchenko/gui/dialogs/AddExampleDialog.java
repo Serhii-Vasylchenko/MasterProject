@@ -161,7 +161,14 @@ public class AddExampleDialog extends VBox implements Initializable, IDialog {
 
                 // Create file for dataset, e.g. "system1-Training.csv"
                 String useFor = useForChoiceBox.getSelectionModel().getSelectedItem();
-                String fileName = system.toString().replace(" ", "") + "-" + useFor + ".csv";
+
+                String fileName = null;
+                if ("Training".equals(useFor)) {
+                    fileName = system.getSystemTrainingConf().getPathToTrainingSet();
+                } else {
+                    fileName = system.getSystemTrainingConf().getPathToTestSet();
+                }
+
                 File datasetFile = new File(datasetFolder.getPath() + "/" + fileName);
 
                 if (!datasetFile.exists()) {

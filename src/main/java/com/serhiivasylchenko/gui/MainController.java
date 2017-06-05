@@ -1,6 +1,9 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
+import com.serhiivasylchenko.persistence.Component;
+import com.serhiivasylchenko.persistence.ComponentGroup;
+import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.persistence.TechnicalEntity;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,6 +36,8 @@ public class MainController implements Initializable {
     @FXML
     private TrainingPaneController trainingPaneController;
 
+    private System system;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         componentsTreeView.setCellFactory(p -> new ContextMenuTreeCell());
@@ -40,8 +45,20 @@ public class MainController implements Initializable {
             TreeItem<TechnicalEntity> selectedItem = componentsTreeView.getSelectionModel().getSelectedItem();
             // Selected item can be null, if the tree was recreated, for example on update
             if (selectedItem != null) {
-                parametersPaneController.showEntityParameters(selectedItem.getValue());
-                trainingPaneController.updateSelectedEntity(selectedItem.getValue());
+                TechnicalEntity selectedEntity = selectedItem.getValue();
+
+                parametersPaneController.showEntityParameters(selectedEntity);
+
+                if (selectedEntity instanceof System) {
+                    this.system = (System) selectedEntity;
+                } else if (selectedEntity instanceof Component) {
+                    this.system = ((Component) selectedEntity).getSystem();
+                } else if (selectedEntity instanceof ComponentGroup) {
+                    this.system = ((ComponentGroup) selectedEntity).getSystem();
+                }
+
+                trainingPaneController.updateSelectedEntity(this.system);
+
             }
         });
 
@@ -86,10 +103,5 @@ public class MainController implements Initializable {
         status.setText("Updating component list...");
         guiUpdater.updateComponentTree();
         status.setText("Idle");
-    }
-
-    @FXML
-    private void filterComponentsTree() {
-
     }
 }

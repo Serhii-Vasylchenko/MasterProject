@@ -4,7 +4,7 @@
 
     <groupId>com.serhiivasylchenko</groupId>
     <artifactId>master-project</artifactId>
-    <version>0.01</version>
+    <version>0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>master-project</name>
@@ -80,7 +80,7 @@
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-native-platform</artifactId>
+            <artifactId>nd4j-native</artifactId>
             <version>0.8.0</version>
         </dependency>
         <dependency>
@@ -88,6 +88,13 @@
             <artifactId>datavec-api</artifactId>
             <version>0.8.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
         <!-- LOGGER -->
         <dependency>
             <groupId>log4j</groupId>

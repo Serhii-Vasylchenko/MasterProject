@@ -151,7 +151,7 @@ public class LearningUtils {
             if (node instanceof TextField) {
                 fieldValues.add(((TextField) node).getText());
             } else if (node instanceof ChoiceBox) {
-                fieldValues.add(((ChoiceBox<String>) node).getValue());
+                fieldValues.add(String.valueOf(((ChoiceBox) node).getSelectionModel().getSelectedIndex()));
             }
         });
 

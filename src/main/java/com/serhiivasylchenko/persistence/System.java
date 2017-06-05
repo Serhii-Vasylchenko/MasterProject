@@ -31,14 +31,15 @@ public class System extends TechnicalEntity implements Group {
     @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComponentGroup> componentGroups;
 
-    @OneToMany(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SystemTrainingConf> systemTrainingConf;
+    @OneToOne(mappedBy = "system", cascade = CascadeType.ALL, orphanRemoval = true)
+    private SystemTrainingConf systemTrainingConf;
 
     @OneToMany(mappedBy = "system", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Learner> learners;
 
     public System(String name, String description) {
         super(name, description);
+        this.systemTrainingConf = new SystemTrainingConf(this);
     }
 
     public System() {
@@ -83,11 +84,11 @@ public class System extends TechnicalEntity implements Group {
         this.componentGroups = componentGroups;
     }
 
-    public List<SystemTrainingConf> getSystemTrainingConf() {
+    public SystemTrainingConf getSystemTrainingConf() {
         return systemTrainingConf;
     }
 
-    public void setSystemTrainingConf(List<SystemTrainingConf> systemTrainingConf) {
+    public void setSystemTrainingConf(SystemTrainingConf systemTrainingConf) {
         this.systemTrainingConf = systemTrainingConf;
     }
 

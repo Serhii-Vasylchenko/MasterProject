@@ -15,7 +15,7 @@ public interface ILearner {
 
     void setConfiguration(AbstractConfiguration configuration);
 
-    void train();
+    void train(System system);
 
     AbstractResult calculateResult(AbstractInput input);
 }

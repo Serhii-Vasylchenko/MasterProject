@@ -1,14 +1,13 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.PersistenceBean;
+import com.serhiivasylchenko.learners.LearningManager;
 import com.serhiivasylchenko.learners.LearningUtils;
-import com.serhiivasylchenko.persistence.Component;
-import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
-import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.persistence.learning.Learner;
 import com.serhiivasylchenko.persistence.learning.LearnerParameter;
 import com.serhiivasylchenko.utils.Parameters;
+import com.serhiivasylchenko.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,12 +29,17 @@ public class TrainingPaneController implements Initializable {
     private GridPane learnerParameters;
     @FXML
     private Button saveConfigurationButton;
+    @FXML
+    private Button runTrainingButton;
+    @FXML
+    private Label learnerNameLabel;
 
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
     private DialogController dialogController = DialogController.getInstance();
     private SharedData sharedData = SharedData.getInstanse();
 
     private System system;
+    private Learner learner;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -43,8 +47,8 @@ public class TrainingPaneController implements Initializable {
             if ((int) newValue != -1) {
                 // I have no idea why this fucking line is not working how it's supposed to. Shit.
                 // Learner learner = learnerChoiceBox.getSelectionModel().getSelectedItem();
-                Learner learner = learnerChoiceBox.getItems().get((int) newValue);
-                List<LearnerParameter> parameters = learner.getConfiguration().getConfigurableFields();
+                this.learner = learnerChoiceBox.getItems().get((int) newValue);
+                List<LearnerParameter> parameters = this.learner.getConfiguration().getConfigurableFields();
 
                 // clear first
                 this.learnerParameters.getChildren().clear();
@@ -69,24 +73,23 @@ public class TrainingPaneController implements Initializable {
                             break;
                     }
 
-                    learnerParameters.addRow(i, fieldName, fieldValue);
+                    this.learnerParameters.addRow(i, fieldName, fieldValue);
                 }
 
+                this.learnerNameLabel.setText(learner.getName() + " - " + learner.getType());
+                this.learnerNameLabel.setVisible(true);
                 this.saveConfigurationButton.setDisable(false);
+                this.runTrainingButton.setDisable(false);
             } else {
+                this.learnerNameLabel.setVisible(false);
                 this.saveConfigurationButton.setDisable(true);
+                this.runTrainingButton.setDisable(true);
             }
         });
     }
 
-    public void updateSelectedEntity(TechnicalEntity selectedEntity) {
-        if (selectedEntity instanceof System) {
-            this.system = (System) selectedEntity;
-        } else if (selectedEntity instanceof Component) {
-            this.system = ((Component) selectedEntity).getSystem();
-        } else if (selectedEntity instanceof ComponentGroup) {
-            this.system = ((ComponentGroup) selectedEntity).getSystem();
-        }
+    public void updateSelectedEntity(System system) {
+        this.system = system;
 
         if (this.system != null) {
             List<Learner> learners = persistenceBean.find(Learner.class, Learner.NQ_BY_SYSTEM_ORDERED,
@@ -113,41 +116,45 @@ public class TrainingPaneController implements Initializable {
 
     @FXML
     private void setExternalFiles() {
-
+        Utils.notImplemented();
     }
 
     @FXML
     private void showTrainingSet() {
-
+        Utils.notImplemented();
     }
 
     @FXML
     private void showTestSet() {
-
+        Utils.notImplemented();
     }
 
     @FXML
     private void showHelpTraining() {
-
+        Utils.notImplemented();
     }
 
     @FXML
     private void addLearner() {
-        this.dialogController.addLearner(system);
+        this.dialogController.addLearner(this.system);
     }
 
     @FXML
     private void saveConfiguration() {
-        List<String> parameterValues = LearningUtils.collectFieldValues(learnerParameters);
-        Learner learner = learnerChoiceBox.getSelectionModel().getSelectedItem();
+        List<String> parameterValues = LearningUtils.collectFieldValues(this.learnerParameters);
 
         // TODO: validate parameters
 
-        learner.getConfiguration().setConfigurableFields(parameterValues);
+        this.learner.getConfiguration().setConfigurableFields(parameterValues);
+    }
+
+    @FXML
+    private void runTraining() {
+        LearningManager.train(this.system, this.learner);
     }
 
     @FXML
     private void showHelpLearnerConfiguration() {
-
+        Utils.notImplemented();
     }
 }

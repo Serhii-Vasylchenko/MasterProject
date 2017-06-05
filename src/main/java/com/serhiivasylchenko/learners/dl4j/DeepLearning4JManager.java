@@ -31,7 +31,7 @@ public class DeepLearning4JManager implements ILearner {
     }
 
     @Override
-    public void train() {
+    public void train(System system) {
 
     }
 

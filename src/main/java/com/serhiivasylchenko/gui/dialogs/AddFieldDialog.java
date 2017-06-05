@@ -151,7 +151,7 @@ public class AddFieldDialog extends VBox implements Initializable, IDialog {
         choiceStringsBox.getChildren().clear();
         insideVBox.getChildren().clear();
 
-        Button addChoiceButton = new Button("Add choice");
+        Button addChoiceButton = new Button("Add option");
 
         addChoiceButton.setOnAction(event -> {
             insideVBox.getChildren().add(buildChoice());
