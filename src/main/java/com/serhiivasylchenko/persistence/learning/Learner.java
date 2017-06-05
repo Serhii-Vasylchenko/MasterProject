@@ -28,11 +28,15 @@ public class Learner extends Named {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private AbstractConfiguration configuration;
 
+    @Column
+    private String learnerModelName;
+
     public Learner(System system, String name, LearnerType learnerType, AbstractConfiguration configuration) {
         super(name);
         this.system = system;
         this.type = learnerType;
         this.configuration = configuration;
+        this.learnerModelName = system.getName().replace(" ", "") + "-" + name.replace(" ", "") + "-Model.zip";
     }
 
     protected Learner() {
@@ -60,5 +64,13 @@ public class Learner extends Named {
 
     public void setConfiguration(AbstractConfiguration configuration) {
         this.configuration = configuration;
+    }
+
+    public String getLearnerModelName() {
+        return learnerModelName;
+    }
+
+    public void setLearnerModelName(String learnerModelName) {
+        this.learnerModelName = learnerModelName;
     }
 }

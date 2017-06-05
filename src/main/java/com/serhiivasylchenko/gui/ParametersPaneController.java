@@ -4,7 +4,10 @@ import com.serhiivasylchenko.core.PersistenceBean;
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.persistence.*;
 import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.persistence.learning.Learner;
+import com.serhiivasylchenko.utils.Constants;
 import com.serhiivasylchenko.utils.Parameters;
+import com.serhiivasylchenko.utils.Utils;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
@@ -21,7 +24,14 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.Notifications;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.util.ModelSerializer;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.factory.Nd4j;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -46,18 +56,39 @@ public class ParametersPaneController implements Initializable {
     private GridPane parameterGridPane;
     @FXML
     private VBox mainVBox;
+    @FXML
+    private ChoiceBox<Learner> learnerChoiceBox;
+    @FXML
+    private Button runAnalysisButton;
 
     private DialogController dialogController = DialogController.getInstance();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private SharedData sharedData = SharedData.getInstanse();
+    private ControllerMap controllerMap = ControllerMap.getInstance();
+
+    private MainController mainController;
+    private TrainingPaneController trainingPaneController;
 
     private TechnicalEntity entity;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         guiUpdater.setParametersGridPane(parameterGridPane);
+
+        this.learnerChoiceBox.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                this.runAnalysisButton.setDisable(false);
+            } else {
+                this.runAnalysisButton.setDisable(true);
+            }
+        }));
+    }
+
+    public void lookupControllers() {
+        this.trainingPaneController = (TrainingPaneController) controllerMap.getController(TrainingPaneController.class);
+        this.mainController = (MainController) controllerMap.getController(MainController.class);
     }
 
     public void showEntityParameters(TechnicalEntity entity) {
@@ -94,6 +125,11 @@ public class ParametersPaneController implements Initializable {
         descriptionTextArea.setContextMenu(contextMenu);
 
         updateParameters();
+
+        System system = Utils.getSystem(entity);
+        List<Learner> learners = Utils.getLearners(system);
+        this.learnerChoiceBox.setItems(FXCollections.observableList(learners));
+        this.learnerChoiceBox.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -366,6 +402,49 @@ public class ParametersPaneController implements Initializable {
             this.workflowManager.deleteEntity(entity);
             this.guiUpdater.updateComponentTree();
             this.reset();
+        }
+    }
+
+    @FXML
+    private void runAnalysis() {
+
+        Learner learner = this.learnerChoiceBox.getSelectionModel().getSelectedItem();
+
+        //Load the model
+        try {
+            File learnerModelFile = new File(Constants.learnerModelPath + learner.getLearnerModelName());
+            if (learnerModelFile.exists()) {
+                MultiLayerNetwork restoredModel = ModelSerializer.restoreMultiLayerNetwork(learnerModelFile);
+
+                DataSet dataSet = new DataSet();
+
+                INDArray input = Nd4j.create(9, 1, 2, 60);
+                INDArray testPredicted = restoredModel.output(input);
+
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Model not found!");
+                alert.setHeaderText(null);
+                alert.setContentText("There is no model trained for this learner! Do you want to create one?");
+
+                ButtonType buttonTypeYes = new ButtonType("Yes, take me to it", ButtonBar.ButtonData.YES);
+                ButtonType buttonTypeNo = new ButtonType("Not now", ButtonBar.ButtonData.NO);
+
+                alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent()) {
+                    if (result.get() == buttonTypeYes) {
+                        this.mainController.selectTab(1);
+                        this.trainingPaneController.selectLearner(learner);
+                    }
+                }
+            }
+
+
+        } catch (IOException e) {
+            LOGGER.error("Failed to load saved learner model!");
         }
     }
 

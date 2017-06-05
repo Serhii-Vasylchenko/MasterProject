@@ -101,16 +101,6 @@
                                                     <children>
                                                         <fx:include fx:id="parametersPane"
                                                                     source="parametersPane.fxml"/>
-                                                        <Pane VBox.vgrow="ALWAYS"/>
-                                                        <VBox alignment="BOTTOM_CENTER" spacing="20.0">
-                                                            <children>
-                                                                <Button alignment="CENTER" disable="true" layoutX="85.0"
-                                                                        layoutY="627.0" mnemonicParsing="false"
-                                                                        onAction="#runAnalysis"
-                                                                        text="Run analysis for this configuration"
-                                                                        AnchorPane.bottomAnchor="14.0"/>
-                                                            </children>
-                                                        </VBox>
                                                     </children>
                                                     <padding>
                                                         <Insets bottom="14.0" left="14.0" right="14.0"/>
@@ -172,7 +162,7 @@
                                                                      toggleGroup="$evaluationToggleGroup"/>
                                                     </children>
                                                 </HBox>
-                                                <Button alignment="CENTER" layoutX="86.0" layoutY="104.0"
+                                                <Button alignment="CENTER" disable="true" layoutX="86.0" layoutY="104.0"
                                                         mnemonicParsing="false" prefWidth="200.0"
                                                         text="Add to training set"/>
                                             </children>

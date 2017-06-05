@@ -1,10 +1,9 @@
 package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.WorkflowManager;
-import com.serhiivasylchenko.persistence.Component;
-import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.persistence.TechnicalEntity;
+import com.serhiivasylchenko.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -30,6 +29,7 @@ public class MainController implements Initializable {
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
     private DialogController dialogController = DialogController.getInstance();
+    private ControllerMap controllerMap = ControllerMap.getInstance();
 
     @FXML
     private ParametersPaneController parametersPaneController;
@@ -40,68 +40,63 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        componentsTreeView.setCellFactory(p -> new ContextMenuTreeCell());
-        componentsTreeView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            TreeItem<TechnicalEntity> selectedItem = componentsTreeView.getSelectionModel().getSelectedItem();
+        this.componentsTreeView.setCellFactory(p -> new ContextMenuTreeCell());
+        this.componentsTreeView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            TreeItem<TechnicalEntity> selectedItem = this.componentsTreeView.getSelectionModel().getSelectedItem();
             // Selected item can be null, if the tree was recreated, for example on update
             if (selectedItem != null) {
                 TechnicalEntity selectedEntity = selectedItem.getValue();
 
-                parametersPaneController.showEntityParameters(selectedEntity);
+                this.parametersPaneController.showEntityParameters(selectedEntity);
 
-                if (selectedEntity instanceof System) {
-                    this.system = (System) selectedEntity;
-                } else if (selectedEntity instanceof Component) {
-                    this.system = ((Component) selectedEntity).getSystem();
-                } else if (selectedEntity instanceof ComponentGroup) {
-                    this.system = ((ComponentGroup) selectedEntity).getSystem();
-                }
+                this.system = Utils.getSystem(selectedEntity);
 
-                trainingPaneController.updateSelectedEntity(this.system);
+                this.trainingPaneController.updateSelectedEntity(this.system);
 
             }
         });
 
-        configurationTabPane.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-
-        });
-
-        guiUpdater.setComponentsTreeView(componentsTreeView);
-        guiUpdater.setSearchTextField(searchTextField);
+        this.guiUpdater.setComponentsTreeView(this.componentsTreeView);
+        this.guiUpdater.setSearchTextField(this.searchTextField);
 
         updateComponentList();
-    }
 
-    @FXML
-    private void runAnalysis() {
+        this.controllerMap.addController(this);
+        this.controllerMap.addController(this.parametersPaneController);
+        this.controllerMap.addController(this.trainingPaneController);
 
+        this.parametersPaneController.lookupControllers();
     }
 
     @FXML
     private void addComponent() {
-        status.setText("Adding new component...");
-        dialogController.addComponent();
-        status.setText("Idle");
+        this.status.setText("Adding new component...");
+        this.dialogController.addComponent();
+        this.status.setText("Idle");
     }
 
     @FXML
     private void addSystem() {
-        status.setText("Adding new system...");
-        dialogController.addSystem();
-        status.setText("Idle");
+        this.status.setText("Adding new system...");
+        this.dialogController.addSystem();
+        this.status.setText("Idle");
     }
 
     @FXML
     private void addComponentGroup() {
-        status.setText("Adding new component group...");
-        dialogController.addComponentGroup();
-        status.setText("Idle");
+        this.status.setText("Adding new component group...");
+        this.dialogController.addComponentGroup();
+        this.status.setText("Idle");
     }
 
     @FXML
     private void updateComponentList() {
-        status.setText("Updating component list...");
-        guiUpdater.updateComponentTree();
-        status.setText("Idle");
+        this.status.setText("Updating component list...");
+        this.guiUpdater.updateComponentTree();
+        this.status.setText("Idle");
+    }
+
+    public void selectTab(int tabIndex) {
+        this.configurationTabPane.getSelectionModel().select(tabIndex);
     }
 }

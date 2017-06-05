@@ -6,7 +6,6 @@ import com.serhiivasylchenko.learners.LearningUtils;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.persistence.learning.Learner;
 import com.serhiivasylchenko.persistence.learning.LearnerParameter;
-import com.serhiivasylchenko.utils.Parameters;
 import com.serhiivasylchenko.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -37,6 +36,7 @@ public class TrainingPaneController implements Initializable {
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
     private DialogController dialogController = DialogController.getInstance();
     private SharedData sharedData = SharedData.getInstanse();
+    private ControllerMap controllerMap = ControllerMap.getInstance();
 
     private System system;
     private Learner learner;
@@ -91,17 +91,8 @@ public class TrainingPaneController implements Initializable {
     public void updateSelectedEntity(System system) {
         this.system = system;
 
-        if (this.system != null) {
-            List<Learner> learners = persistenceBean.find(Learner.class, Learner.NQ_BY_SYSTEM_ORDERED,
-                    new Parameters().add("system", system));
-            if (learners != null && !learners.isEmpty()) {
-                this.learnerChoiceBox.setItems(FXCollections.observableList(learners));
-            } else {
-                this.learnerChoiceBox.setItems(FXCollections.emptyObservableList());
-            }
-        } else {
-            this.learnerChoiceBox.setItems(FXCollections.emptyObservableList());
-        }
+        List<Learner> learners = Utils.getLearners(system);
+        this.learnerChoiceBox.setItems(FXCollections.observableList(learners));
 
         this.learnerChoiceBox.getSelectionModel().clearSelection();
         this.learnerParameters.getChildren().clear();
@@ -156,5 +147,9 @@ public class TrainingPaneController implements Initializable {
     @FXML
     private void showHelpLearnerConfiguration() {
         Utils.notImplemented();
+    }
+
+    public void selectLearner(Learner learner) {
+        this.learnerChoiceBox.getSelectionModel().select(learner);
     }
 }

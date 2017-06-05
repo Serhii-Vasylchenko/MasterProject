@@ -19,6 +19,7 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -99,8 +100,18 @@ public class LearningManager {
                 eval.eval(testData.getLabels(), output);
                 LOGGER.info(eval.stats());
 
-                //Print the evaluation statistics
-                java.lang.System.out.println(eval.stats());
+                // Save the model
+                File learnerModelFile = new File(Constants.learnerModelPath + learner.getLearnerModelName());
+                if (!learnerModelFile.exists()) {
+                    if (learnerModelFile.createNewFile()) {
+                        LOGGER.info("Learner model file '" + learner.getLearnerModelName() + "' created");
+                    } else {
+                        LOGGER.info("Learner model file '" + learner.getLearnerModelName() + "' already exists");
+                    }
+                }
+
+                boolean saveUpdater = true; //Updater: i.e., the state for Momentum, RMSProp, Adagrad etc. Save this if you want to train your network more in the future
+                ModelSerializer.writeModel(model, learnerModelFile, saveUpdater);
 
             } catch (IOException | InterruptedException e) {
                 LOGGER.error(e);
