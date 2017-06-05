@@ -87,6 +87,11 @@ public class DL4JConfiguration extends AbstractConfiguration {
         return parameters;
     }
 
+    /**
+     * This function expects values EXACTLY in the same order, as in getConfigurableFields()
+     *
+     * @param fieldValues field values as string array
+     */
     @Override
     public void setConfigurableFields(List<String> fieldValues) {
         if (fieldValues.size() == NUM_PARAMETERS) {

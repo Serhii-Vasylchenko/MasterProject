@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -147,47 +148,43 @@ public class AddExampleDialog extends VBox implements Initializable, IDialog {
         // Send the result to workflowManager when the add button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
-                URL url = AddExampleDialog.class.getClassLoader().getResource(Constants.datasetPath);
-                if (url != null) {
-                    String dir = url.getFile();
-                    dir = dir.replace("%20", " ");
-                    String useFor = useForChoiceBox.getSelectionModel().getSelectedItem();
-                    String fileName = system.toString().replace(" ", "") + "-" + useFor + ".csv";
-                    File datasetFile = new File(dir + fileName);
 
+                // Create directory is not exists
+                File datasetFolder = new File(Constants.datasetPath);
+                if (!datasetFolder.exists()) {
+                    if (datasetFolder.mkdir()) {
+                        LOGGER.info("Dataset folder was created");
+                    } else {
+                        LOGGER.info("Dataset folder already exists");
+                    }
+                }
+
+                // Create file for dataset, e.g. "system1-Training.csv"
+                String useFor = useForChoiceBox.getSelectionModel().getSelectedItem();
+                String fileName = system.toString().replace(" ", "") + "-" + useFor + ".csv";
+                File datasetFile = new File(datasetFolder.getPath() + "/" + fileName);
+
+                if (!datasetFile.exists()) {
                     try {
-                        datasetFile.createNewFile();
+                        if (datasetFile.createNewFile()) {
+                            LOGGER.info("Dataset file '" + fileName + "' was created");
+                        } else {
+                            LOGGER.info("Dataset file '" + fileName + "' already exists");
+                        }
                     } catch (IOException e) {
-                        LOGGER.error("File was not created!", e);
+                        LOGGER.error("Creation of file '" + fileName + "' failed!", e);
                     }
+                }
 
-                    List<Field> inputFields = LearningUtils.getInputFields(system);
-                    List<Field> targetFields = LearningUtils.getTargetFields(system);
+                if (datasetFile.exists()) {
+                    List<String> fieldValues = new ArrayList<>();
+                    fieldValues.addAll(LearningUtils.collectFieldValues(inputFieldsGridPane));
+                    fieldValues.addAll(LearningUtils.collectFieldValues(targetFieldsGridPane));
 
-                    List<String> inputFieldValues = LearningUtils.collectFieldValues(inputFieldsGridPane);
-                    List<String> targetFieldValues = LearningUtils.collectFieldValues(targetFieldsGridPane);
-
-                    if (inputFields.size() == inputFieldValues.size() && targetFields.size() == targetFieldValues.size()) {
-
-                        for (int i = 0; i < inputFields.size(); i++) {
-                            switch (inputFields.get(i).getFieldType()) {
-                                case INT_NUMBER:
-                                    inputFields.get(i).setIntValue(Integer.valueOf(inputFieldValues.get(i)));
-                            }
-                        }
-
-                        for (int i = 0; i < targetFields.size(); i++) {
-                            switch (targetFields.get(i).getFieldType()) {
-                                case INT_NUMBER:
-                                    targetFields.get(i).setIntValue(Integer.valueOf(targetFieldValues.get(i)));
-                            }
-                        }
-                    }
-
-                    LearningUtils.writeCSV(datasetFile, inputFields);
-                    LearningUtils.writeCSV(datasetFile, targetFields);
+                    LearningUtils.writeCSV(datasetFile, fieldValues);
                 }
             }
+
 
             // clear dialog
             useForChoiceBox.getSelectionModel().select(-1);
@@ -196,7 +193,9 @@ public class AddExampleDialog extends VBox implements Initializable, IDialog {
             return null;
         });
 
-        dialog.getDialogPane().setContent(this);
+        dialog.getDialogPane().
+
+                setContent(this);
 
         dialog.showAndWait();
     }

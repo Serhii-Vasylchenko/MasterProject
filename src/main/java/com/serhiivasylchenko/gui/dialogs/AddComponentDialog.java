@@ -1,10 +1,10 @@
 package com.serhiivasylchenko.gui.dialogs;
 
-import com.serhiivasylchenko.core.Validator;
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.gui.GUIUpdater;
 import com.serhiivasylchenko.persistence.ComponentGroup;
 import com.serhiivasylchenko.persistence.System;
+import com.serhiivasylchenko.utils.Validator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -31,7 +31,6 @@ public class AddComponentDialog extends GridPane {
     private TextArea compDescription;
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
-    private Validator validator = new Validator();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
 
     public AddComponentDialog() {
@@ -89,7 +88,7 @@ public class AddComponentDialog extends GridPane {
                 event.consume();
                 alert.setContentText("Please choose the system");
                 alert.showAndWait();
-            } else if (!validator.validateComponentName(compSystem.getValue(), compName.getText())) {
+            } else if (!Validator.validateComponentName(compSystem.getValue(), compName.getText())) {
                 event.consume();
                 alert.setContentText("Component name should unique per system");
                 alert.showAndWait();

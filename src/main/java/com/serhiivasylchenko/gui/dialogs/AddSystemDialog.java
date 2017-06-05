@@ -1,8 +1,8 @@
 package com.serhiivasylchenko.gui.dialogs;
 
-import com.serhiivasylchenko.core.Validator;
 import com.serhiivasylchenko.core.WorkflowManager;
 import com.serhiivasylchenko.gui.GUIUpdater;
+import com.serhiivasylchenko.utils.Validator;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +24,6 @@ public class AddSystemDialog extends GridPane {
     private TextArea systemDescription;
 
     private WorkflowManager workflowManager = WorkflowManager.getInstance();
-    private Validator validator = new Validator();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
 
     public AddSystemDialog() {
@@ -60,7 +59,7 @@ public class AddSystemDialog extends GridPane {
                 event.consume();
                 alert.setContentText("Please set the name of the system");
                 alert.showAndWait();
-            } else if (!validator.validateSystemName(systemName.getText())) {
+            } else if (!Validator.validateSystemName(systemName.getText())) {
                 event.consume();
                 alert.setContentText("System name should be unique");
                 alert.showAndWait();

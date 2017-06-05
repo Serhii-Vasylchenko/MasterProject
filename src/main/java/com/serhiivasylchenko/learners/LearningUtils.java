@@ -10,7 +10,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -158,7 +158,23 @@ public class LearningUtils {
         return fieldValues;
     }
 
-    public static void writeCSV(File file, List<Field> fields) {
-        //TODO: write fields to the file
+    public static void writeCSV(File file, List<String> fieldValues) {
+        try {
+            DataOutput dataOutput = new DataOutputStream(new FileOutputStream(file, true));
+
+            int i = 0;
+            for (String fieldValue : fieldValues) {
+                dataOutput.writeChars(fieldValue);
+                if (i != fieldValues.size() - 1) {
+                    dataOutput.write(",".getBytes());
+                    i++;
+                }
+            }
+            dataOutput.write("\n".getBytes());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

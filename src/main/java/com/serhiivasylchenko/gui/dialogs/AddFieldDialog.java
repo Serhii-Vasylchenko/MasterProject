@@ -1,11 +1,11 @@
 package com.serhiivasylchenko.gui.dialogs;
 
 import com.serhiivasylchenko.core.PersistenceBean;
-import com.serhiivasylchenko.core.Validator;
 import com.serhiivasylchenko.gui.GUIUpdater;
 import com.serhiivasylchenko.persistence.Field;
 import com.serhiivasylchenko.persistence.TechnicalEntity;
 import com.serhiivasylchenko.utils.FieldType;
+import com.serhiivasylchenko.utils.Validator;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
@@ -46,7 +46,6 @@ public class AddFieldDialog extends VBox implements Initializable, IDialog {
 
     private Dialog<List<String>> dialog;
 
-    private Validator validator = new Validator();
     private GUIUpdater guiUpdater = GUIUpdater.getInstance();
     private PersistenceBean persistenceBean = PersistenceBean.getInstance();
 
@@ -103,7 +102,7 @@ public class AddFieldDialog extends VBox implements Initializable, IDialog {
                 event.consume();
                 alert.setContentText("Please choose the type");
                 alert.showAndWait();
-            } else if (!validator.validateFieldName(entity, fieldName.getText())) {
+            } else if (!Validator.validateFieldName(entity, fieldName.getText())) {
                 event.consume();
                 alert.setContentText("Field name should unique per entity");
                 alert.showAndWait();

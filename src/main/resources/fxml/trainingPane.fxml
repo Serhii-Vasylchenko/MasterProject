@@ -87,10 +87,11 @@
                             <children>
                                 <Label text="Select learner:"/>
                                 <ChoiceBox fx:id="learnerChoiceBox" prefWidth="150.0"/>
-                                <Button maxHeight="22.0" maxWidth="22.0" minHeight="22.0" minWidth="22.0"
+                                <Button maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
                                         mnemonicParsing="false" onAction="#addLearner">
                                     <graphic>
-                                        <FontAwesomeIconView glyphName="PLUS" glyphStyle="-fx-fill: green" size="20"/>
+                                        <FontAwesomeIconView glyphName="PLUS_SQUARE" glyphStyle="-fx-fill: green"
+                                                             size="22"/>
                                     </graphic>
                                     <tooltip>
                                         <Tooltip text="Create new learner"/>

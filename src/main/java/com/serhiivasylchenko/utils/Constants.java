@@ -5,5 +5,5 @@ package com.serhiivasylchenko.utils;
  */
 public final class Constants {
 
-    public static final String datasetPath = "datasets/";
+    public static final String datasetPath = "src/main/resources/datasets/";
 }
