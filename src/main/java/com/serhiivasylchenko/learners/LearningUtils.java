@@ -120,9 +120,11 @@ public class LearningUtils {
         List<Field> fields = new ArrayList<>();
 
         // Add all system fields first
-        List<Field> systemFields = persistenceBean.find(Field.class, Field.NQ_BY_PARAMETER_LIST_ORDERED,
-                new Parameters().add("parameterList", system.getParameterList()));
-        fields.addAll(systemFields);
+        persistenceBean.find(Field.class, Field.NQ_BY_PARAMETER_LIST_ORDERED,
+                new Parameters().add("parameterList", system.getParameterList()))
+                .stream()
+                .filter(Field::isTarget)
+                .forEach(fields::add);
 
         // Then all component groups fields
         persistenceBean.find(ComponentGroup.class, ComponentGroup.NQ_BY_SYSTEM, new Parameters().add("system", system))

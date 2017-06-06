@@ -2,6 +2,7 @@ package com.serhiivasylchenko.gui;
 
 import com.serhiivasylchenko.core.PersistenceBean;
 import com.serhiivasylchenko.core.WorkflowManager;
+import com.serhiivasylchenko.learners.LearningManager;
 import com.serhiivasylchenko.persistence.*;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.persistence.learning.Learner;
@@ -24,11 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.Notifications;
-import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.DataSet;
-import org.nd4j.linalg.factory.Nd4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -414,13 +411,9 @@ public class ParametersPaneController implements Initializable {
         try {
             File learnerModelFile = new File(Constants.learnerModelPath + learner.getLearnerModelName());
             if (learnerModelFile.exists()) {
-                MultiLayerNetwork restoredModel = ModelSerializer.restoreMultiLayerNetwork(learnerModelFile);
 
-                DataSet dataSet = new DataSet();
-
-                INDArray input = Nd4j.create(9, 1, 2, 60);
-                INDArray testPredicted = restoredModel.output(input);
-
+                List<INDArray> result = LearningManager.resolve(Utils.getSystem(entity), learner);
+                this.mainController.showResult(Utils.getSystem(entity), result);
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

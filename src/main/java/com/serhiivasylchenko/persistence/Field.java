@@ -134,4 +134,16 @@ public class Field extends Named {
             dataOutput.writeInt(0);
         }
     }
+
+    public float toFloat() {
+        if (this.intValue != 0) {
+            return (float) this.intValue;
+        } else if (this.floatValue != 0) {
+            return this.floatValue;
+        } else if (this.selectedStringIndex != -1) {
+            return (float) this.selectedStringIndex;
+        } else {
+            return 0f;
+        }
+    }
 }

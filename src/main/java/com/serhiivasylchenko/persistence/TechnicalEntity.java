@@ -2,14 +2,14 @@ package com.serhiivasylchenko.persistence;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 /**
  * @author Serhii Vasylchenko
  */
-@MappedSuperclass
+@Entity
 public abstract class TechnicalEntity extends Conditional {
 
     private static final long serialVersionUID = -8572714188110426056L;
@@ -27,7 +27,7 @@ public abstract class TechnicalEntity extends Conditional {
         super(name);
         this.description = description;
         this.creationTime = LocalDate.now();
-        this.parameterList = new ParameterList();
+        this.parameterList = new ParameterList(this);
     }
 
     public TechnicalEntity() {

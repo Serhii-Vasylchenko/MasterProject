@@ -1,9 +1,11 @@
 package com.serhiivasylchenko.learners;
 
+import com.serhiivasylchenko.persistence.Field;
 import com.serhiivasylchenko.persistence.System;
 import com.serhiivasylchenko.persistence.learning.DL4JConfiguration;
 import com.serhiivasylchenko.persistence.learning.Learner;
 import com.serhiivasylchenko.utils.Constants;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
@@ -26,10 +28,14 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Serhii Vasylchenko
@@ -127,5 +133,22 @@ public class LearningManager {
         rr.initialize(new FileSplit(new File(csvFileClasspath)));
         DataSetIterator iterator = new RecordReaderDataSetIterator(rr, batchSize, labelIndex, numClasses);
         return iterator.next();
+    }
+
+    public static List<INDArray> resolve(System system, Learner learner) throws IOException {
+        File learnerModelFile = new File(Constants.learnerModelPath + learner.getLearnerModelName());
+
+        MultiLayerNetwork restoredModel = ModelSerializer.restoreMultiLayerNetwork(learnerModelFile);
+
+        List<Float> floatList = LearningUtils.getInputFields(system).stream()
+                .map(Field::toFloat)
+                .collect(Collectors.toList());
+
+        float[] array = ArrayUtils.toPrimitive(floatList.toArray(new Float[0]), 0.0F);
+        INDArray input = Nd4j.create(array);
+//        DataSet dataSet = new DataSet(input);
+        INDArray result = restoredModel.output(input);
+
+        return Collections.singletonList(result);
     }
 }
